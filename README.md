@@ -145,6 +145,21 @@ JLCPCB with LCSC part numbers. Order ENIG (or hard-gold fingers with a 45° beve
 thickness so the board fits a standard DMG cartridge shell. **Route the board first**: the
 current revision is unrouted.
 
+Snapshot from 2026-10-01 (USD, before shipping):
+
+| Qty | Bare PCB, ENIG | PCB + Economic assembly |
+| --- | --- | --- |
+| 5 | $18.60 ($3.72/board) | ~$129 (~$25.75/board) |
+| 10 | $21.60 ($2.16/board) | ~$215 (~$21.46/board) |
+| 30 | $28.90 ($0.96/board) | ~$496 (~$16.55/board) |
+| 100 | $62.70 ($0.63/board) | ~$1,497 (~$14.97/board) |
+
+Before ordering:
+- **Stock.** The exact flash and F-RAM are out of stock at LCSC. Use the drop-in SST39SF040-55-4I-NHE-T
+  (C632847) and FM18W08-SGTR (C55945). The F-RAM is about 60% of the assembled cost.
+- **Gold-finger size rule.** JLC's bevelled gold-finger option needs boards of at least 50 mm on both sides.
+  This board is 49.5 mm tall, so widen it to 50 mm (r1.1) or order a panel. Plain ENIG needs no change.
+
 ## Project files
 
 - `scripts/gen.py` generates `lib/gbdev.kicad_sym`, `lib/gbdev.pretty/` and `circuit.netlist.json`. The netlist is the source of truth; `board.kicad_*` are built from it.

@@ -4,8 +4,36 @@ A simple, original Game Boy (DMG) / ModRetro Chromatic homebrew development cart
 512 KB of rewritable NOR flash, 8 KB of battery-free F-RAM, and an MBC5-subset mapper built
 from discrete 74HC logic. 2-layer, 56 x 49.5 mm, 32 edge fingers at 1.5 mm pitch, 5 V bus.
 
-> **Status:** built, placed, ERC/DRC clean, rendered (`renders/top.png`) — but **not routed**.
+![GB DEVCART r1, 3D render](renders/3d-iso.png)
+
+> **Status:** built, placed, ERC/DRC clean, every part with a 3D model, but **not routed** yet.
 > The board has a complete ratsnest only; see "Project status" below.
+
+Designed with [fabPlane](https://fabplane.com) (fabdesk) driving Claude Code. Inspired by the ModRetro
+"Demo Cartridge", but an original, much simpler design: no FPGA, no level shifters, no regulators.
+
+| What | Where |
+| --- | --- |
+| KiCad project (schematic, board, custom symbols/footprint) | `board.kicad_*`, `lib/`, `circuit.netlist.json` |
+| 3D models of every part, 3D renders, STEP of the whole board | `3dmodels/`, `renders/`, `exports/board.step` |
+| USB programmer (Arduino Mega firmware + PC tool + cart simulator) | [`programmer/`](programmer/README.md) |
+| Demo homebrew game "Bit Catcher" (GBDK-2020) | [`game/`](game/README.md) |
+| JLCPCB / LCSC price list | [`docs/jlcpcb-pricing.md`](docs/jlcpcb-pricing.md) |
+
+## Quick start
+
+```bash
+# build the demo game (GBDK-2020)
+make -C game GBDK_HOME=/path/to/gbdk
+# test the programmer end to end against the cart simulator (no hardware needed)
+programmer/test_e2e.sh
+# flash a real cart through an Arduino Mega 2560 (see programmer/README.md for wiring)
+python3 programmer/host/gbflash.py --port /dev/ttyACM0 flash game/dist/bitcatcher.gb
+```
+
+| Top | Bit Catcher on the cart |
+| --- | --- |
+| ![top](renders/3d-top.png) | ![game](game/dist/screenshot-game.png) |
 
 ## Memory map
 
@@ -86,6 +114,36 @@ read-back. Keep bank 0 (vectors, header, flasher stub) write-protected by softwa
 | R2–R6 | 5 | 2.2 kΩ | 0603 | — |
 | TP1–TP6 | 6 | test pad D1.5 mm | — | — |
 | J1 | 1 | edge fingers (PCB feature) | `gbdev:GB_Cart_Edge_32` | — |
+
+## Programming over USB
+
+The cart is programmed by an **Arduino Mega 2560** (5 V I/O, so no level shifters) wired to a
+32-pin Game Boy cartridge slot. The PC runs `programmer/host/gbflash.py`
+(`info`, `flash`, `dump`, `erase`, `save-backup`, `save-restore`). The flashing algorithm lives in
+`programmer/firmware/gbflash/gbflash_core.h`, which also compiles into a native simulator of this
+cart for hardware-free tests. See [`programmer/README.md`](programmer/README.md) for the wiring table.
+
+## 3D models
+
+Every component carries a 3D model, vendored in `3dmodels/` and referenced as
+`${KIPRJMOD}/3dmodels/…`, so the project renders and exports (STEP/GLB) with no global KiCad
+3D library. The passives and SOIC models come from the official KiCad 3D library
+(CC-BY-SA 4.0 with the KiCad library exception). KiCad ships no PLCC-32 model, so
+`scripts/make_plcc32_model.py` generates one with CadQuery (JEDEC MS-016 body, 32 J-leads)
+matching the KiCad footprint. Regenerate the renders with:
+
+```bash
+kicad-cli pcb export glb --include-pads --include-silkscreen --include-soldermask -o renders/board.glb board.kicad_pcb
+kicad-cli pcb export step -o exports/board.step board.kicad_pcb
+cd scripts/render3d && npm install && CHROMIUM_PATH=/path/to/chrome npm run render  # -> renders/3d-*.png
+```
+
+## Ordering
+
+See [`docs/jlcpcb-pricing.md`](docs/jlcpcb-pricing.md) for bare-PCB and assembled prices at
+JLCPCB with LCSC part numbers. Order ENIG (or hard-gold fingers with a 45° bevel) and **1.0 mm**
+thickness so the board fits a standard DMG cartridge shell. **Route the board first**: the
+current revision is unrouted.
 
 ## Project files
 

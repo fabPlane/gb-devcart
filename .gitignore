@@ -1,3 +1,8 @@
 .fabdesk/
 *.lck
-exports/
+game/build/
+scripts/render3d/node_modules/
+scripts/render3d/board.glb
+scripts/render3d/out-*.png
+__pycache__/
+*.kicad_prl

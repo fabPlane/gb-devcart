@@ -1,0 +1,24 @@
+<!doctype html><html><body style="margin:0;background:#20242b"><script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+const view = new URLSearchParams(location.search).get('view') || 'iso';
+const W=1600,H=1200; const r=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});
+r.setSize(W,H); r.toneMapping=THREE.ACESFilmicToneMapping; r.outputColorSpace=THREE.SRGBColorSpace; document.body.appendChild(r.domElement);
+const scene=new THREE.Scene(); scene.background=new THREE.Color(0x20242b);
+scene.environment=new THREE.PMREMGenerator(r).fromScene(new RoomEnvironment(),0.04).texture;
+const key=new THREE.DirectionalLight(0xffffff,2.2); key.position.set(-40,80,60); scene.add(key);
+new GLTFLoader().load('board.glb',g=>{const m=g.scene; scene.add(m);
+ m.traverse(o=>{if(!o.isMesh)return; const n=o.material.name;
+  if(n==='mat_11'||n==='mat_12'){o.material.color.setHex(0x0f3d24);o.material.opacity=0.92;o.material.roughness=0.45;}
+  if(n==='mat_9'){o.material.color.setHex(0xd4a93a);o.material.metalness=1.0;o.material.roughness=0.25;}
+  if(n==='mat_13'){o.material.color.setHex(0x2c3a22);}
+  if(n==='mat_10'){o.material.color.setHex(0xf2f2f2);o.material.opacity=1;}});
+ const box=new THREE.Box3().setFromObject(m), c=box.getCenter(new THREE.Vector3()), s=box.getSize(new THREE.Vector3());
+ m.position.sub(c); const d=Math.max(s.x,s.y,s.z);
+ const cam=new THREE.PerspectiveCamera(30,W/H,d/100,d*20);
+ // KiCad GLB: Y up = board normal
+ if(view==='top'){cam.position.set(0,d*2.2,0.001);} else {cam.position.set(-d*0.75,d*1.15,d*1.25);}
+ cam.lookAt(0,0,0); r.render(scene,cam); window.__done=true;});
+</script></body></html>

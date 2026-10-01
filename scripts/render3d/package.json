@@ -1,0 +1,10 @@
+{
+  "name": "gb-devcart-render3d",
+  "private": true,
+  "type": "module",
+  "description": "Renders renders/board.glb to renders/3d-{iso,top}.png with three.js in headless Chromium.",
+  "scripts": {
+    "render": "cp ../../renders/board.glb . && node shot.mjs iso top && cp out-iso.png ../../renders/3d-iso.png && cp out-top.png ../../renders/3d-top.png"
+  },
+  "dependencies": { "playwright-core": "^1.55.0", "three": "0.169.0" }
+}

@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "id": "prj_muq09vhgc7de0ce740",
+  "name": "gb-devcart",
+  "createdAt": "2026-10-01T20:47:41.476Z",
+  "updatedAt": "2026-10-01T20:47:41.476Z",
+  "board": {
+    "layers": 2
+  },
+  "router": "capacity",
+  "agent": {},
+  "allowedDrcWarnings": []
+}

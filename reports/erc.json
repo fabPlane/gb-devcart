@@ -1,0 +1,74 @@
+{
+  "violations": [],
+  "counts": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "raw": {
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-01T21:00:25",
+    "ignored_checks": [
+      {
+        "description": "Global label only appears once in the schematic",
+        "key": "single_global_label"
+      },
+      {
+        "description": "Four connection points are joined together",
+        "key": "four_way_junction"
+      },
+      {
+        "description": "SPICE model issue",
+        "key": "simulation_model_issue"
+      },
+      {
+        "description": "Assigned footprint doesn't match footprint filters",
+        "key": "footprint_filter"
+      }
+    ],
+    "included_severities": [
+      "error",
+      "warning",
+      "exclusion"
+    ],
+    "kicad_version": "10.99.0",
+    "sheets": [
+      {
+        "path": "/",
+        "uuid_path": "/b18735d8-2c91-44fe-b5b0-cc5a9b0e3664",
+        "violations": []
+      }
+    ],
+    "source": "board.kicad_sch"
+  },
+  "measurement": {
+    "evidenceLevel": "measured",
+    "source": "packaged-kicad-cli",
+    "scope": "complete saved hierarchy",
+    "applicability": true,
+    "checkedRevision": "4eab173c1fafa75334ad5c87907cb1ca1dd60b4df8ba16b7d6e9d2e9d9d57634",
+    "currentRevision": "4eab173c1fafa75334ad5c87907cb1ca1dd60b4df8ba16b7d6e9d2e9d9d57634",
+    "revisionStable": true,
+    "capturedAt": "2026-10-01T21:00:27.283Z",
+    "kicadCli": {
+      "path": "/home/user/tools/kicad-cli/kicad-cli",
+      "version": "10.99.0"
+    },
+    "hierarchy": {
+      "rootFile": "board.kicad_sch",
+      "referencedSheetCount": 1,
+      "complete": true,
+      "referencedFiles": [
+        "board.kicad_sch"
+      ],
+      "orphanFiles": [],
+      "sheets": [
+        {
+          "hierarchyPath": "/",
+          "nativePath": "board.kicad_sch",
+          "identity": "b18735d8-2c91-44fe-b5b0-cc5a9b0e3664"
+        }
+      ]
+    }
+  }
+}

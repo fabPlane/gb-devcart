@@ -948,5 +948,40 @@
   "100nF_0603": "C14663",
   "1uF_0603": "C15849",
   "10uF_0603_10V": "C19702"
+ },
+ "X_CLK": {
+  "mpn": "OT3EL89CJI-111YLC-48M (YXC)",
+  "lcsc": "C7434936",
+  "jlc": "Extended",
+  "stock": 6005,
+  "price_usd": {
+   "@10": 0.47,
+   "@100": 0.37
+  },
+  "stock_date": "2026-10-02",
+  "alt": {
+   "mpn": "OT252048MJBA4SL (YXC, the requested candidate)",
+   "lcsc": "C669070",
+   "stock": 945,
+   "price_usd": {
+    "@10": 0.52,
+    "@100": 0.4
+   }
+  },
+  "package": "SMD2520-4P (2.5 x 2.0 mm)",
+  "specs": "48 MHz CMOS, VDD 1.8-3.3 V, tolerance ±10/±20 ppm at 25 °C, stability over temperature ±20 ppm (LCSC listing). 15 pF load, 45-55% duty, start-up 3 ms max, current 12 mA max at 3.3 V for 41-54 MHz.",
+  "source": "YXC 'YSO110TR Wide Voltage' crystal-oscillator datasheet (4 pages, PDF dated 2025-12-30), from LCSC. LCSC serves the same PDF for both C-numbers.",
+  "pins": {
+   "1": "Tri-state / OE (enable when high or floating, >=70% VDD; disable <=30% VDD)",
+   "2": "GND",
+   "3": "OUTPUT",
+   "4": "VDD"
+  },
+  "footprint": "Oscillator:Oscillator_SMD_Abracon_ASDMB-4Pin_2.5x2.0mm",
+  "footprint_note": "KiCad pads: 1 bottom-left, 2 bottom-right, 3 top-right, 4 top-left (landscape). This matches the YXC top view. Pad centres are ±0.825/±0.775 mm vs YXC's recommended ±0.925/±0.725 (0.9 x 0.8 mm pads); the difference is small. Oscillator_SMD_ECS_2520MV-xxx-xx-4Pin_2.5x2.0mm has YXC's exact land geometry but is drawn rotated 90°, with the same counter-clockwise numbering from pin 1, so it also works.",
+  "notes": "Tie pin 1 to 3.3 V, or drive it from the FPGA. Put 100 nF between VDD and GND (the datasheet requires 0.01-0.1 uF). Route OUT to a GCLK pin on the GW1N-4, e.g. pin 35 IOB20A/GCLKT_4 or pin 11 IOL11A/GCLKT_6 (apicula). ±20 ppm is well inside the UART's ±100 ppm budget.",
+  "unverified": [
+   "The datasheet covers the whole series; it is not specific to either MPN. The pin-out and specs are assumed to apply to both, because LCSC links the same PDF for each."
+  ]
  }
 }

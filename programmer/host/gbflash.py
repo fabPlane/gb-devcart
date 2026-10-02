@@ -7,7 +7,8 @@
     python3 gbflash.py --port /dev/ttyACM0 dump backup.gb [--size 524288]
     python3 gbflash.py --port /dev/ttyACM0 save-backup game.sav   # 8 KB F-RAM at 0xA000
     python3 gbflash.py --port /dev/ttyACM0 save-restore game.sav
-    python3 gbflash.py --port /dev/ttyACM0 --rev 2 flash big.gb      # GB DEVCART r2 (FPGA, 8 MB)
+    python3 gbflash.py --port /dev/ttyACM0 --rev 2 flash big.gb      # r2 through the Mega
+    python3 gbflash.py --usb /dev/ttyACM0 flash big.gb               # r2 on its own USB-C port
 
 `--sim path/to/cart_sim [--sim-flash f.bin --sim-fram r.bin]` runs the same protocol against the native cart simulator instead of a
 serial port (used by programmer/test_e2e.sh).
@@ -196,12 +197,72 @@ def cmd_flash(link: Link, path: str) -> None:
     print("verify ok")
 
 
+def run_usb(a: argparse.Namespace) -> None:
+    """GB DEVCART r2 on its own USB-C port (CH347F UART -> FPGA USB engine)."""
+    import gbusb
+
+    model = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "sim", "usb_cart_model.py")
+    sim = [sys.executable, model, *[p for p in (a.sim_flash, a.sim_fram) if p]] if a.sim_usb else None
+    cart = gbusb.UsbCart(None if sim else a.usb, sim)
+    try:
+        print(cart.hello())
+        usb, dev = cart.mode()
+        if not usb:
+            raise SystemExit("the cart is powered by a console: unplug it from the console to use USB")
+        m, d = cart.flash_id()
+        print(f"flash id: 0x{m:02x} 0x{d:02x} {KNOWN_FLASH.get((m, d), 'UNKNOWN')}")
+        if a.cmd == "flash":
+            rom = open(a.rom, "rb").read()
+            if len(rom) > gbusb.FLASH_SIZE:
+                raise SystemExit(f"{a.rom}: {len(rom)} bytes does not fit the 8 MB flash")
+            if len(rom) >= 0x150:
+                print(f"{a.rom}: {len(rom)} bytes, {header_info(rom)}")
+            print("erasing chip (8 MB parts take up to a minute)...")
+            t0 = time.time()
+            cart.chip_erase()
+            print(f"erased in {time.time() - t0:.1f}s")
+            t0 = time.time()
+            for off in range(0, len(rom), gbusb.P_MAX):
+                chunk = rom[off : off + gbusb.P_MAX]
+                if chunk.count(0xFF) != len(chunk):
+                    cart.program(off, chunk)
+                progress(min(off + gbusb.P_MAX, len(rom)), len(rom), "programming")
+            print(f"programmed in {time.time() - t0:.1f}s; verifying...")
+            back = cart.read(gbusb.FLASH, 0, len(rom))
+            if back != rom:
+                bad = next(i for i in range(len(rom)) if back[i] != rom[i])
+                raise SystemExit(f"verify FAILED at 0x{bad:06x}: wrote 0x{rom[bad]:02x}, read 0x{back[bad]:02x}")
+            print("verify ok")
+        elif a.cmd == "dump":
+            data = cart.read(gbusb.FLASH, 0, a.size or gbusb.FLASH_SIZE)
+            open(a.out, "wb").write(data)
+            print(f"wrote {len(data)} bytes to {a.out}; {header_info(data)}")
+        elif a.cmd == "erase":
+            cart.chip_erase()
+            print("chip erased")
+        elif a.cmd == "save-backup":
+            data = cart.read(gbusb.FRAM, 0, gbusb.FRAM_SIZE)
+            open(a.out, "wb").write(data)
+            print(f"saved {len(data)} bytes of F-RAM to {a.out}")
+        elif a.cmd == "save-restore":
+            data = open(a.sav, "rb").read()[: gbusb.FRAM_SIZE]
+            for off in range(0, len(data), CHUNK):
+                cart.write(gbusb.FRAM, off, data[off : off + CHUNK])
+            if cart.read(gbusb.FRAM, 0, len(data)) != data:
+                raise SystemExit("F-RAM verify failed")
+            print(f"restored {len(data)} bytes to F-RAM")
+    finally:
+        cart.close()
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--port", help="serial port of the Mega, e.g. /dev/ttyACM0 or COM5")
     ap.add_argument("--sim", help="path to programmer/sim/cart_sim instead of a serial port")
     ap.add_argument("--sim-flash", help="cart_sim: flash image file (loaded at start, saved at exit)")
     ap.add_argument("--sim-fram", help="cart_sim: F-RAM image file")
+    ap.add_argument("--usb", metavar="PORT", help="r2 cart on its own USB-C port (CH347F UART), e.g. /dev/ttyACM0")
+    ap.add_argument("--sim-usb", action="store_true", help="--usb against programmer/sim/usb_cart_model.py")
     ap.add_argument("--rev", type=int, choices=(1, 2), default=1, help="cart revision: 1 = discrete mapper, 2 = FPGA mapper")
     sub = ap.add_subparsers(dest="cmd", required=True)
     sub.add_parser("info")
@@ -211,8 +272,11 @@ def main() -> None:
     p = sub.add_parser("save-backup"); p.add_argument("out")
     p = sub.add_parser("save-restore"); p.add_argument("sav")
     a = ap.parse_args()
+    if a.usb or a.sim_usb:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        return run_usb(a)
     if not a.port and not a.sim:
-        ap.error("give --port (or --sim)")
+        ap.error("give --port, --usb (or --sim / --sim-usb)")
 
     link = Link(a.port, a.sim, [p for p in (a.sim_flash, a.sim_fram) if p], a.rev)
     try:

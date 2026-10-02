@@ -62,4 +62,25 @@ head -c 32768 /dev/urandom > "$work/save2.sav"
 "${host2[@]}" save-restore "$work/save2.sav" | tail -1
 "${host2[@]}" save-backup "$work/save2b.sav" | tail -1
 cmp "$work/save2.sav" "$work/save2b.sav" && echo "r2: 32 KB save round-trips"
+echo
+echo "######## r2 over its own USB-C port (CH347F UART -> FPGA USB engine model) ########"
+usb=(python3 "$here/host/gbflash.py" --sim-usb --sim-flash "$work/flash3.bin" --sim-fram "$work/fram3.bin")
+head -c 8388608 /dev/urandom > "$work/flash3.bin"
+"${usb[@]}" info
+"${usb[@]}" flash "$rom" 2>/dev/null | tail -2
+"${usb[@]}" dump "$work/dump3.bin" --size "$(stat -c%s "$rom")" | tail -1
+cmp "$rom" "$work/dump3.bin" && echo "usb: dump matches ROM"
+python3 - "$work/big3.gb" <<'PY'
+import sys, os
+img = bytearray(os.urandom(1 << 20))       # 1 MB keeps the pure-Python model quick
+img[0x10000:0x10100] = b"\xff" * 256       # an erased chunk is skipped by the host
+open(sys.argv[1], "wb").write(img)
+PY
+"${usb[@]}" flash "$work/big3.gb" 2>/dev/null | tail -1
+"${usb[@]}" dump "$work/big3-dump.bin" --size 1048576 >/dev/null
+cmp "$work/big3.gb" "$work/big3-dump.bin" && echo "usb: 1 MB image (write-buffer pages) round-trips"
+head -c 32768 /dev/urandom > "$work/save3.sav"
+"${usb[@]}" save-restore "$work/save3.sav" | tail -1
+"${usb[@]}" save-backup "$work/save3b.sav" | tail -1
+cmp "$work/save3.sav" "$work/save3b.sav" && echo "usb: 32 KB save round-trips"
 echo "ALL OK"

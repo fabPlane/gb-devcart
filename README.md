@@ -6,8 +6,8 @@ from discrete 74HC logic. 2-layer, 56 x 49.5 mm, 32 edge fingers at 1.5 mm pitch
 
 ![GB DEVCART r1, 3D render](renders/3d-iso.png)
 
-> **Status:** built, placed, ERC/DRC clean, every part with a 3D model, but **not routed** yet.
-> The board has a complete ratsnest only; see "Project status" below.
+> **Status:** fully routed (2 layers, Freerouting through fabdesk), DRC/ERC clean, in-stock JLCPCB parts
+> with LCSC numbers, JLC gerbers/BOM/CPL in `exports/jlcpcb/`. **Not yet built or tested on hardware.**
 
 Designed with [fabPlane](https://fabplane.com) (fabdesk) driving Claude Code. Inspired by the ModRetro
 "Demo Cartridge", but an original, much simpler design: no FPGA, no level shifters, no regulators.
@@ -142,8 +142,22 @@ cd scripts/render3d && npm install && CHROMIUM_PATH=/path/to/chrome npm run rend
 
 See [`docs/jlcpcb-pricing.md`](docs/jlcpcb-pricing.md) for bare-PCB and assembled prices at
 JLCPCB with LCSC part numbers. Order ENIG (or hard-gold fingers with a 45° bevel) and **1.0 mm**
-thickness so the board fits a standard DMG cartridge shell. **Route the board first**: the
-current revision is unrouted.
+thickness so the board fits a standard DMG cartridge shell.
+
+JLC order files (regenerate with `KICAD_CLI=… python3 scripts/jlc_export.py`):
+
+| File | Upload as |
+| --- | --- |
+| `exports/jlcpcb/gerbers.zip` | Gerber files (2 layers, 56 × 49.5 mm) |
+| `exports/jlcpcb/bom.csv` | Assembly BOM: 9 lines, every line with an LCSC part number |
+| `exports/jlcpcb/cpl.csv` | Assembly pick-and-place (19 parts, top side) |
+
+Check the rotation preview on JLC's assembly page before confirming. SOIC and PLCC reels
+sometimes need a ±90° correction.
+
+| Routed top (F.Cu) | Routed bottom (B.Cu) |
+| --- | --- |
+| ![top](renders/top.png) | ![bottom](renders/bottom.png) |
 
 Snapshot from 2026-10-01 (USD, before shipping):
 
@@ -155,32 +169,37 @@ Snapshot from 2026-10-01 (USD, before shipping):
 | 100 | $62.70 ($0.63/board) | ~$1,497 (~$14.97/board) |
 
 Before ordering:
-- **Stock.** The exact flash and F-RAM are out of stock at LCSC. Use the drop-in SST39SF040-55-4I-NHE-T
-  (C632847) and FM18W08-SGTR (C55945). The F-RAM is about 60% of the assembled cost.
+- **Stock.** The design now uses the in-stock drop-ins: SST39SF040-55-4I-NHE-T (C632847, the same flash
+  in a faster, industrial grade) and FM18W08-SGTR (C55945, the same F-RAM on tape and reel). Stock was
+  17 and 45 on 2026-10-01, so re-check it before ordering. The F-RAM is about 60% of the assembled cost.
 - **Gold-finger size rule.** JLC's bevelled gold-finger option needs boards of at least 50 mm on both sides.
   This board is 49.5 mm tall, so widen it to 50 mm (r1.1) or order a panel. Plain ENIG needs no change.
 
 ## Project files
 
+- `scripts/sync_fields.py` copies MPN / Manufacturer / LCSC from the netlist into `board.kicad_pcb` and `board.kicad_sch`.
+- `scripts/jlc_export.py` writes the JLC gerbers, BOM and CPL.
 - `scripts/gen.py` generates `lib/gbdev.kicad_sym`, `lib/gbdev.pretty/` and `circuit.netlist.json`. The netlist is the source of truth; `board.kicad_*` are built from it.
 - Symbols and the edge footprint are custom (`gbdev` library) because the build environment has no KiCad symbol libraries.
 
 ## Project status
 
-- Done: netlist (26 components, 46 nets), custom symbol/footprint libraries, `circuit_build`, placement
-  inside the 56 x 49.5 mm outline (all parts above y = 41.5 mm, 3.5 mm boss hole at (28, 39)), top render.
-- **ERC** (`reports/erc.json`): 0 errors, 0 warnings.
-- **DRC** (`reports/drc.json`): 0 violations, 0 schematic-parity conflicts, **134 unrouted connections**
-  (the ratsnest of a board with no copper).
-- **Routing: not done.** `route_run` with the `capacity` router fails immediately
-  (`Cannot find package '@fabplane/fab-router'`), and Freerouting's jar is not installed. The board is left
-  unrouted with the ratsnest. Routing needs one of those routers installed, or manual routing in KiCad.
-  Expect to use both copper layers; the fingers are on F.Cu, so the data/address bus needs vias to B.Cu.
-- Board thickness is the KiCad default (1.6 mm). The netlist format has no thickness field and it was
-  deliberately not changed; set 1.0 mm in the fab order or in KiCad's board setup.
-- The "GB DEVCART r1" / "open hardware" silkscreen and the J1 reference-text position were added to
-  `board.kicad_pcb` by hand. A `circuit_build` with `fresh: true` will discard them.
-- During review, the generated schematic merged four net pairs (e.g. A13 with WR_N) because the tall flash and
-  F-RAM symbols overlapped the gate chips below them on the generator's grid. The symbols were rebalanced
-  (16/16 and 14/14 pins per side) in `lib/gbdev.kicad_sym` and `scripts/gen.py`. The library file was edited
-  by hand; `gen.py` was updated to match but has not been re-run since.
+- **Netlist:** 26 components, 46 nets. Custom `gbdev` symbols and edge footprint; placement inside the 56 x 49.5 mm
+  outline, with all parts above y = 41.5 mm and the 3.5 mm boss hole at (28, 39).
+- **Routing:** done with Freerouting 2.4.1 (Java 25) through fabdesk's `route_run`. All 134 connections are routed
+  in one run.
+  - **Rules:** 0.2 mm tracks, 0.15 mm clearance, 0.5/0.3 mm vias, all within JLCPCB's standard 2-layer process.
+  - **Keepouts:** a copper keepout around the boss hole and rules for the finger zone.
+  - **Power:** VCC/GND widened to 0.25–0.4 mm where neighbouring tracks allow. A GND pour on B.Cu would be a
+    good r1.1 change.
+- **DRC:** 0 errors, 0 warnings, 0 unconnected, 0 schematic-parity conflicts. **ERC:** 0 errors.
+- **What didn't work:** fabdesk's built-in `capacity` router (fab_router) could not route this dense
+  2-layer bus. Its best result was 63 of 134 connections, and long runs block the bridge process until
+  fabdesk times out. To get to the result above, parts were moved (U2, U3, C2, C3, C6, R2–R6), the rules
+  were tightened as listed, and Freerouting was enabled.
+- **Board thickness:** still the KiCad default (1.6 mm). Choose 1.0 mm in the fab order so the board fits
+  a DMG shell.
+- **Hand edits:** the silkscreen text and the J1 reference position were added to `board.kicad_pcb` by hand.
+  A `circuit_build` with `fresh: true` will discard them, along with the routing.
+- **Not yet verified on hardware:** bus timing (bank-0 pull-down settling), the `/CS` decode assumption,
+  and the JLC rotation offsets.

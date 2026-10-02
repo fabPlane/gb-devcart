@@ -10,11 +10,14 @@ const scene=new THREE.Scene(); scene.background=new THREE.Color(0x20242b);
 scene.environment=new THREE.PMREMGenerator(r).fromScene(new RoomEnvironment(),0.04).texture;
 const key=new THREE.DirectionalLight(0xffffff,2.2); key.position.set(-40,80,60); scene.add(key);
 new GLTFLoader().load('board.glb',g=>{const m=g.scene; scene.add(m);
- m.traverse(o=>{if(!o.isMesh)return; const n=o.material.name;
-  if(n==='mat_11'||n==='mat_12'){o.material.color.setHex(0x0f3d24);o.material.opacity=0.92;o.material.roughness=0.45;}
-  if(n==='mat_9'){o.material.color.setHex(0xd4a93a);o.material.metalness=1.0;o.material.roughness=0.25;}
-  if(n==='mat_13'){o.material.color.setHex(0x2c3a22);}
-  if(n==='mat_10'){o.material.color.setHex(0xf2f2f2);o.material.opacity=1;}});
+ // KiCad GLB materials, matched by their export colour (indices shift with export options)
+ const near=(c,r,g,b)=>Math.abs(c.r-r)<0.02&&Math.abs(c.g-g)<0.02&&Math.abs(c.b-b)<0.02;
+ m.traverse(o=>{if(!o.isMesh)return; const mt=o.material, c=mt.color;
+  if(near(c,0.08,0.20,0.14)){c.setHex(0x0f3d24);mt.opacity=0.92;mt.roughness=0.45;}           // soldermask
+  else if(near(c,0.5,0.5,0.5)){c.setHex(0xd4a93a);mt.metalness=1.0;mt.roughness=0.25;}        // exposed pads
+  else if(near(c,0.7,0.61,0)){c.setHex(0x8a6a2a);mt.metalness=0.6;mt.roughness=0.4;}          // copper tracks
+  else if(near(c,0.42,0.45,0.29)){c.setHex(0x2c3a22);}                                         // board body
+  else if(near(c,1,1,1)&&mt.transparent){c.setHex(0xf2f2f2);mt.opacity=1;}});                // silkscreen
  const box=new THREE.Box3().setFromObject(m), c=box.getCenter(new THREE.Vector3()), s=box.getSize(new THREE.Vector3());
  m.position.sub(c); const d=Math.max(s.x,s.y,s.z);
  const cam=new THREE.PerspectiveCamera(30,W/H,d/100,d*20);

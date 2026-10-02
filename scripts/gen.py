@@ -142,18 +142,18 @@ def add(ref, value, fp, part, **fields):
 PARTOF = {}
 
 add("J1", "GB_Cart_Edge_32", FP["J1"], "GB_Cart_Edge_32", Description="DMG cartridge edge fingers (PCB feature, ENIG)")
-add("U1", "SST39SF040", FP["U1"], "SST39SF040", MPN="SST39SF040-70-4C-NHE", Manufacturer="Microchip")
-add("U2", "FM18W08", FP["U2"], "FM18W08", MPN="FM18W08-SG", Manufacturer="Infineon (Cypress/Ramtron)")
-add("U3", "74HC574", FP["U3"], "74HC574", MPN="SN74HC574DWR", Manufacturer="Texas Instruments")
-add("U4", "74HC32", FP["U4"], "74HC32", MPN="SN74HC32DR", Manufacturer="Texas Instruments")
-add("U5", "74HC32", FP["U5"], "74HC32", MPN="SN74HC32DR", Manufacturer="Texas Instruments")
-add("U6", "74HC00", FP["U6"], "74HC00", MPN="SN74HC00DR", Manufacturer="Texas Instruments")
+add("U1", "SST39SF040", FP["U1"], "SST39SF040", MPN="SST39SF040-55-4I-NHE-T", Manufacturer="Microchip", LCSC="C632847")
+add("U2", "FM18W08", FP["U2"], "FM18W08", MPN="FM18W08-SGTR", Manufacturer="Infineon (Cypress/Ramtron)", LCSC="C55945")
+add("U3", "74HC574", FP["U3"], "74HC574", MPN="SN74HC574DWR", Manufacturer="Texas Instruments", LCSC="C10097")
+add("U4", "74HC32", FP["U4"], "74HC32", MPN="SN74HC32DR", Manufacturer="Texas Instruments", LCSC="C6838")
+add("U5", "74HC32", FP["U5"], "74HC32", MPN="SN74HC32DR", Manufacturer="Texas Instruments", LCSC="C6838")
+add("U6", "74HC00", FP["U6"], "74HC00", MPN="SN74HC00DR", Manufacturer="Texas Instruments", LCSC="C10090")
 for i in range(1, 7):
-    add(f"C{i}", "100nF", "Capacitor_SMD:C_0603_1608Metric", "C", Description="X7R 16V decoupling")
-add("C7", "10uF", "Capacitor_SMD:C_1206_3216Metric", "C", Description="X5R 10V bulk")
-add("R1", "10k", "Resistor_SMD:R_0603_1608Metric", "R", Description="/RESET pull-up")
+    add(f"C{i}", "100nF", "Capacitor_SMD:C_0603_1608Metric", "C", Description="X7R 50V decoupling", MPN="CC0603KRX7R9BB104", Manufacturer="Yageo", LCSC="C14663")
+add("C7", "10uF", "Capacitor_SMD:C_1206_3216Metric", "C", Description="X5R 50V bulk", MPN="CL31A106KBHNNNE", Manufacturer="Samsung", LCSC="C13585")
+add("R1", "10k", "Resistor_SMD:R_0603_1608Metric", "R", Description="/RESET pull-up", MPN="0603WAF1002T5E", Manufacturer="UNI-ROYAL", LCSC="C25804")
 for i in range(2, 7):
-    add(f"R{i}", "2.2k", "Resistor_SMD:R_0603_1608Metric", "R", Description="bank latch pull-down")
+    add(f"R{i}", "2.2k", "Resistor_SMD:R_0603_1608Metric", "R", Description="bank latch pull-down", MPN="0603WAF2201T5E", Manufacturer="UNI-ROYAL", LCSC="C4190")
 for i, n in enumerate(["VCC", "GND", "CLK", "WR", "RD", "AUDIO_IN"], 1):
     add(f"TP{i}", f"TP_{n}", "TestPoint:TestPoint_Pad_D1.5mm", "TestPoint")
 
@@ -224,11 +224,11 @@ for ref, part in PARTOF.items():
             print("UNCONNECTED", ref, num)
 
 PLACE = {
-    "J1": (28, 49.5), "U1": (14, 14), "U2": (46, 15), "U3": (29.5, 11),
+    "J1": (28, 49.5), "U1": (14, 14), "U2": (48.5, 15), "U3": (32.5, 11),
     "U4": (24, 29), "U5": (33, 29), "U6": (13, 31),
-    "C1": (18.5, 3.2), "C2": (54, 6.7), "C3": (31.5, 2.5), "C4": (24, 22.5), "C5": (33, 22.5), "C6": (13, 24.0),
+    "C1": (18.5, 3.2), "C2": (53, 3.4), "C3": (36.8, 2.4), "C4": (24, 22.5), "C5": (33, 22.5), "C6": (18.5, 27.4),
     "C7": (6, 38.5), "R1": (46, 33),
-    "R2": (37.2, 4.8), "R3": (37.2, 7.8), "R4": (37.2, 10.8), "R5": (37.2, 13.8), "R6": (37.2, 16.8),
+    "R2": (40.2, 4.8), "R3": (40.2, 7.8), "R4": (40.2, 10.8), "R5": (40.2, 13.8), "R6": (40.2, 16.8),
     "TP1": (40, 39.5), "TP2": (43, 39.5), "TP3": (46, 39.5), "TP4": (49, 39.5), "TP5": (52, 39.5), "TP6": (52, 35.5),
 }
 doc = {
@@ -240,7 +240,7 @@ doc = {
     },
     "board": {
         "widthMm": 56, "heightMm": 49.5, "copperLayers": 2,
-        "rules": {"clearanceMm": 0.2, "trackWidthMm": 0.25, "viaDiameterMm": 0.6, "viaDrillMm": 0.3},
+        "rules": {"clearanceMm": 0.15, "trackWidthMm": 0.2, "viaDiameterMm": 0.5, "viaDrillMm": 0.3},
         "holes": [{"x": 28, "y": 39, "diameterMm": 3.5}],
         "placements": [{"ref": r, "position": {"x": x, "y": y}} for r, (x, y) in PLACE.items()],
     },

@@ -102,7 +102,7 @@
     "value": "100nF",
     "footprint": "Capacitor_SMD:C_0603_1608Metric",
     "fields": {
-     "Description": "X7R 16V decoupling",
+     "Description": "X7R 50V decoupling",
      "MPN": "CC0603KRX7R9BB104",
      "Manufacturer": "Yageo",
      "LCSC": "C14663"
@@ -117,7 +117,7 @@
     "value": "100nF",
     "footprint": "Capacitor_SMD:C_0603_1608Metric",
     "fields": {
-     "Description": "X7R 16V decoupling",
+     "Description": "X7R 50V decoupling",
      "MPN": "CC0603KRX7R9BB104",
      "Manufacturer": "Yageo",
      "LCSC": "C14663"
@@ -132,7 +132,7 @@
     "value": "100nF",
     "footprint": "Capacitor_SMD:C_0603_1608Metric",
     "fields": {
-     "Description": "X7R 16V decoupling",
+     "Description": "X7R 50V decoupling",
      "MPN": "CC0603KRX7R9BB104",
      "Manufacturer": "Yageo",
      "LCSC": "C14663"
@@ -147,7 +147,7 @@
     "value": "100nF",
     "footprint": "Capacitor_SMD:C_0603_1608Metric",
     "fields": {
-     "Description": "X7R 16V decoupling",
+     "Description": "X7R 50V decoupling",
      "MPN": "CC0603KRX7R9BB104",
      "Manufacturer": "Yageo",
      "LCSC": "C14663"
@@ -162,7 +162,7 @@
     "value": "100nF",
     "footprint": "Capacitor_SMD:C_0603_1608Metric",
     "fields": {
-     "Description": "X7R 16V decoupling",
+     "Description": "X7R 50V decoupling",
      "MPN": "CC0603KRX7R9BB104",
      "Manufacturer": "Yageo",
      "LCSC": "C14663"
@@ -177,7 +177,7 @@
     "value": "100nF",
     "footprint": "Capacitor_SMD:C_0603_1608Metric",
     "fields": {
-     "Description": "X7R 16V decoupling",
+     "Description": "X7R 50V decoupling",
      "MPN": "CC0603KRX7R9BB104",
      "Manufacturer": "Yageo",
      "LCSC": "C14663"
@@ -192,7 +192,7 @@
     "value": "10uF",
     "footprint": "Capacitor_SMD:C_1206_3216Metric",
     "fields": {
-     "Description": "X5R 10V bulk",
+     "Description": "X5R 50V bulk",
      "MPN": "CL31A106KBHNNNE",
      "Manufacturer": "Samsung",
      "LCSC": "C13585"
@@ -1521,9 +1521,9 @@
   "heightMm": 49.5,
   "copperLayers": 2,
   "rules": {
-   "clearanceMm": 0.2,
-   "trackWidthMm": 0.25,
-   "viaDiameterMm": 0.6,
+   "clearanceMm": 0.15,
+   "trackWidthMm": 0.2,
+   "viaDiameterMm": 0.5,
    "viaDrillMm": 0.3
   },
   "holes": [
@@ -1551,14 +1551,14 @@
    {
     "ref": "U2",
     "position": {
-     "x": 46,
+     "x": 48.5,
      "y": 15
     }
    },
    {
     "ref": "U3",
     "position": {
-     "x": 29.5,
+     "x": 32.5,
      "y": 11
     }
    },
@@ -1593,15 +1593,15 @@
    {
     "ref": "C2",
     "position": {
-     "x": 54,
-     "y": 6.7
+     "x": 53,
+     "y": 3.4
     }
    },
    {
     "ref": "C3",
     "position": {
-     "x": 31.5,
-     "y": 2.5
+     "x": 36.8,
+     "y": 2.4
     }
    },
    {
@@ -1621,8 +1621,8 @@
    {
     "ref": "C6",
     "position": {
-     "x": 13,
-     "y": 24.0
+     "x": 18.5,
+     "y": 27.4
     }
    },
    {
@@ -1642,35 +1642,35 @@
    {
     "ref": "R2",
     "position": {
-     "x": 37.2,
+     "x": 40.2,
      "y": 4.8
     }
    },
    {
     "ref": "R3",
     "position": {
-     "x": 37.2,
+     "x": 40.2,
      "y": 7.8
     }
    },
    {
     "ref": "R4",
     "position": {
-     "x": 37.2,
+     "x": 40.2,
      "y": 10.8
     }
    },
    {
     "ref": "R5",
     "position": {
-     "x": 37.2,
+     "x": 40.2,
      "y": 13.8
     }
    },
    {
     "ref": "R6",
     "position": {
-     "x": 37.2,
+     "x": 40.2,
      "y": 16.8
     }
    },

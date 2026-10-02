@@ -1,0 +1,952 @@
+{
+ "_meta": {
+  "date": "2026-10-02",
+  "project": "GB DEVCART r2",
+  "note": "Pin numbers transcribed from the primary sources named in each entry. 'verified' lists what was checked against a primary source; 'unverified' lists what was not. KiCad footprints checked against /home/user/tools/footprints (pad names/count).",
+  "superseded": "GW1NZ-LV1QN48 pin work was stopped by the coordinator (plan change to a bigger FPGA); not included."
+ },
+ "U_FPGA": {
+  "mpn": "GW1N-LV4QN88C6/I5",
+  "lcsc": "C31900351",
+  "jlc": "Extended",
+  "stock": 112,
+  "price_usd": {
+   "@10": 14.96,
+   "@100": 12.26
+  },
+  "stock_date": "2026-10-02",
+  "footprint": "Package_DFN_QFN:ArtInChip_QFN-88-1EP_10x10mm_P0.4mm_EP6.74x6.74mm",
+  "footprint_note": "Only 10x10 mm 0.4 mm-pitch QFN-88 in the local KiCad lib; 88 pads + EP pad '89'. JLC lists GW1N-LV9 QN88 as 'QFN-88_L10.0-W10.0-P0.40-EP6.7'. EP size / pad length NOT checked against Gowin's QN88 package drawing (UNVERIFIED).",
+  "sources": [
+   "Gowin UG105 'GW1N-4 Pinout' v1.8.5E (11/01/2024), cdn.gowinsemi.com.cn/UG105E.pdf, pin list p.10-11 + Power sheet p.15",
+   "Gowin UG290 'Programming and Configuration Guide' v2.9.1E (07/31/2026), Table 5-1, Fig 7-1, JTAG pin note",
+   "apycula 0.32 chipdb GW1N-4.msgpack.xz pinout['GW1N-4']['QFN88']"
+  ],
+  "supplies": {
+   "VCC": "core, LV: 1.14-1.26 V -> 1.2 V",
+   "VCCIO0..3": "1.14-3.6 V -> 3.3 V (all four banks independent in QN88)",
+   "VCCX": "aux 2.375-3.6 V -> 3.3 V; VCCX >= VCCIO",
+   "EPAD": "GND recommended, not required (UG105 note)"
+  },
+  "power_pins": {
+   "VCC": [
+    1,
+    22,
+    45,
+    66
+   ],
+   "VCCIO0": [
+    67
+   ],
+   "VCCIO1": [
+    58
+   ],
+   "VCCIO2": [
+    23,
+    44
+   ],
+   "VCCIO3": [
+    12
+   ],
+   "VCCX": [
+    64,
+    78
+   ],
+   "VSS": [
+    2,
+    21,
+    24,
+    43,
+    46,
+    65
+   ],
+   "EP": "pad 89 -> GND"
+  },
+  "power_pins_check": "17 non-I/O pins {1,2,12,21,22,23,24,43,44,45,46,58,64,65,66,67,78} = exactly the pins absent from apicula's 71-pin QFN88 I/O list.",
+  "config_pins": {
+   "JTAGSEL_N": 4,
+   "TMS": 5,
+   "TCK": 6,
+   "TDI": 7,
+   "TDO": 8,
+   "RECONFIG_N": 9,
+   "DONE": 10,
+   "MODE1": 87,
+   "MODE0": 88,
+   "MODE2": "not bonded, internally grounded",
+   "READY": "not bonded in QN88"
+  },
+  "strapping_autoboot": {
+   "mode": "AUTO BOOT (internal flash) = MODE[2:0]=000 (UG290 Table 5-1). JTAG works regardless of MODE.",
+   "MODE0_88": "1k to GND (MODE pins have internal weak pull-ups; UG290 recommends 1k pull-down / 4.7k pull-up)",
+   "MODE1_87": "1k to GND",
+   "MODE2": "internally grounded",
+   "RECONFIG_N_9": "internal weak pull-up; UG290 Fig 7-1: 1k to a push-button to GND (optional). Add 4.7k-10k to 3.3V (recommended, engineering choice). FPGA can also drive it via a spare pin to self-reload.",
+   "DONE_10": "4.7k to 3.3V (UG290 Fig 7-1; optional LED). Open-drain, low during config.",
+   "TCK_6": "4.7k to GND (UG290: 'TCK needs to connect a 4.7K pull-down resistor on the PCB')",
+   "JTAGSEL_N_4": "keep JTAG pins dedicated (do not reuse TMS/TCK/TDI/TDO as GPIO); then JTAGSEL_N is irrelevant; 4.7k to 3.3V recommended (engineering choice)."
+  },
+  "decoupling_recommendation": "UNVERIFIED vs a Gowin schematic guide (not fetched): 100 nF 0402/0603 at each of the 4 VCC, 4 VCCIO and 2 VCCX pins; 10 uF bulk per rail (1.2 V, 3.3 V).",
+  "user_io": {
+   "count": 71,
+   "per_bank": {
+    "0": 20,
+    "1": 15,
+    "2": 23,
+    "3": 13
+   },
+   "usable_note": "71 minus JTAG(4), RECONFIG_N, DONE, MODE0/1 (strapped) = 63 freely usable; JTAGSEL_N usable after config -> ~64."
+  },
+  "io_pins_apicula": {
+   "3": {
+    "name": "IOL2A",
+    "bank": 3
+   },
+   "4": {
+    "name": "IOL3A",
+    "bank": 3,
+    "func": [
+     "JTAGSEL_N",
+     "LPLL_T_IN"
+    ]
+   },
+   "5": {
+    "name": "IOL10A",
+    "bank": 3,
+    "func": [
+     "TMS"
+    ]
+   },
+   "6": {
+    "name": "IOL10B",
+    "bank": 3,
+    "func": [
+     "TCK"
+    ]
+   },
+   "7": {
+    "name": "IOL10D",
+    "bank": 3,
+    "func": [
+     "TDI"
+    ]
+   },
+   "8": {
+    "name": "IOL10E",
+    "bank": 3,
+    "func": [
+     "TDO"
+    ]
+   },
+   "9": {
+    "name": "IOL10F",
+    "bank": 3,
+    "func": [
+     "RECONFIG_N"
+    ]
+   },
+   "10": {
+    "name": "IOL10G",
+    "bank": 3,
+    "func": [
+     "DONE"
+    ]
+   },
+   "11": {
+    "name": "IOL11A",
+    "bank": 3,
+    "func": [
+     "GCLKT_6"
+    ]
+   },
+   "13": {
+    "name": "IOL15A",
+    "bank": 3
+   },
+   "14": {
+    "name": "IOL15B",
+    "bank": 3
+   },
+   "15": {
+    "name": "IOL17A",
+    "bank": 3
+   },
+   "16": {
+    "name": "IOL17B",
+    "bank": 3
+   },
+   "17": {
+    "name": "IOB2A",
+    "bank": 2
+   },
+   "18": {
+    "name": "IOB2B",
+    "bank": 2
+   },
+   "19": {
+    "name": "IOB4A",
+    "bank": 2
+   },
+   "20": {
+    "name": "IOB4B",
+    "bank": 2
+   },
+   "25": {
+    "name": "IOB6A",
+    "bank": 2
+   },
+   "26": {
+    "name": "IOB6B",
+    "bank": 2
+   },
+   "27": {
+    "name": "IOB8A",
+    "bank": 2
+   },
+   "28": {
+    "name": "IOB8B",
+    "bank": 2
+   },
+   "29": {
+    "name": "IOB10A",
+    "bank": 2
+   },
+   "30": {
+    "name": "IOB10B",
+    "bank": 2
+   },
+   "31": {
+    "name": "IOB12A",
+    "bank": 2
+   },
+   "32": {
+    "name": "IOB12B",
+    "bank": 2
+   },
+   "33": {
+    "name": "IOB14A",
+    "bank": 2
+   },
+   "34": {
+    "name": "IOB15A",
+    "bank": 2
+   },
+   "35": {
+    "name": "IOB20A",
+    "bank": 2,
+    "func": [
+     "GCLKT_4"
+    ]
+   },
+   "36": {
+    "name": "IOB20B",
+    "bank": 2,
+    "func": [
+     "GCLKC_4"
+    ]
+   },
+   "37": {
+    "name": "IOB26B",
+    "bank": 2
+   },
+   "38": {
+    "name": "IOB27B",
+    "bank": 2
+   },
+   "39": {
+    "name": "IOB28A",
+    "bank": 2
+   },
+   "40": {
+    "name": "IOB28B",
+    "bank": 2
+   },
+   "41": {
+    "name": "IOB30A",
+    "bank": 2
+   },
+   "42": {
+    "name": "IOB30B",
+    "bank": 2
+   },
+   "47": {
+    "name": "IOB36B",
+    "bank": 2
+   },
+   "48": {
+    "name": "IOR17B",
+    "bank": 1
+   },
+   "49": {
+    "name": "IOR17A",
+    "bank": 1
+   },
+   "50": {
+    "name": "IOR15B",
+    "bank": 1
+   },
+   "51": {
+    "name": "IOR11B",
+    "bank": 1,
+    "func": [
+     "GCLKC_3"
+    ]
+   },
+   "52": {
+    "name": "IOR11A",
+    "bank": 1,
+    "func": [
+     "GCLKT_3"
+    ]
+   },
+   "53": {
+    "name": "IOR10J",
+    "bank": 1,
+    "func": [
+     "DOUT",
+     "WE_N"
+    ]
+   },
+   "54": {
+    "name": "IOR10I",
+    "bank": 1,
+    "func": [
+     "DIN",
+     "CLKHOLD_N"
+    ]
+   },
+   "55": {
+    "name": "IOR10H",
+    "bank": 1,
+    "func": [
+     "SSPI_CS_N",
+     "D0"
+    ]
+   },
+   "56": {
+    "name": "IOR10G",
+    "bank": 1,
+    "func": [
+     "SO",
+     "D1"
+    ]
+   },
+   "57": {
+    "name": "IOR10E",
+    "bank": 1,
+    "func": [
+     "FASTRD_N",
+     "D3"
+    ]
+   },
+   "59": {
+    "name": "IOR10D",
+    "bank": 1,
+    "func": [
+     "MCLK",
+     "D4"
+    ]
+   },
+   "60": {
+    "name": "IOR10C",
+    "bank": 1,
+    "func": [
+     "MCS_N",
+     "D5"
+    ]
+   },
+   "61": {
+    "name": "IOR10B",
+    "bank": 1,
+    "func": [
+     "MO",
+     "D6"
+    ]
+   },
+   "62": {
+    "name": "IOR10A",
+    "bank": 1,
+    "func": [
+     "MI",
+     "D7"
+    ]
+   },
+   "63": {
+    "name": "IOR3A",
+    "bank": 1,
+    "func": [
+     "RPLL_T_IN"
+    ]
+   },
+   "68": {
+    "name": "IOT37B",
+    "bank": 0
+   },
+   "69": {
+    "name": "IOT37A",
+    "bank": 0
+   },
+   "70": {
+    "name": "IOT36B",
+    "bank": 0
+   },
+   "71": {
+    "name": "IOT36A",
+    "bank": 0
+   },
+   "72": {
+    "name": "IOT35B",
+    "bank": 0
+   },
+   "73": {
+    "name": "IOT35A",
+    "bank": 0
+   },
+   "74": {
+    "name": "IOT33B",
+    "bank": 0
+   },
+   "75": {
+    "name": "IOT32B",
+    "bank": 0
+   },
+   "76": {
+    "name": "IOT31B",
+    "bank": 0
+   },
+   "77": {
+    "name": "IOT30B",
+    "bank": 0
+   },
+   "79": {
+    "name": "IOT12A",
+    "bank": 0
+   },
+   "80": {
+    "name": "IOT9A",
+    "bank": 0
+   },
+   "81": {
+    "name": "IOT6B",
+    "bank": 0
+   },
+   "82": {
+    "name": "IOT6A",
+    "bank": 0
+   },
+   "83": {
+    "name": "IOT5B",
+    "bank": 0
+   },
+   "84": {
+    "name": "IOT5A",
+    "bank": 0
+   },
+   "85": {
+    "name": "IOT4B",
+    "bank": 0
+   },
+   "86": {
+    "name": "IOT4A",
+    "bank": 0
+   },
+   "87": {
+    "name": "IOT3B",
+    "bank": 0,
+    "func": [
+     "MODE1"
+    ]
+   },
+   "88": {
+    "name": "IOT2B",
+    "bank": 0,
+    "func": [
+     "MODE0"
+    ]
+   }
+  },
+  "unverified": [
+   "Which die revision LCSC ships for C31900351 and that apicula's 'GW1N-4' chipdb matches it (Gowin sells GW1N-4 B/D variants; apicula lists only a UV4LQ144 board for GW1N-4).",
+   "EP/pad geometry of the ArtInChip QFN-88 footprint vs Gowin QN88 drawing."
+  ]
+ },
+ "U_FPGA_alt": {
+  "mpn": "GW1NR-LV9QN88PC6/I5",
+  "lcsc": "C5799578",
+  "jlc": "Extended",
+  "stock": 173,
+  "price_usd": {
+   "@10": 22.06,
+   "@100": 18.07
+  },
+  "sources": [
+   "Gowin UG803 'GW1NR-9 Pinout' v1.6.5E (03/14/2025) Power sheet",
+   "Gowin UG801 v1.5E pin list p.14-15 (QN88P column)",
+   "DS117 v3.2.5E (07/31/2026) Table 3-2",
+   "apycula GW1N-9C.msgpack.xz pinout['GW1NR-9C']['QFN88P']"
+  ],
+  "power_pins": {
+   "VCC": [
+    1,
+    22,
+    45,
+    66
+   ],
+   "VCCIO1": [
+    58
+   ],
+   "VCCIO2": [
+    23,
+    44
+   ],
+   "VCCIO3": [
+    12
+   ],
+   "VCCX/VCCIO0 (shorted)": [
+    64,
+    67,
+    78
+   ],
+   "VSS": [
+    2,
+    21,
+    24,
+    43,
+    46,
+    65
+   ]
+  },
+  "config_pins": {
+   "JTAGSEL_N": 4,
+   "TMS": 5,
+   "TCK": 6,
+   "TDI": 7,
+   "TDO": 8,
+   "RECONFIG_N": 9,
+   "MODE1": 87,
+   "MODE0": 88
+  },
+  "caveat": "QN88P: VCCIO3 MUST be 1.71-1.89 V (it powers the embedded PSRAM). Bank 3 holds 23 I/O incl. JTAG, so only 48 I/O (banks 1+2) are 3.3 V, JTAG is 1.8 V (CH347F VIO=1.8 V would handle it) and a 1.8 V LDO is needed. This is the Tang Nano 9K chip (best-tested apicula target, needs --vopt family=GW1N-9C).",
+  "user_io": {
+   "count": 71,
+   "per_bank": {
+    "1": 25,
+    "2": 23,
+    "3": 23
+   }
+  }
+ },
+ "U_ROM": {
+  "mpn": "S29GL064N90TFI040",
+  "lcsc": "C117907",
+  "footprint": "Package_SO:TSOP-I-48_18.4x12mm_P0.5mm",
+  "source": "Infineon/Cypress S29GL064N/S29GL032N datasheet Doc 001-98525 Rev *B (2017-05-26) via LCSC C117907: Fig.1 48-pin TSOP (models 03,04), ordering info p.13, Table 8, Table 19",
+  "model": "'04' = x8/x16, VCC 2.7-3.6 V, bottom boot sector, WP#/ACC=VIL protects bottom two sectors (ordering table). Last digit '0' = packing type 0.",
+  "boot_sectors": "SA0-SA7 = eight 8 KB (4 Kword) sectors at byte 0x000000-0x00FFFF; SA8.. = 64 KB sectors (Table 8).",
+  "pins": {
+   "1": "A15",
+   "2": "A14",
+   "3": "A13",
+   "4": "A12",
+   "5": "A11",
+   "6": "A10",
+   "7": "A9",
+   "8": "A8",
+   "9": "A19",
+   "10": "A20",
+   "11": "WE#",
+   "12": "RESET#",
+   "13": "A21",
+   "14": "WP#/ACC",
+   "15": "RY/BY#",
+   "16": "A18",
+   "17": "A17",
+   "18": "A7",
+   "19": "A6",
+   "20": "A5",
+   "21": "A4",
+   "22": "A3",
+   "23": "A2",
+   "24": "A1",
+   "25": "A0",
+   "26": "CE#",
+   "27": "VSS",
+   "28": "OE#",
+   "29": "DQ0",
+   "30": "DQ8",
+   "31": "DQ1",
+   "32": "DQ9",
+   "33": "DQ2",
+   "34": "DQ10",
+   "35": "DQ3",
+   "36": "DQ11",
+   "37": "VCC",
+   "38": "DQ4",
+   "39": "DQ12",
+   "40": "DQ5",
+   "41": "DQ13",
+   "42": "DQ6",
+   "43": "DQ14",
+   "44": "DQ7",
+   "45": "DQ15/A-1",
+   "46": "VSS",
+   "47": "BYTE#",
+   "48": "A16"
+  },
+  "nc_pins": "none on S29GL064N model 03/04 (A21 pin 13 is NC only on S29GL032N)",
+  "byte_mode": "BYTE#=VIL: DQ0-DQ7 active, DQ8-DQ14 tri-stated (leave unconnected), DQ15 = A-1 address LSB. Byte address = {A21..A0, A-1} = 23 bits = 8 MB.",
+  "commands_x8": "unlock AAA/AA, 555/55; program AAA/A0 then PA/PD; sector erase AAA/80, AAA/AA, 555/55, SA/30; ID AAA/90 (Table 19).",
+  "notes": "WP#/ACC has an internal pull-up (floating = VIH); tie high, since low write-protects SA0/SA1 (GB bank 0). RY/BY# is open-drain: pull-up to 3.3 V (e.g. 10k) if used. No separate VIO pin on model 04."
+ },
+ "U_DATA_XCVR": {
+  "mpn": "SN74LVC8T245PWR",
+  "lcsc": "C27643",
+  "footprint": "Package_SO:TSSOP-24_4.4x7.8mm_P0.65mm",
+  "source": "TI SCES584A (June 2005, rev. Aug 2005) via LCSC C27643",
+  "pins": {
+   "1": "VCCA",
+   "2": "DIR",
+   "3": "A1",
+   "4": "A2",
+   "5": "A3",
+   "6": "A4",
+   "7": "A5",
+   "8": "A6",
+   "9": "A7",
+   "10": "A8",
+   "11": "GND",
+   "12": "GND",
+   "13": "GND",
+   "14": "B8",
+   "15": "B7",
+   "16": "B6",
+   "17": "B5",
+   "18": "B4",
+   "19": "B3",
+   "20": "B2",
+   "21": "B1",
+   "22": "OE#",
+   "23": "VCCB",
+   "24": "VCCB"
+  },
+  "function": "OE#=L,DIR=L: B->A; OE#=L,DIR=H: A->B; OE#=H: isolation. DIR and OE# are referenced to VCCA.",
+  "notes": "VCCA=3.3 V (FPGA side), VCCB=5 V (GB side). Datasheet: tie OE# to VCC through a pull-up so outputs stay Hi-Z during power-up/down."
+ },
+ "U_ADDR_BUF": {
+  "mpn": "74LVC245APW,118 (Nexperia)",
+  "lcsc": "C6082",
+  "footprint": "Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm",
+  "source": "Nexperia 74LVC245A/74LVCH245A product data sheet Rev.13 (2023-08-08), Table 2 and Table 3",
+  "pins": {
+   "1": "DIR",
+   "2": "A0",
+   "3": "A1",
+   "4": "A2",
+   "5": "A3",
+   "6": "A4",
+   "7": "A5",
+   "8": "A6",
+   "9": "A7",
+   "10": "GND",
+   "11": "B7",
+   "12": "B6",
+   "13": "B5",
+   "14": "B4",
+   "15": "B3",
+   "16": "B2",
+   "17": "B1",
+   "18": "B0",
+   "19": "OE#",
+   "20": "VCC"
+  },
+  "function": "OE#=L,DIR=L: An=Bn (B->A); OE#=L,DIR=H: Bn=An (A->B); OE#=H: Z. Inputs and 3-state I/O tolerate up to 5.5 V.",
+  "notes": "For GB->FPGA at VCC=3.3 V: put GB lines on B, FPGA on A, DIR=GND. Nexperia numbers A0-A7/B0-B7; TI numbers the same pins A1-A8/B1-B8."
+ },
+ "U_ADDR_BUF_bushold": {
+  "mpn": "SN74LVCH245APWR (TI)",
+  "lcsc": "C352976",
+  "stock": 4515,
+  "price_usd": {
+   "@10": 0.56,
+   "@100": 0.43
+  },
+  "footprint": "Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm",
+  "source": "TI SN74LVCH245A ZHCSIR4Q (rev. Sept 2018)",
+  "pins": {
+   "1": "DIR",
+   "2": "A1",
+   "3": "A2",
+   "4": "A3",
+   "5": "A4",
+   "6": "A5",
+   "7": "A6",
+   "8": "A7",
+   "9": "A8",
+   "10": "GND",
+   "11": "B8",
+   "12": "B7",
+   "13": "B6",
+   "14": "B5",
+   "15": "B4",
+   "16": "B3",
+   "17": "B2",
+   "18": "B1",
+   "19": "OE#",
+   "20": "VCC"
+  },
+  "function": "OE#=L,DIR=L: B->A; OE#=L,DIR=H: A->B.",
+  "notes": "Same pinout as 74LVC245A. Bus-hold is always active (OE/DIR do not disable it); TI says not to add pull resistors with bus-hold. Nexperia 74LVCH245APW (C426764) has only 4 in stock."
+ },
+ "U_FRAM": {
+  "mpn": "FM28V020-SGTR",
+  "lcsc": "C54935",
+  "footprint": "Package_SO:SOIC-28W_7.5x17.9mm_P1.27mm",
+  "source": "Cypress FM28V020 Doc 001-86204 Rev *H (2018-11-20) Fig.1 + Package 51-85026 (body 7.39-7.62 x 17.70-18.11 mm)",
+  "pins": {
+   "1": "A14",
+   "2": "A12",
+   "3": "A7",
+   "4": "A6",
+   "5": "A5",
+   "6": "A4",
+   "7": "A3",
+   "8": "A2",
+   "9": "A1",
+   "10": "A0",
+   "11": "DQ0",
+   "12": "DQ1",
+   "13": "DQ2",
+   "14": "VSS",
+   "15": "DQ3",
+   "16": "DQ4",
+   "17": "DQ5",
+   "18": "DQ6",
+   "19": "DQ7",
+   "20": "CE#",
+   "21": "A10",
+   "22": "OE#",
+   "23": "A11",
+   "24": "A9",
+   "25": "A8",
+   "26": "A13",
+   "27": "WE#",
+   "28": "VDD"
+  },
+  "matches_jedec_62256": true,
+  "notes": "VDD 2.0-3.6 V. The whole address is latched on the CE# falling edge, so CE# must toggle for every access."
+ },
+ "U_LDO_3V3": {
+  "mpn": "XC6206P332MR-G",
+  "lcsc": "C5446",
+  "footprint": "Package_TO_SOT_SMD:SOT-23",
+  "source": "Torex XC6206 ETR0305_004b, pin assignment + typical application circuit",
+  "pins": {
+   "1": "VSS",
+   "2": "VOUT",
+   "3": "VIN"
+  },
+  "caps": "CIN 1.0 uF ceramic, CL 1.0 uF ceramic (typical circuit)",
+  "limits": "VIN max 6.0 V operating; 200 mA (3.0 V type)",
+  "notes": "The CH347 VCC is 3.3 V only (abs max 4.0 V), so it runs off this rail. The 3.3 V load grows with the bigger FPGA and USB bridge. If the budget goes over about 150 mA, switch to ME6211C33M5G-N (C82942, 500 mA, SOT-23-5, same pinout as the 1.2 V part)."
+ },
+ "U_LDO_1V2": {
+  "mpn": "ME6211C12M5G-N",
+  "lcsc": "C236672",
+  "footprint": "Package_TO_SOT_SMD:SOT-23-5",
+  "source": "Microne ME6211 datasheet V20, pin assignment ME6211CXXG + electrical table",
+  "pins": {
+   "1": "VIN",
+   "2": "VSS",
+   "3": "CE",
+   "4": "NC",
+   "5": "VOUT"
+  },
+  "caps": "CIN = CL = 1 uF (datasheet test conditions); ceramic OK",
+  "limits": "VIN max 6.5 V; CE high >= 1.0 V, low <= 0.5 V; ME6211C12 Iout max 300 mA",
+  "notes": "Tie CE to VIN or drive it for sequencing."
+ },
+ "U_USB_BRIDGE": {
+  "mpn": "CH347F",
+  "lcsc": "C18221627",
+  "jlc": "Extended",
+  "stock": 5472,
+  "price_usd": {
+   "@10": 2.78,
+   "@100": 2.22
+  },
+  "package": "QFN-28 4x4 mm 0.4 mm",
+  "footprint": "Package_DFN_QFN:QFN-28-1EP_4x4mm_P0.4mm_EP2.4x2.4mm",
+  "footprint_note": "KiCad EP = pad 29; CH347F calls it pin 0 (GND, optional but recommended). EP size NOT checked (the datasheet has no package drawing): UNVERIFIED.",
+  "source": "WCH CH347 datasheet V1.4 (Chinese) via LCSC C18221627, sections 3, 4.2, 5.1, 5.2",
+  "pins": {
+   "0/EP": "GND",
+   "1": "XI",
+   "2": "XO",
+   "3": "RST#",
+   "4": "TXD1",
+   "5": "RXD1",
+   "6": "VIO",
+   "7": "SCS1/DTR1",
+   "8": "SRST",
+   "9": "TRST/GPIO3",
+   "10": "DTR0/GPIO2",
+   "11": "SCL/CTS1",
+   "12": "SDA/RTS1",
+   "13": "SCS0",
+   "14": "SCK",
+   "15": "MISO",
+   "16": "MOSI",
+   "17": "CTS0/GPIO0",
+   "18": "RTS0/GPIO1",
+   "19": "TXD0",
+   "20": "GND",
+   "21": "VCC",
+   "22": "RXD0",
+   "23": "TCK",
+   "24": "TDO",
+   "25": "TDI",
+   "26": "TMS",
+   "27": "UD-",
+   "28": "UD+"
+  },
+  "jtag": {
+   "TCK": 23,
+   "TMS": 26,
+   "TDI": 25,
+   "TDO": 24
+  },
+  "uart": {
+   "TXD0": 19,
+   "RXD0": 22
+  },
+  "supply": "VCC 3.3 V (abs max 4.0 V), 0.1 uF decoupling. VIO 1.8-3.3 V powers I/O and RST# (3.3 V for GW1N-4). Pins 17/18 are always VCC-level.",
+  "clock": "8 MHz crystal on XI/XO with ~22 pF to GND on each pin (datasheet 5.1).",
+  "usb": "UD+/UD- connect directly to USB D+/D-, no series resistors (1.5k pull-up and termination internal).",
+  "mode": "No straps. PID 0x55DE gives UART + I2C + SPI + JTAG + SWD at the same time.",
+  "openfpgaloader": "cable 'ch347_jtag' (src/cable.hpp VID 0x1a86; ch347jtag.cpp accepts PID 0x55DD (CH347T) and 0x55DE (CH347F)), checked 2026-10-02",
+  "unverified": [
+   "Pins 7-12 multi-function names collated from tables 4-2..4-7 (TRST=9, SRST=8 per Table 4-3)."
+  ]
+ },
+ "U_USB_BRIDGE_alt": {
+  "mpn": "CH347T",
+  "lcsc": "C5122332",
+  "stock": 857,
+  "price_usd": {
+   "@10": 2.89,
+   "@100": 2.21
+  },
+  "footprint": "Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm",
+  "source": "WCH CH347 datasheet V1.4, Table 4-8/4-9/4-12, section 5.2",
+  "pins_mode3": {
+   "1": "RST#",
+   "2": "CTS1",
+   "3": "TXD1",
+   "4": "RXD1",
+   "5": "TMS",
+   "6": "TCK",
+   "7": "TDO",
+   "8": "TDI",
+   "9": "TRST",
+   "10": "DTR1 (MODE0 strap)",
+   "11": "GPIO",
+   "12": "GPIO",
+   "13": "RTS1 (MODE1 strap)",
+   "14": "VCC",
+   "15": "ACT#",
+   "16": "UD-",
+   "17": "UD+",
+   "18": "GND",
+   "19": "XI",
+   "20": "XO"
+  },
+  "mode3_strap": "DTR1 (10) and RTS1 (13) pulled low at reset -> mode 3 = UART1 + JTAG, PID 0x55DD. Both pins have internal pull-ups, so use about 4.7k to GND (value is an engineering choice, not specified).",
+  "notes": "All I/O run at 3.3 V; there is no VIO pin."
+ },
+ "J_USB": {
+  "mpn": "TYPE-C-31-M-12 (HRO)",
+  "lcsc": "C165948",
+  "stock": 448022,
+  "price_usd": {
+   "@10": 0.19,
+   "@100": 0.15
+  },
+  "footprint": "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12",
+  "source": "HRO drawing TYPE-C-31-M-12 (2020-12-08) via LCSC C165948",
+  "pins": {
+   "A1": "GND",
+   "A4": "VBUS",
+   "A5": "CC1",
+   "A6": "DP1",
+   "A7": "DN1",
+   "A8": "SBU1",
+   "A9": "VBUS",
+   "A12": "GND",
+   "B1": "GND",
+   "B4": "VBUS",
+   "B5": "CC2",
+   "B6": "DP2",
+   "B7": "DN2",
+   "B8": "SBU2",
+   "B9": "VBUS",
+   "B12": "GND",
+   "SH": "shell (4 tabs)"
+  },
+  "notes": "Tie DP1 to DP2 and DN1 to DN2. Put a separate 5.1k pull-down on each of CC1 and CC2 (C23186, Basic, 0603). Leave SBU unconnected. KiCad pad names match the drawing."
+ },
+ "U_ESD": {
+  "mpn": "USBLC6-2SC6",
+  "lcsc": "C7519",
+  "stock": 36352,
+  "price_usd": {
+   "@10": 0.18,
+   "@100": 0.14
+  },
+  "footprint": "Package_TO_SOT_SMD:SOT-23-6",
+  "source": "ST USBLC6-2 Doc ID 11265 Rev 5 (Oct 2011) Fig.1",
+  "pins": {
+   "1": "I/O1",
+   "2": "GND",
+   "3": "I/O2",
+   "4": "I/O2",
+   "5": "VBUS",
+   "6": "I/O1"
+  },
+  "notes": "Cheaper second-source parts with the same pinout are C2687116 (UMW, $0.05) and C2827654 (TECH PUBLIC)."
+ },
+ "D_OR": {
+  "mpn": "B5819W SL",
+  "lcsc": "C8598",
+  "jlc": "Basic",
+  "stock": 510793,
+  "price_usd": {
+   "@10": 0.028
+  },
+  "footprint": "Diode_SMD:D_SOD-123",
+  "pins": {
+   "1": "K (cathode, band)",
+   "2": "A"
+  },
+  "notes": "Use two of these to OR the cart-edge 5 V and USB VBUS. Expect about 0.3-0.45 V drop at 100-200 mA (typical for a 1 A Schottky; this datasheet was not opened). KiCad Diode_SMD pad 1 = cathode by library convention."
+ },
+ "Y_USB": {
+  "mpn": "XXDCELNANF-8MHZ (TAITIEN)",
+  "lcsc": "C367183",
+  "stock": 10992,
+  "price_usd": {
+   "@10": 0.34
+  },
+  "footprint": "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm",
+  "notes": "8 MHz for the CH347. A cheaper option is C544974 (ECEC, 1,912 in stock, $0.23). Load capacitance and the 3225 pad mapping (crystal on pads 1/3, GND on 2/4) are UNVERIFIED for this MPN. Use 22 pF C0G load capacitors (C1653, Basic)."
+ },
+ "passives_basic": {
+  "5.1k_0603": "C23186",
+  "4.7k_0603": "C23162",
+  "1k_0603": "C21190",
+  "10k_0603": "C25804",
+  "22pF_0603_C0G": "C1653",
+  "100nF_0603": "C14663",
+  "1uF_0603": "C15849",
+  "10uF_0603_10V": "C19702"
+ }
+}

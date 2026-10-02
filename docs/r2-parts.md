@@ -112,3 +112,62 @@ Tags: **[P]** parts API, queried 2026-10-02. **[Q]** live JLC quote engine (`car
 - Gowin DS841 *GW1NZ series Datasheet* v2.8E (2026-04-03). Gowin UG842 *GW1NZ-1 Pinout* v1.6.8E (2026-03-09). Both from cdn.gowinsemi.com.cn.
 - github.com/YosysHQ/apicula readme.md. github.com/trabucayre/openFPGALoader doc/FPGAs.yml.
 - KiCad footprint names checked against the local standard library at /home/user/tools/footprints.
+
+## USB / FPGA v2 (added 2026-10-02 after the "USB connector to program it" change)
+
+The FPGA now drives ROM and F-RAM directly, and a USB-C bridge provides JTAG and UART. Pin tables are in `docs/r2-pinouts.json`.
+
+| Role | Pick | LCSC | Stock | $ @10 / @100 | KiCad footprint |
+|---|---|---|---|---|---|
+| FPGA | **GW1N-LV4QN88C6/I5** | C31900351 | 112 | 14.96 / 12.26 | `Package_DFN_QFN:ArtInChip_QFN-88-1EP_10x10mm_P0.4mm_EP6.74x6.74mm` (EP geometry unverified) |
+| FPGA alt | GW1NR-LV9QN88PC6/I5 (Tang Nano 9K chip) | C5799578 | 173 | 22.06 / 18.07 | same |
+| USB bridge | **CH347F** (QFN-28) | C18221627 | 5,472 | 2.78 / 2.22 | `Package_DFN_QFN:QFN-28-1EP_4x4mm_P0.4mm_EP2.4x2.4mm` |
+| USB bridge alt | CH347T (TSSOP-20, mode-3 straps) | C5122332 | 857 | 2.89 / 2.21 | `Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm` |
+| 8 MHz crystal | XXDCELNANF-8MHZ (TAITIEN) | C367183 | 10,992 | 0.34 / 0.27 | `Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm` |
+| USB-C | HRO TYPE-C-31-M-12 | C165948 | 448,022 | 0.19 / 0.15 | `Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12` |
+| ESD | USBLC6-2SC6 (ST); C2687116 (UMW) $0.05 | C7519 | 36,352 | 0.18 / 0.14 | `Package_TO_SOT_SMD:SOT-23-6` |
+| 5 V OR diodes (x2) | B5819W SL (**Basic**) | C8598 | 510,793 | 0.03 | `Diode_SMD:D_SOD-123` |
+| CC pull-downs (x2) | 5.1k 0603 (**Basic**) | C23186 | 25M | 0.002 | `Resistor_SMD:R_0603_1608Metric` |
+| Bus-hold buffer (x3) | SN74LVCH245APWR (TI) | C352976 | 4,515 | 0.56 / 0.43 | `Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm` |
+
+**FPGA.** The GW1N-LV9 is out of stock in every package at LCSC on 2026-10-02 (QN88, LQ100 and QN48 all show 0). That leaves two QN88 (10 x 10 mm) parts in stock.
+- **GW1N-LV4 QN88 is the pick.** Sources: UG105 v1.8.5E and apicula 0.32.
+  - It has 71 user I/O (bank 0: 20, bank 1: 15, bank 2: 23, bank 3: 13). All four VCCIO banks can be 3.3 V.
+  - Supplies: VCC 1.2 V (1.14-1.26 V), VCCX 3.3 V (2.375-3.6 V). It has internal flash, so it auto-boots with MODE[2:0]=000.
+  - About 64 I/O are left free once JTAG, RECONFIG_N, DONE and MODE0/1 are taken.
+- **GW1NR-LV9 QN88P is the fallback.** It is the best-tested apicula part, but UG803 v1.6.5E requires **VCCIO3 = 1.8 V** because that bank feeds the embedded PSRAM. That bank holds 23 I/O including JTAG.
+  - So it gives only 48 I/O at 3.3 V and needs an extra 1.8 V LDO.
+- **I/O budget is tight on either part:** about 64 usable against about 71 needed.
+  - The 71 is: 29 GB-side lines + 23 ROM address (A-1..A21) + 8 data + ROM CE/OE/WE/RESET/RY + RAM CE + transceiver DIR/OE + 2 UART.
+  - To fit, share the address, data and OE/WE lines between ROM and F-RAM. Drop RY/BY# (poll the DQ6 toggle bit instead) and drive RESET# from an RC. Consider not giving GB A0-A13 their own FPGA pins.
+- **Open-source flow (checked 2026-10-02).**
+  - The apicula chipdb contains GW1N-4 QFN88 and GW1NR-9C QFN88P pinouts.
+  - openFPGALoader FPGAs.yml lists GW1N-4 and GW1NR-9/9C as "Memory OK, Flash IF".
+  - **Unverified:** which GW1N-4 die revision (B or D) LCSC ships, and whether apicula's GW1N-4 database matches it. Apicula's only listed GW1N-4 board is the UV4 LQ144. Confirm with a first prototype or with the Gowin IDE before committing.
+
+**USB bridge.**
+- openFPGALoader cable `ch347_jtag` accepts both CH347T (PID 0x55DD) and CH347F (PID 0x55DE), per `src/ch347jtag.cpp`, checked 2026-10-02.
+- I picked the **CH347F**:
+  - No mode straps; UART, JTAG, SPI and I2C are all available at once.
+  - It has a VIO pin (1.8-3.3 V), which also covers the 1.8 V JTAG bank if the GW1NR-9 is used.
+  - 6x the stock of the CH347T.
+- It needs **VCC = 3.3 V** (absolute max 4.0 V) and an **8 MHz** crystal with about 22 pF to GND on each side. UD+/UD- connect straight to the connector with no series resistors.
+- Pins: JTAG on TCK 23, TMS 26, TDI 25, TDO 24; UART on TXD0 19, RXD0 22.
+- The FT2232HL (C27882, $10.33) and a CH552 running ch552_jtag firmware also work with openFPGALoader. The FT2232HL costs more. The CH552 needs firmware flashed before use.
+
+**Power.**
+- VBUS and cart-edge 5 V each go through a B5819W into the 5 V rail. This stops USB from back-powering the console.
+- Feed the 8T245's VCCB from the **cart-edge** 5 V, before the diode. When no console is present, its "either VCC = 0 means Hi-Z" isolation then takes effect.
+- The 3.3 V load grows with the GW1N-4 and CH347F. If the budget goes over about 150 mA, use ME6211C33M5G-N (C82942, 500 mA) instead of the XC6206.
+
+**Floating GB-side inputs (no console present).**
+- **SN74LVCH245APWR** is a pin-for-pin drop-in for the 74LVC245A. Bus-hold is always on; TI says not to add pull resistors with it.
+- Nexperia's 74LVCH245APW (C426764) has only 4 in stock.
+- Alternative at no extra cost: keep the 74LVC245A, enable the FPGA's internal weak pull-ups on those inputs, and gate the GB logic on a "console present" input (the cart-edge 5 V through a divider).
+
+**BOM delta at 10 boards [P/E].**
+- FPGA: +$9.37 over the GW1NZ-LV1.
+- USB block: CH347F, crystal, USB-C, ESD, 2 diodes and passives, about +$3.6.
+- LVCH245 instead of LVC245: about +$1.05 for three.
+- r2 parts come to **about $33 per board** (versus about $19.3 for the GW1NZ plan).
+- Extended unique parts rise to about 10, so Economic loading fees are about $30.7 per order.

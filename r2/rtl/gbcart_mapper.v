@@ -1,11 +1,12 @@
-// gbcart_mapper.v — GB DEVCART r2 mapper: MBC5 plus a locked "dev mode" for flash writes.
+// gbcart_mapper.v — GB DEVCART r2 mapper: MBC5 plus a locked "dev mode" for flash writes, with the
+// FPGA driving the whole memory side so a USB engine can take over when no console is present.
 //
-// Everything here is on the cart's 3.3 V side, behind the level shifters:
-//   a[15:12], d[7:0], nwr, nrd, ncs, nreset come from the Game Boy bus (via 74LVC245s);
-//   flash and F-RAM get bus A0-A13 straight from the shifters; this block drives only the high
-//   address bits, the memory strobes and the data-bus transceiver (74LVC8T245) DIR/OE.
+// All signals are on the cart's 3.3 V side, behind the level shifters:
+//   ga[15:0], nwr, nrd, ncs, nreset come from the Game Boy bus (via 74LVCH245s, inputs only);
+//   cd_in is the cart-side data bus (shared by the 74LVC8T245 A side, flash, F-RAM and FPGA);
+//   ma[22:0] and the memory strobes go to the flash (x8 byte mode, ma[0] = A-1) and F-RAM.
 //
-// Memory map (MBC5-compatible):
+// Memory map in console mode (MBC5-compatible):
 //   0000-1FFF W  RAM enable: low nibble 0xA enables F-RAM; writing 0xD0 also leaves dev mode
 //   2000-2FFF W  ROM bank bits 7:0
 //   3000-3FFF W  ROM bank bit 8              (9 bits -> 512 x 16 KB = 8 MB)
@@ -16,27 +17,37 @@
 // Dev mode: writes to 4000-7FFF are passed to the flash /WE (so JEDEC command sequences work
 // through the switchable window) instead of updating the RAM bank register. A game cannot
 // reach this by accident: it needs the exact unlock sequence and then the flash's own unlock.
+//
+// USB mode (usb_mode = 1, no console power): the usb_* inputs drive the memory side directly
+// and the console-side transceiver stays disabled.
 module gbcart_mapper (
-    input  wire       clk,       // free-running sample clock (>= 20 MHz), e.g. on-chip oscillator
-    input  wire       nreset,    // cart /RESET from the console, active low
-    input  wire [15:12] a,       // high address bits (A0-A11 only go to the memories)
-    input  wire [7:0] d,         // data bus, cart side (read only for this block)
-    input  wire       nwr,
-    input  wire       nrd,
-    input  wire       ncs,       // console /CS: asserted for A000-FDFF
+    input  wire        clk,       // free-running sample clock (>= 20 MHz), e.g. on-chip oscillator
+    input  wire        nreset,    // cart /RESET from the console, active low
+    input  wire [15:0] ga,        // console address bus
+    input  wire [7:0]  cd_in,     // cart-side data bus
+    input  wire        nwr,
+    input  wire        nrd,
+    input  wire        ncs,       // console /CS: asserted for A000-FDFF
 
-    output wire [22:14] rom_a,   // flash A14-A22 (16 KB bank number)
-    output wire       rom_ce_n,
-    output wire       rom_oe_n,
-    output wire       rom_we_n,
-    output wire [14:13] ram_a,   // F-RAM A13-A14 (8 KB bank number)
-    output wire       ram_ce_n,
-    output wire       ram_oe_n,
-    output wire       ram_we_n,
-    output wire       bus_oe_n,  // 74LVC8T245 /OE: only talk on the console bus when addressed
-    output wire       bus_dir,   // 74LVC8T245 DIR: 1 = cart -> console (reads), 0 = console -> cart
+    output wire [22:0] ma,        // memory address: flash A-1..A21 = ma[0..22], F-RAM A0..A14 = ma[0..14]
+    output wire        rom_ce_n,
+    output wire        rom_oe_n,
+    output wire        rom_we_n,
+    output wire        ram_ce_n,
+    output wire        ram_oe_n,
+    output wire        ram_we_n,
+    output wire        bus_oe_n,  // 74LVC8T245 /OE: only talk on the console bus when addressed
+    output wire        bus_dir,   // 74LVC8T245 DIR: 1 = cart (A) -> console (B), 0 = console -> cart
+    output wire        dev_mode,
 
-    output wire       dev_mode   // exposed for a status LED / test pad
+    input  wire        usb_mode,
+    input  wire [22:0] usb_ma,
+    input  wire        usb_rom_ce_n,
+    input  wire        usb_rom_oe_n,
+    input  wire        usb_rom_we_n,
+    input  wire        usb_ram_ce_n,
+    input  wire        usb_ram_oe_n,
+    input  wire        usb_ram_we_n
 );
   // ---- registers ----------------------------------------------------------------------------
   reg [8:0] rom_bank;
@@ -52,13 +63,13 @@ module gbcart_mapper (
   reg [2:0] nwr_s;
   reg [3:0] a_h [0:3];
   reg [7:0] d_h [0:3];
-  wire       wr_rise = (nwr_s[2:1] == 2'b01);
+  wire       wr_rise = (nwr_s[2:1] == 2'b01) && !usb_mode;
   wire [3:0] wa = a_h[3];
   wire [7:0] wd = d_h[3];
   always @(posedge clk) begin
     nwr_s  <= {nwr_s[1:0], nwr};
-    a_h[0] <= a;   a_h[1] <= a_h[0]; a_h[2] <= a_h[1]; a_h[3] <= a_h[2];
-    d_h[0] <= d;   d_h[1] <= d_h[0]; d_h[2] <= d_h[1]; d_h[3] <= d_h[2];
+    a_h[0] <= ga[15:12]; a_h[1] <= a_h[0]; a_h[2] <= a_h[1]; a_h[3] <= a_h[2];
+    d_h[0] <= cd_in;     d_h[1] <= d_h[0]; d_h[2] <= d_h[1]; d_h[3] <= d_h[2];
   end
 
   localparam [31:0] UNLOCK = "GBDV";
@@ -100,26 +111,26 @@ module gbcart_mapper (
   end
   assign dev_mode = dev;
 
-  // ---- combinational decode (must be fast: the memories see these directly) ---------------
-  wire a15 = a[15], a14 = a[14], a13 = a[13];
-  wire rom_sel = !a15;                       // 0000-7FFF
-  wire ram_sel = !ncs && !a14 && a13;        // A000-BFFF (/CS covers A000-FDFF)
+  // ---- console-mode decode (combinational: the memories see these directly) ---------------
+  wire a15 = ga[15], a14 = ga[14], a13 = ga[13];
+  wire rom_sel = !a15;                    // 0000-7FFF
+  wire ram_sel = !ncs && !a14 && a13;     // A000-BFFF (/CS covers A000-FDFF)
 
-  assign rom_a    = a14 ? rom_bank : 9'd0;
-  // /CE and /OE need no logic: on the board they are wired straight to A15 and /RD.
-  assign rom_ce_n = a15;
-  assign rom_oe_n = nrd;
-  assign rom_we_n = !(dev && rom_sel && a14 && !nwr);
+  wire [22:0] gb_ma = ram_sel ? {8'd0, ram_bank, ga[12:0]}
+                              : {(a14 ? rom_bank : 9'd0), ga[13:0]};
 
-  assign ram_a    = ram_bank;
-  assign ram_ce_n = !(ram_sel && ram_en);
-  assign ram_oe_n = nrd;  // wired straight to /RD on the board
-  assign ram_we_n = nwr;  // wired straight to /WR on the board
+  assign ma       = usb_mode ? usb_ma       : gb_ma;
+  assign rom_ce_n = usb_mode ? usb_rom_ce_n : !rom_sel;
+  assign rom_oe_n = usb_mode ? usb_rom_oe_n : !(rom_sel && !nrd);
+  assign rom_we_n = usb_mode ? usb_rom_we_n : !(dev && rom_sel && a14 && !nwr);
+  assign ram_ce_n = usb_mode ? usb_ram_ce_n : !(ram_sel && ram_en);
+  assign ram_oe_n = usb_mode ? usb_ram_oe_n : nrd;
+  assign ram_we_n = usb_mode ? usb_ram_we_n : nwr;
 
   // Drive the console data bus only while the console reads from us; open it inward for any
   // write to cart space so register writes and flash/F-RAM writes reach this side.
   wire cart_read  = !nrd && nwr && (rom_sel || (ram_sel && ram_en));
   wire cart_write = !nwr && (rom_sel || ram_sel);
   assign bus_dir  = cart_read;
-  assign bus_oe_n = !(cart_read || cart_write);
+  assign bus_oe_n = usb_mode || !(cart_read || cart_write);
 endmodule

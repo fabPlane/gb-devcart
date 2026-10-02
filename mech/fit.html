@@ -39,7 +39,7 @@ header { display: grid; gap: 12px }
 section { display: grid; gap: 16px; min-width: 0 }
 .sec-head { display: grid; gap: 6px }
 
-.verdicts { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px }
+.verdicts { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px }
 .vcard { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 10px; align-content: start; cursor: pointer; text-align: left; color: inherit; font: inherit }
 .vcard[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset }
 .vcard .top { display: flex; justify-content: space-between; align-items: center; gap: 8px }
@@ -167,7 +167,7 @@ footer { color: var(--muted); font-size: 13px; display: grid; gap: 6px }
           <div class="ctl"><label>Shell</label>
             <div class="seg" id="shellSeg">
               <button data-v="std" aria-pressed="true">Standard</button>
-              <button data-v="usb" aria-pressed="false">USB-C top (r2)</button>
+              <button data-v="usb" aria-pressed="false">USB-C top (r2.1)</button>
             </div></div>
           <div class="ctl"><label>Label half</label>
             <div class="seg" id="frontSeg">
@@ -196,15 +196,15 @@ footer { color: var(--muted); font-size: 13px; display: grid; gap: 6px }
 
   <section class="two">
     <div class="panel" style="gap:12px">
-      <h2>Getting r1.1 and r2.1 to fit</h2>
+      <h2>What changed for r1.1 and r2.1</h2>
       <ol class="fix">
-        <li>Start from the OEM outline in <code>mech/out/dmg_reference.kicad_pcb</code>. It is 51.4 × 61.0 with a 49.2 mm finger tongue and a 4.0 × 2.6 lock notch at the top right.</li>
+        <li>Both now use the OEM outline in <code>mech/out/dmg_reference.kicad_pcb</code>. It is 51.4 × 61.0 with a 49.2 mm finger tongue and a 4.0 × 2.6 lock notch at the top right.</li>
         <li>Cut holes for the shell: Ø7.2 at (25.7, 15.35) for the screw tube and Ø2.3 at (25.7, 40.35) for the post, both measured from the board's bottom-left corner.</li>
-        <li>Swap J1 for <code>gbdev:GB_Cart_Edge_32_DMG</code>. Its fingers start 1.5 mm above the edge, and GND/VCC sit 1.0 mm above it so they make contact first. Order ENIG or hard gold.</li>
-        <li>Order 0.8 or 1.0 mm FR-4. A 1.6 mm board pushes into the back wall.</li>
-        <li>Put every part on the label side, inside the dashed zone, no taller than 3.3 mm. Nothing goes in the bottom 11.4 mm, which sits inside the console's connector.</li>
-        <li>r2: put USB-C J2 on the top edge, centred, with its mouth 1.2 mm past the board edge, and print <code>shell_back_usb</code> + <code>shell_front_usb</code>. Both halves are open over the connector. At 3.26 mm the receptacle leaves 0.04 mm under a 3.3 mm wall, so the front half has a 0.8 mm pocket over it. The lock notch rules out the top-right corner.</li>
-        <li>r2 needs 4 layers at 1.0 mm. JLCPCB offers 4-layer boards at 0.8 or 1.0 mm.</li>
+        <li>J1 is now <code>gbdev:GB_Cart_Edge_32_DMG</code>. Its fingers start 1.5 mm above the edge, and GND/VCC sit 1.0 mm above it so they make contact first. Order ENIG or hard gold.</li>
+        <li>Both files are 1.0 mm FR-4; order 1.0 mm (0.8 also fits). A 1.6 mm board pushes into the back wall.</li>
+        <li>Every part is on the label side, inside the dashed zone. Nothing sits in the bottom 11.4 mm, which goes inside the console's connector. r1.1's PLCC-32 flash is 3.56 mm tall: fine in an OEM shell (≈3.6 mm), but for the printed shell set <code>front_inner_z</code> to 6.1 in <code>mech/dims.py</code>.</li>
+        <li>r2.1: USB-C J2 sits on the top edge, centred, with its mouth 1.2 mm past the board edge; and print <code>shell_back_usb</code> + <code>shell_front_usb</code>. Both halves are open over the connector. At 3.26 mm the receptacle leaves 0.04 mm under a 3.3 mm wall, so the front half has a 0.8 mm pocket over it. The lock notch rules out the top-right corner.</li>
+        <li>r2.1 is 4 layers at 1.0 mm (GND plane on In1, 3V3 on In2), 0.1 mm clearance at the QFN-88 pins, which JLCPCB's 4-layer process allows.</li>
       </ol>
     </div>
     <div class="panel" style="gap:12px">
@@ -241,10 +241,12 @@ footer { color: var(--muted); font-size: 13px; display: grid; gap: 6px }
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
 <script>
-const NAMES = { reference: "DMG reference outline", r1: "r1 — parallel flash (main)", r2: "r2 — FPGA + USB-C" };
-const SHORT = { reference: "Reference", r1: "r1", r2: "r2" };
+const NAMES = { reference: "DMG reference outline", "r1.1": "r1.1 — parallel flash", "r2.1": "r2.1 — FPGA + USB-C",
+                r1: "r1 — as first drawn", r2: "r2 — as first drawn" };
+const SHORT = { reference: "Reference", "r1.1": "r1.1", "r2.1": "r2.1", r1: "r1 (old)", r2: "r2 (old)" };
 const NS = "http://www.w3.org/2000/svg";
-let FIT, cur = "r2";
+let FIT, cur = "r2.1";
+const usbBoard = name => name.startsWith("r2");
 
 function el(tag, attrs = {}, parent) {
   const e = document.createElementNS(NS, tag);
@@ -293,21 +295,24 @@ function renderVerdicts() {
     const fails = b.checks.filter(c => c.status === "fail"), warns = b.checks.filter(c => c.status === "warn");
     const btn = document.createElement("button");
     btn.className = "vcard"; btn.setAttribute("aria-pressed", b.name === cur);
-    btn.innerHTML = `<div class="top"><span class="name">${NAMES[b.name] || b.name}</span><span class="chip ${b.verdict}">${b.verdict === "pass" ? "fits" : "does not fit"}</span></div>
+    btn.innerHTML = `<div class="top"><span class="name">${NAMES[b.name] || b.name}</span><span class="chip ${b.verdict}">${b.verdict === "pass" ? "fits" : b.verdict === "warn" ? "fits, 1 warning" : "does not fit"}</span></div>
       <div class="mono muted">${fmt(b.size[0])} × ${fmt(b.size[1])} mm · ${fmt(b.thickness)} mm · ${b.layers} layers · ${b.parts.length} parts</div>`;
     const ul = document.createElement("ul");
-    const items = fails.length ? fails.map(c => `${c.label}: ${c.measured}`) : ["Every check passes. Use this as the starting outline."];
+    const items = fails.length ? fails.map(c => `${c.label}: ${c.measured}`)
+      : warns.length ? warns.map(c => `${c.label}: ${c.measured}`)
+      : [b.name === "reference" ? "Every check passes. The outline r1.1 and r2.1 are built on." : "Every check passes."];
     items.slice(0, 4).forEach(t => { const li = document.createElement("li"); li.textContent = t; ul.appendChild(li); });
     if (fails.length > 4) { const li = document.createElement("li"); li.textContent = `+ ${fails.length - 4} more`; ul.appendChild(li); }
-    if (warns.length) { const li = document.createElement("li"); li.textContent = `${warns.length} warning${warns.length > 1 ? "s" : ""}`; ul.appendChild(li); }
+    if (fails.length && warns.length) { const li = document.createElement("li"); li.textContent = `${warns.length} warning${warns.length > 1 ? "s" : ""}`; ul.appendChild(li); }
     btn.appendChild(ul);
     btn.onclick = () => select(b.name);
     box.appendChild(btn);
   }
-  const bad = FIT.boards.filter(b => b.verdict !== "pass").map(b => SHORT[b.name]);
-  document.getElementById("headline").textContent = bad.length
-    ? `${bad.join(" and ")} will not go into a cartridge shell as drawn. ${bad.length > 1 ? "Both are" : "It is"} 56 mm wide against a 53.2 mm cavity, with no screw-tube hole and fingers too close to the edge. Don't send r1 to fab as it stands. The fix is the reference outline: same electronics, new board shape.`
-    : "Every board fits.";
+  const bad = FIT.boards.filter(b => b.verdict === "fail").map(b => SHORT[b.name]);
+  const good = FIT.boards.filter(b => b.verdict !== "fail" && b.name !== "reference").map(b => SHORT[b.name]);
+  document.getElementById("headline").textContent =
+    (good.length ? `${good.join(" and ")} fit the cartridge shell: OEM outline, shell screw and post holes, fingers 1.5 mm above the edge, every part inside the component zone, 1.0 mm thick. ` : "") +
+    (bad.length ? `${bad.join(" and ")} (56 mm wide against a 53.2 mm cavity, no screw-tube hole, fingers 0.5 mm from the edge) are shown for comparison; don't order them.` : "");
 }
 
 /* ---------- top view ---------- */
@@ -543,7 +548,7 @@ function select(name) {
   cur = name;
   try { localStorage.setItem("fit-board", name) } catch (e) {}
   renderVerdicts(); renderTop(); buildBoard3D();
-  setShell(name === "r2" ? "usb" : "std");
+  setShell(usbBoard(name) ? "usb" : "std");
 }
 
 async function main() {
@@ -551,7 +556,7 @@ async function main() {
   catch (e) { document.getElementById("headline").textContent = "Could not load out/fit.json."; return; }
   try { const s = localStorage.getItem("fit-board"); if (s && FIT.boards.some(b => b.name === s)) cur = s; } catch (e) {}
   if (!FIT.boards.some(b => b.name === cur)) cur = FIT.boards[0].name;
-  V.shell = cur === "r2" ? "usb" : "std";
+  V.shell = usbBoard(cur) ? "usb" : "std";
   renderVerdicts(); renderTop(); renderStack(); renderChecks();
   init3D(); setShell(V.shell);
   seg("shellSeg", v => { V.shell = v; applyView(); });

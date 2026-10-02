@@ -14,6 +14,9 @@ fits a DMG / GBC / Pocket / ModRetro Chromatic cartridge shell; see [`mech/`](me
 > **Status:** fully routed (2 layers, Freerouting through fabdesk), DRC clean, in-stock JLCPCB parts
 > with LCSC numbers, JLC gerbers/BOM/CPL in `exports/jlcpcb/`. **Not yet built or tested on hardware.**
 
+**r2.1** (FPGA mapper, 8 MB flash, USB-C programming, 4 layers) is in [`r2/board/`](r2/board/README.md);
+both boards are checked against a 3D cartridge shell model in [`mech/`](mech/).
+
 Designed with [fabPlane](https://fabplane.com) (fabdesk) driving Claude Code. Inspired by the ModRetro
 "Demo Cartridge", but an original, much simpler design: no FPGA, no level shifters, no regulators.
 

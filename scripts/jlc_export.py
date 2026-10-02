@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Write JLCPCB assembly files: exports/jlcpcb/{gerbers.zip, bom.csv, cpl.csv}.
 
-    KICAD_CLI=/path/to/kicad-cli python3 scripts/jlc_export.py
+    KICAD_CLI=/path/to/kicad-cli python3 scripts/jlc_export.py            # r1.1 (repo root)
+    KICAD_CLI=/path/to/kicad-cli BOARD_DIR=r2/board python3 scripts/jlc_export.py   # r2.1
 
 BOM rows come from circuit.netlist.json (grouped by LCSC part number); CPL rows from
 `kicad-cli pcb export pos`. Parts without an LCSC field (test pads, edge fingers) are not placed.
@@ -18,10 +19,12 @@ from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / "exports" / "jlcpcb"
+PROJ = Path(os.environ.get("BOARD_DIR", ROOT)).resolve()
+OUT = PROJ / "exports" / "jlcpcb"
 KICAD_CLI = os.environ.get("KICAD_CLI", "kicad-cli")
-BOARD = ROOT / "board.kicad_pcb"
-LAYERS = "F.Cu,B.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts"
+BOARD = PROJ / "board.kicad_pcb"
+INNER = ",In1.Cu,In2.Cu" if '"In1.Cu"' in BOARD.read_text() else ""
+LAYERS = f"F.Cu{INNER},B.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts"
 
 
 def run(*args: str) -> None:
@@ -30,7 +33,7 @@ def run(*args: str) -> None:
 
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
-    comps = json.load(open(ROOT / "circuit.netlist.json"))["netlist"]["components"]
+    comps = json.load(open(PROJ / "circuit.netlist.json"))["netlist"]["components"]
     lcsc = {c["ref"]: c for c in comps if c["fields"].get("LCSC")}
 
     # BOM: Comment, Designator, Footprint, LCSC Part #

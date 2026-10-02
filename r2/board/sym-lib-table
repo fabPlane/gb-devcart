@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "gbdev2") (type "KiCad") (uri "${KIPRJMOD}/lib/gbdev2.kicad_sym") (options "") (descr "GB devcart r2 symbols"))
+)

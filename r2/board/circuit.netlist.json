@@ -1,0 +1,3779 @@
+{
+ "netlist": {
+  "components": [
+   {
+    "ref": "R1",
+    "value": "10k",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "fields": {
+     "LCSC": "C25804"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "R"
+    }
+   },
+   {
+    "ref": "R2",
+    "value": "10k",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "fields": {
+     "LCSC": "C25804"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "R"
+    }
+   },
+   {
+    "ref": "C19",
+    "value": "100nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C14663"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "C5",
+    "value": "100nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C14663"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "R8",
+    "value": "4.7k",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "fields": {
+     "LCSC": "C23162"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "R"
+    }
+   },
+   {
+    "ref": "R6",
+    "value": "4.7k",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "fields": {
+     "LCSC": "C23162"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "R"
+    }
+   },
+   {
+    "ref": "R7",
+    "value": "10k",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "fields": {
+     "LCSC": "C25804"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "R"
+    }
+   },
+   {
+    "ref": "R5",
+    "value": "4.7k",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "fields": {
+     "LCSC": "C23162"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "R"
+    }
+   },
+   {
+    "ref": "U1",
+    "value": "GW1N-LV4QN88",
+    "footprint": "Package_DFN_QFN:ArtInChip_QFN-88-1EP_10x10mm_P0.4mm_EP6.74x6.74mm",
+    "fields": {
+     "MPN": "GW1N-LV4QN88C6/I5",
+     "Manufacturer": "Gowin",
+     "LCSC": "C31900351"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "GW1N-LV4QN88"
+    }
+   },
+   {
+    "ref": "C9",
+    "value": "100nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C14663"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "U3",
+    "value": "FM28V020",
+    "footprint": "Package_SO:SOIC-28W_7.5x17.9mm_P1.27mm",
+    "fields": {
+     "MPN": "FM28V020-SGTR",
+     "Manufacturer": "Infineon (Cypress)",
+     "LCSC": "C54935"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "FM28V020"
+    }
+   },
+   {
+    "ref": "U10",
+    "value": "CH347F",
+    "footprint": "Package_DFN_QFN:QFN-28-1EP_4x4mm_P0.4mm_EP2.4x2.4mm",
+    "fields": {
+     "MPN": "CH347F",
+     "Manufacturer": "WCH",
+     "LCSC": "C18221627"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "CH347F"
+    }
+   },
+   {
+    "ref": "R9",
+    "value": "10k",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "fields": {
+     "LCSC": "C25804"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "R"
+    }
+   },
+   {
+    "ref": "R10",
+    "value": "10k",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "fields": {
+     "LCSC": "C25804"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "R"
+    }
+   },
+   {
+    "ref": "C2",
+    "value": "100nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C14663"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "R12",
+    "value": "10k",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "fields": {
+     "LCSC": "C25804"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "R"
+    }
+   },
+   {
+    "ref": "TP2",
+    "value": "TP_3V3",
+    "footprint": "TestPoint:TestPoint_Pad_D1.5mm",
+    "fields": {},
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "TestPoint"
+    }
+   },
+   {
+    "ref": "R14",
+    "value": "10k",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "fields": {
+     "LCSC": "C25804"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "R"
+    }
+   },
+   {
+    "ref": "R15",
+    "value": "10k",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "fields": {
+     "LCSC": "C25804"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "R"
+    }
+   },
+   {
+    "ref": "R16",
+    "value": "10k",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "fields": {
+     "LCSC": "C25804"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "R"
+    }
+   },
+   {
+    "ref": "D2",
+    "value": "B5819W",
+    "footprint": "Diode_SMD:D_SOD-123",
+    "fields": {
+     "MPN": "B5819W SL",
+     "Manufacturer": "CJ",
+     "LCSC": "C8598"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "D_Schottky"
+    }
+   },
+   {
+    "ref": "TP6",
+    "value": "TP_GB_AUDIO",
+    "footprint": "TestPoint:TestPoint_Pad_D1.5mm",
+    "fields": {},
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "TestPoint"
+    }
+   },
+   {
+    "ref": "U6",
+    "value": "74LVCH245",
+    "footprint": "Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm",
+    "fields": {
+     "MPN": "SN74LVCH245APWR",
+     "Manufacturer": "Texas Instruments",
+     "LCSC": "C352976"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "74LVCH245"
+    }
+   },
+   {
+    "ref": "R17",
+    "value": "5.1k",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "fields": {
+     "LCSC": "C23186"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "R"
+    }
+   },
+   {
+    "ref": "U8",
+    "value": "XC6206P332",
+    "footprint": "Package_TO_SOT_SMD:SOT-23",
+    "fields": {
+     "MPN": "XC6206P332MR-G",
+     "Manufacturer": "Torex",
+     "LCSC": "C5446"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "XC6206P332"
+    }
+   },
+   {
+    "ref": "U9",
+    "value": "ME6211C12",
+    "footprint": "Package_TO_SOT_SMD:SOT-23-5",
+    "fields": {
+     "MPN": "ME6211C12M5G-N",
+     "Manufacturer": "MICRONE",
+     "LCSC": "C236672"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "ME6211C12"
+    }
+   },
+   {
+    "ref": "X1",
+    "value": "48MHz",
+    "footprint": "Oscillator:Oscillator_SMD_Abracon_ASDMB-4Pin_2.5x2.0mm",
+    "fields": {
+     "MPN": "OT3EL89CJI-111YLC-48M",
+     "Manufacturer": "YXC",
+     "LCSC": "C7434936"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "Oscillator_4pin"
+    }
+   },
+   {
+    "ref": "Y1",
+    "value": "8MHz",
+    "footprint": "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm",
+    "fields": {
+     "MPN": "XXDCELNANF-8MHZ",
+     "Manufacturer": "TAITIEN",
+     "LCSC": "C367183"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "Crystal_GND24"
+    }
+   },
+   {
+    "ref": "U11",
+    "value": "USBLC6-2SC6",
+    "footprint": "Package_TO_SOT_SMD:SOT-23-6",
+    "fields": {
+     "MPN": "USBLC6-2SC6",
+     "Manufacturer": "ST",
+     "LCSC": "C7519"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "USBLC6-2SC6"
+    }
+   },
+   {
+    "ref": "U4",
+    "value": "74LVCH245",
+    "footprint": "Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm",
+    "fields": {
+     "MPN": "SN74LVCH245APWR",
+     "Manufacturer": "Texas Instruments",
+     "LCSC": "C352976"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "74LVCH245"
+    }
+   },
+   {
+    "ref": "U5",
+    "value": "74LVCH245",
+    "footprint": "Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm",
+    "fields": {
+     "MPN": "SN74LVCH245APWR",
+     "Manufacturer": "Texas Instruments",
+     "LCSC": "C352976"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "74LVCH245"
+    }
+   },
+   {
+    "ref": "C7",
+    "value": "100nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C14663"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "U7",
+    "value": "SN74LVC8T245",
+    "footprint": "Package_SO:TSSOP-24_4.4x7.8mm_P0.65mm",
+    "fields": {
+     "MPN": "SN74LVC8T245PWR",
+     "Manufacturer": "Texas Instruments",
+     "LCSC": "C27643"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "SN74LVC8T245"
+    }
+   },
+   {
+    "ref": "J2",
+    "value": "USB-C",
+    "footprint": "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12",
+    "fields": {
+     "MPN": "TYPE-C-31-M-12",
+     "Manufacturer": "HRO",
+     "LCSC": "C165948"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "USB_C_2.0"
+    }
+   },
+   {
+    "ref": "J1",
+    "value": "GB_Cart_Edge_32",
+    "footprint": "gbdev2:GB_Cart_Edge_32_DMG",
+    "fields": {},
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "GB_Cart_Edge_32"
+    }
+   },
+   {
+    "ref": "C1",
+    "value": "100nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C14663"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "R11",
+    "value": "10k",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "fields": {
+     "LCSC": "C25804"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "R"
+    }
+   },
+   {
+    "ref": "C3",
+    "value": "100nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C14663"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "C4",
+    "value": "100nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C14663"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "R4",
+    "value": "1k",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "fields": {
+     "LCSC": "C21190"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "R"
+    }
+   },
+   {
+    "ref": "C14",
+    "value": "1uF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C15849"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "D1",
+    "value": "B5819W",
+    "footprint": "Diode_SMD:D_SOD-123",
+    "fields": {
+     "MPN": "B5819W SL",
+     "Manufacturer": "CJ",
+     "LCSC": "C8598"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "D_Schottky"
+    }
+   },
+   {
+    "ref": "C8",
+    "value": "100nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C14663"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "U2",
+    "value": "S29GL064N",
+    "footprint": "Package_SO:TSOP-I-48_18.4x12mm_P0.5mm",
+    "fields": {
+     "MPN": "S29GL064N90TFI040",
+     "Manufacturer": "Infineon (Spansion)",
+     "LCSC": "C117907"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "S29GL064N_TSOP48"
+    }
+   },
+   {
+    "ref": "C10",
+    "value": "10uF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C19702"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "C11",
+    "value": "10uF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C19702"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "TP4",
+    "value": "TP_GND",
+    "footprint": "TestPoint:TestPoint_Pad_D1.5mm",
+    "fields": {},
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "TestPoint"
+    }
+   },
+   {
+    "ref": "C13",
+    "value": "1uF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C15849"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "C6",
+    "value": "100nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C14663"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "C15",
+    "value": "10uF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C19702"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "C16",
+    "value": "100nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C14663"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "C27",
+    "value": "100nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C14663"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "C18",
+    "value": "100nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C14663"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "R3",
+    "value": "1k",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "fields": {
+     "LCSC": "C21190"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "R"
+    }
+   },
+   {
+    "ref": "C20",
+    "value": "100nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C14663"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "C21",
+    "value": "100nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C14663"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "C22",
+    "value": "100nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C14663"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "C23",
+    "value": "100nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C14663"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "TP1",
+    "value": "TP_EDGE_5V",
+    "footprint": "TestPoint:TestPoint_Pad_D1.5mm",
+    "fields": {},
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "TestPoint"
+    }
+   },
+   {
+    "ref": "C17",
+    "value": "100nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C14663"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "C25",
+    "value": "22pF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C1653"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "C26",
+    "value": "22pF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C1653"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "C24",
+    "value": "100nF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C14663"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   },
+   {
+    "ref": "TP3",
+    "value": "TP_1V2",
+    "footprint": "TestPoint:TestPoint_Pad_D1.5mm",
+    "fields": {},
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "TestPoint"
+    }
+   },
+   {
+    "ref": "TP5",
+    "value": "TP_GB_CLK",
+    "footprint": "TestPoint:TestPoint_Pad_D1.5mm",
+    "fields": {},
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "TestPoint"
+    }
+   },
+   {
+    "ref": "R18",
+    "value": "5.1k",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "fields": {
+     "LCSC": "C23186"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "R"
+    }
+   },
+   {
+    "ref": "R13",
+    "value": "10k",
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "fields": {
+     "LCSC": "C25804"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "R"
+    }
+   },
+   {
+    "ref": "C12",
+    "value": "1uF",
+    "footprint": "Capacitor_SMD:C_0603_1608Metric",
+    "fields": {
+     "LCSC": "C15849"
+    },
+    "libSource": {
+     "lib": "gbdev2",
+     "part": "C"
+    }
+   }
+  ],
+  "nets": [
+   {
+    "name": "EDGE_5V",
+    "nodes": [
+     {
+      "ref": "R1",
+      "pin": "1"
+     },
+     {
+      "ref": "D1",
+      "pin": "2"
+     },
+     {
+      "ref": "C22",
+      "pin": "1"
+     },
+     {
+      "ref": "TP1",
+      "pin": "1"
+     },
+     {
+      "ref": "J1",
+      "pin": "1"
+     },
+     {
+      "ref": "U7",
+      "pin": "23"
+     },
+     {
+      "ref": "U7",
+      "pin": "24"
+     }
+    ]
+   },
+   {
+    "name": "CONS_DIV",
+    "nodes": [
+     {
+      "ref": "R1",
+      "pin": "2"
+     },
+     {
+      "ref": "R2",
+      "pin": "1"
+     },
+     {
+      "ref": "U1",
+      "pin": "13"
+     }
+    ]
+   },
+   {
+    "name": "GND",
+    "nodes": [
+     {
+      "ref": "R2",
+      "pin": "2"
+     },
+     {
+      "ref": "R3",
+      "pin": "2"
+     },
+     {
+      "ref": "R4",
+      "pin": "2"
+     },
+     {
+      "ref": "R5",
+      "pin": "2"
+     },
+     {
+      "ref": "R17",
+      "pin": "2"
+     },
+     {
+      "ref": "R18",
+      "pin": "2"
+     },
+     {
+      "ref": "C1",
+      "pin": "2"
+     },
+     {
+      "ref": "C2",
+      "pin": "2"
+     },
+     {
+      "ref": "C3",
+      "pin": "2"
+     },
+     {
+      "ref": "C4",
+      "pin": "2"
+     },
+     {
+      "ref": "C5",
+      "pin": "2"
+     },
+     {
+      "ref": "C6",
+      "pin": "2"
+     },
+     {
+      "ref": "C7",
+      "pin": "2"
+     },
+     {
+      "ref": "C8",
+      "pin": "2"
+     },
+     {
+      "ref": "C9",
+      "pin": "2"
+     },
+     {
+      "ref": "C10",
+      "pin": "2"
+     },
+     {
+      "ref": "C11",
+      "pin": "2"
+     },
+     {
+      "ref": "C12",
+      "pin": "2"
+     },
+     {
+      "ref": "C13",
+      "pin": "2"
+     },
+     {
+      "ref": "C14",
+      "pin": "2"
+     },
+     {
+      "ref": "C15",
+      "pin": "2"
+     },
+     {
+      "ref": "C16",
+      "pin": "2"
+     },
+     {
+      "ref": "C17",
+      "pin": "2"
+     },
+     {
+      "ref": "C18",
+      "pin": "2"
+     },
+     {
+      "ref": "C19",
+      "pin": "2"
+     },
+     {
+      "ref": "C20",
+      "pin": "2"
+     },
+     {
+      "ref": "C21",
+      "pin": "2"
+     },
+     {
+      "ref": "C22",
+      "pin": "2"
+     },
+     {
+      "ref": "C23",
+      "pin": "2"
+     },
+     {
+      "ref": "C24",
+      "pin": "2"
+     },
+     {
+      "ref": "C27",
+      "pin": "2"
+     },
+     {
+      "ref": "C25",
+      "pin": "2"
+     },
+     {
+      "ref": "C26",
+      "pin": "2"
+     },
+     {
+      "ref": "TP4",
+      "pin": "1"
+     },
+     {
+      "ref": "J1",
+      "pin": "32"
+     },
+     {
+      "ref": "U4",
+      "pin": "19"
+     },
+     {
+      "ref": "U4",
+      "pin": "10"
+     },
+     {
+      "ref": "U5",
+      "pin": "19"
+     },
+     {
+      "ref": "U5",
+      "pin": "10"
+     },
+     {
+      "ref": "U6",
+      "pin": "19"
+     },
+     {
+      "ref": "U6",
+      "pin": "10"
+     },
+     {
+      "ref": "U6",
+      "pin": "6"
+     },
+     {
+      "ref": "U6",
+      "pin": "7"
+     },
+     {
+      "ref": "U6",
+      "pin": "8"
+     },
+     {
+      "ref": "U6",
+      "pin": "9"
+     },
+     {
+      "ref": "U7",
+      "pin": "11"
+     },
+     {
+      "ref": "U7",
+      "pin": "12"
+     },
+     {
+      "ref": "U7",
+      "pin": "13"
+     },
+     {
+      "ref": "U1",
+      "pin": "2"
+     },
+     {
+      "ref": "U1",
+      "pin": "21"
+     },
+     {
+      "ref": "U1",
+      "pin": "24"
+     },
+     {
+      "ref": "U1",
+      "pin": "43"
+     },
+     {
+      "ref": "U1",
+      "pin": "46"
+     },
+     {
+      "ref": "U1",
+      "pin": "65"
+     },
+     {
+      "ref": "U1",
+      "pin": "89"
+     },
+     {
+      "ref": "U2",
+      "pin": "47"
+     },
+     {
+      "ref": "U2",
+      "pin": "27"
+     },
+     {
+      "ref": "U2",
+      "pin": "46"
+     },
+     {
+      "ref": "U3",
+      "pin": "14"
+     },
+     {
+      "ref": "U8",
+      "pin": "1"
+     },
+     {
+      "ref": "U9",
+      "pin": "2"
+     },
+     {
+      "ref": "X1",
+      "pin": "2"
+     },
+     {
+      "ref": "J2",
+      "pin": "A1"
+     },
+     {
+      "ref": "J2",
+      "pin": "A12"
+     },
+     {
+      "ref": "J2",
+      "pin": "B1"
+     },
+     {
+      "ref": "J2",
+      "pin": "B12"
+     },
+     {
+      "ref": "J2",
+      "pin": "SH"
+     },
+     {
+      "ref": "U11",
+      "pin": "2"
+     },
+     {
+      "ref": "Y1",
+      "pin": "2"
+     },
+     {
+      "ref": "Y1",
+      "pin": "4"
+     },
+     {
+      "ref": "U10",
+      "pin": "29"
+     },
+     {
+      "ref": "U10",
+      "pin": "20"
+     }
+    ]
+   },
+   {
+    "name": "FPGA_MODE0",
+    "nodes": [
+     {
+      "ref": "R3",
+      "pin": "1"
+     },
+     {
+      "ref": "U1",
+      "pin": "88"
+     }
+    ]
+   },
+   {
+    "name": "FPGA_MODE1",
+    "nodes": [
+     {
+      "ref": "R4",
+      "pin": "1"
+     },
+     {
+      "ref": "U1",
+      "pin": "87"
+     }
+    ]
+   },
+   {
+    "name": "JTAG_TCK",
+    "nodes": [
+     {
+      "ref": "R5",
+      "pin": "1"
+     },
+     {
+      "ref": "U1",
+      "pin": "6"
+     },
+     {
+      "ref": "U10",
+      "pin": "23"
+     }
+    ]
+   },
+   {
+    "name": "FPGA_DONE",
+    "nodes": [
+     {
+      "ref": "R6",
+      "pin": "1"
+     },
+     {
+      "ref": "U1",
+      "pin": "10"
+     }
+    ]
+   },
+   {
+    "name": "3V3",
+    "nodes": [
+     {
+      "ref": "R6",
+      "pin": "2"
+     },
+     {
+      "ref": "R7",
+      "pin": "2"
+     },
+     {
+      "ref": "R8",
+      "pin": "2"
+     },
+     {
+      "ref": "R9",
+      "pin": "2"
+     },
+     {
+      "ref": "R10",
+      "pin": "2"
+     },
+     {
+      "ref": "R11",
+      "pin": "2"
+     },
+     {
+      "ref": "R12",
+      "pin": "2"
+     },
+     {
+      "ref": "R13",
+      "pin": "2"
+     },
+     {
+      "ref": "R14",
+      "pin": "2"
+     },
+     {
+      "ref": "R15",
+      "pin": "2"
+     },
+     {
+      "ref": "R16",
+      "pin": "2"
+     },
+     {
+      "ref": "C5",
+      "pin": "1"
+     },
+     {
+      "ref": "C6",
+      "pin": "1"
+     },
+     {
+      "ref": "C7",
+      "pin": "1"
+     },
+     {
+      "ref": "C8",
+      "pin": "1"
+     },
+     {
+      "ref": "C9",
+      "pin": "1"
+     },
+     {
+      "ref": "C11",
+      "pin": "1"
+     },
+     {
+      "ref": "C13",
+      "pin": "1"
+     },
+     {
+      "ref": "C16",
+      "pin": "1"
+     },
+     {
+      "ref": "C17",
+      "pin": "1"
+     },
+     {
+      "ref": "C18",
+      "pin": "1"
+     },
+     {
+      "ref": "C19",
+      "pin": "1"
+     },
+     {
+      "ref": "C20",
+      "pin": "1"
+     },
+     {
+      "ref": "C21",
+      "pin": "1"
+     },
+     {
+      "ref": "C23",
+      "pin": "1"
+     },
+     {
+      "ref": "C24",
+      "pin": "1"
+     },
+     {
+      "ref": "C27",
+      "pin": "1"
+     },
+     {
+      "ref": "TP2",
+      "pin": "1"
+     },
+     {
+      "ref": "U4",
+      "pin": "1"
+     },
+     {
+      "ref": "U4",
+      "pin": "20"
+     },
+     {
+      "ref": "U5",
+      "pin": "1"
+     },
+     {
+      "ref": "U5",
+      "pin": "20"
+     },
+     {
+      "ref": "U6",
+      "pin": "1"
+     },
+     {
+      "ref": "U6",
+      "pin": "20"
+     },
+     {
+      "ref": "U7",
+      "pin": "1"
+     },
+     {
+      "ref": "U1",
+      "pin": "67"
+     },
+     {
+      "ref": "U1",
+      "pin": "58"
+     },
+     {
+      "ref": "U1",
+      "pin": "23"
+     },
+     {
+      "ref": "U1",
+      "pin": "44"
+     },
+     {
+      "ref": "U1",
+      "pin": "12"
+     },
+     {
+      "ref": "U1",
+      "pin": "64"
+     },
+     {
+      "ref": "U1",
+      "pin": "78"
+     },
+     {
+      "ref": "U2",
+      "pin": "37"
+     },
+     {
+      "ref": "U3",
+      "pin": "28"
+     },
+     {
+      "ref": "U8",
+      "pin": "2"
+     },
+     {
+      "ref": "U9",
+      "pin": "1"
+     },
+     {
+      "ref": "U9",
+      "pin": "3"
+     },
+     {
+      "ref": "X1",
+      "pin": "1"
+     },
+     {
+      "ref": "X1",
+      "pin": "4"
+     },
+     {
+      "ref": "U10",
+      "pin": "6"
+     },
+     {
+      "ref": "U10",
+      "pin": "21"
+     }
+    ]
+   },
+   {
+    "name": "FPGA_RECONFIG_N",
+    "nodes": [
+     {
+      "ref": "R7",
+      "pin": "1"
+     },
+     {
+      "ref": "U1",
+      "pin": "9"
+     }
+    ]
+   },
+   {
+    "name": "FPGA_JTAGSEL_N",
+    "nodes": [
+     {
+      "ref": "R8",
+      "pin": "1"
+     },
+     {
+      "ref": "U1",
+      "pin": "4"
+     }
+    ]
+   },
+   {
+    "name": "BUS_NOE",
+    "nodes": [
+     {
+      "ref": "R9",
+      "pin": "1"
+     },
+     {
+      "ref": "U7",
+      "pin": "22"
+     },
+     {
+      "ref": "U1",
+      "pin": "18"
+     }
+    ]
+   },
+   {
+    "name": "ROM_NCE",
+    "nodes": [
+     {
+      "ref": "R10",
+      "pin": "1"
+     },
+     {
+      "ref": "U1",
+      "pin": "20"
+     },
+     {
+      "ref": "U2",
+      "pin": "26"
+     }
+    ]
+   },
+   {
+    "name": "RAM_NCE",
+    "nodes": [
+     {
+      "ref": "R11",
+      "pin": "1"
+     },
+     {
+      "ref": "U1",
+      "pin": "3"
+     },
+     {
+      "ref": "U3",
+      "pin": "20"
+     }
+    ]
+   },
+   {
+    "name": "ROM_NWE",
+    "nodes": [
+     {
+      "ref": "R12",
+      "pin": "1"
+     },
+     {
+      "ref": "U1",
+      "pin": "56"
+     },
+     {
+      "ref": "U2",
+      "pin": "11"
+     }
+    ]
+   },
+   {
+    "name": "RAM_NWE",
+    "nodes": [
+     {
+      "ref": "R13",
+      "pin": "1"
+     },
+     {
+      "ref": "U1",
+      "pin": "57"
+     },
+     {
+      "ref": "U3",
+      "pin": "27"
+     }
+    ]
+   },
+   {
+    "name": "ROM_RESET_N",
+    "nodes": [
+     {
+      "ref": "R14",
+      "pin": "1"
+     },
+     {
+      "ref": "U2",
+      "pin": "12"
+     }
+    ]
+   },
+   {
+    "name": "ROM_WP_N",
+    "nodes": [
+     {
+      "ref": "R15",
+      "pin": "1"
+     },
+     {
+      "ref": "U2",
+      "pin": "14"
+     }
+    ]
+   },
+   {
+    "name": "CH347_RST_N",
+    "nodes": [
+     {
+      "ref": "R16",
+      "pin": "1"
+     },
+     {
+      "ref": "U10",
+      "pin": "3"
+     }
+    ]
+   },
+   {
+    "name": "USB_CC1",
+    "nodes": [
+     {
+      "ref": "R17",
+      "pin": "1"
+     },
+     {
+      "ref": "J2",
+      "pin": "A5"
+     }
+    ]
+   },
+   {
+    "name": "USB_CC2",
+    "nodes": [
+     {
+      "ref": "R18",
+      "pin": "1"
+     },
+     {
+      "ref": "J2",
+      "pin": "B5"
+     }
+    ]
+   },
+   {
+    "name": "VSYS",
+    "nodes": [
+     {
+      "ref": "D1",
+      "pin": "1"
+     },
+     {
+      "ref": "D2",
+      "pin": "1"
+     },
+     {
+      "ref": "C12",
+      "pin": "1"
+     },
+     {
+      "ref": "C15",
+      "pin": "1"
+     },
+     {
+      "ref": "U8",
+      "pin": "3"
+     }
+    ]
+   },
+   {
+    "name": "USB_VBUS",
+    "nodes": [
+     {
+      "ref": "D2",
+      "pin": "2"
+     },
+     {
+      "ref": "J2",
+      "pin": "A4"
+     },
+     {
+      "ref": "J2",
+      "pin": "A9"
+     },
+     {
+      "ref": "J2",
+      "pin": "B4"
+     },
+     {
+      "ref": "J2",
+      "pin": "B9"
+     },
+     {
+      "ref": "U11",
+      "pin": "5"
+     }
+    ]
+   },
+   {
+    "name": "1V2",
+    "nodes": [
+     {
+      "ref": "C1",
+      "pin": "1"
+     },
+     {
+      "ref": "C2",
+      "pin": "1"
+     },
+     {
+      "ref": "C3",
+      "pin": "1"
+     },
+     {
+      "ref": "C4",
+      "pin": "1"
+     },
+     {
+      "ref": "C10",
+      "pin": "1"
+     },
+     {
+      "ref": "C14",
+      "pin": "1"
+     },
+     {
+      "ref": "TP3",
+      "pin": "1"
+     },
+     {
+      "ref": "U1",
+      "pin": "1"
+     },
+     {
+      "ref": "U1",
+      "pin": "22"
+     },
+     {
+      "ref": "U1",
+      "pin": "45"
+     },
+     {
+      "ref": "U1",
+      "pin": "66"
+     },
+     {
+      "ref": "U9",
+      "pin": "5"
+     }
+    ]
+   },
+   {
+    "name": "XTAL_XI",
+    "nodes": [
+     {
+      "ref": "C25",
+      "pin": "1"
+     },
+     {
+      "ref": "U10",
+      "pin": "1"
+     },
+     {
+      "ref": "Y1",
+      "pin": "1"
+     }
+    ]
+   },
+   {
+    "name": "XTAL_XO",
+    "nodes": [
+     {
+      "ref": "C26",
+      "pin": "1"
+     },
+     {
+      "ref": "U10",
+      "pin": "2"
+     },
+     {
+      "ref": "Y1",
+      "pin": "3"
+     }
+    ]
+   },
+   {
+    "name": "GB_CLK",
+    "nodes": [
+     {
+      "ref": "TP5",
+      "pin": "1"
+     },
+     {
+      "ref": "J1",
+      "pin": "2"
+     }
+    ]
+   },
+   {
+    "name": "GB_AUDIO",
+    "nodes": [
+     {
+      "ref": "TP6",
+      "pin": "1"
+     },
+     {
+      "ref": "J1",
+      "pin": "31"
+     }
+    ]
+   },
+   {
+    "name": "GB5_A0",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "6"
+     },
+     {
+      "ref": "U4",
+      "pin": "2"
+     }
+    ]
+   },
+   {
+    "name": "GB5_A1",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "7"
+     },
+     {
+      "ref": "U4",
+      "pin": "3"
+     }
+    ]
+   },
+   {
+    "name": "GB5_A2",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "8"
+     },
+     {
+      "ref": "U4",
+      "pin": "4"
+     }
+    ]
+   },
+   {
+    "name": "GB5_A3",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "9"
+     },
+     {
+      "ref": "U4",
+      "pin": "5"
+     }
+    ]
+   },
+   {
+    "name": "GB5_A4",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "10"
+     },
+     {
+      "ref": "U4",
+      "pin": "6"
+     }
+    ]
+   },
+   {
+    "name": "GB5_A5",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "11"
+     },
+     {
+      "ref": "U4",
+      "pin": "7"
+     }
+    ]
+   },
+   {
+    "name": "GB5_A6",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "12"
+     },
+     {
+      "ref": "U4",
+      "pin": "8"
+     }
+    ]
+   },
+   {
+    "name": "GB5_A7",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "13"
+     },
+     {
+      "ref": "U4",
+      "pin": "9"
+     }
+    ]
+   },
+   {
+    "name": "GB5_A8",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "14"
+     },
+     {
+      "ref": "U5",
+      "pin": "2"
+     }
+    ]
+   },
+   {
+    "name": "GB5_A9",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "15"
+     },
+     {
+      "ref": "U5",
+      "pin": "3"
+     }
+    ]
+   },
+   {
+    "name": "GB5_A10",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "16"
+     },
+     {
+      "ref": "U5",
+      "pin": "4"
+     }
+    ]
+   },
+   {
+    "name": "GB5_A11",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "17"
+     },
+     {
+      "ref": "U5",
+      "pin": "5"
+     }
+    ]
+   },
+   {
+    "name": "GB5_A12",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "18"
+     },
+     {
+      "ref": "U5",
+      "pin": "6"
+     }
+    ]
+   },
+   {
+    "name": "GB5_A13",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "19"
+     },
+     {
+      "ref": "U5",
+      "pin": "7"
+     }
+    ]
+   },
+   {
+    "name": "GB5_A14",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "20"
+     },
+     {
+      "ref": "U5",
+      "pin": "8"
+     }
+    ]
+   },
+   {
+    "name": "GB5_A15",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "21"
+     },
+     {
+      "ref": "U5",
+      "pin": "9"
+     }
+    ]
+   },
+   {
+    "name": "GB5_D0",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "22"
+     },
+     {
+      "ref": "U7",
+      "pin": "21"
+     }
+    ]
+   },
+   {
+    "name": "GB5_D1",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "23"
+     },
+     {
+      "ref": "U7",
+      "pin": "20"
+     }
+    ]
+   },
+   {
+    "name": "GB5_D2",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "24"
+     },
+     {
+      "ref": "U7",
+      "pin": "19"
+     }
+    ]
+   },
+   {
+    "name": "GB5_D3",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "25"
+     },
+     {
+      "ref": "U7",
+      "pin": "18"
+     }
+    ]
+   },
+   {
+    "name": "GB5_D4",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "26"
+     },
+     {
+      "ref": "U7",
+      "pin": "17"
+     }
+    ]
+   },
+   {
+    "name": "GB5_D5",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "27"
+     },
+     {
+      "ref": "U7",
+      "pin": "16"
+     }
+    ]
+   },
+   {
+    "name": "GB5_D6",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "28"
+     },
+     {
+      "ref": "U7",
+      "pin": "15"
+     }
+    ]
+   },
+   {
+    "name": "GB5_D7",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "29"
+     },
+     {
+      "ref": "U7",
+      "pin": "14"
+     }
+    ]
+   },
+   {
+    "name": "GB5_NWR",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "3"
+     },
+     {
+      "ref": "U6",
+      "pin": "2"
+     }
+    ]
+   },
+   {
+    "name": "GB5_NRD",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "4"
+     },
+     {
+      "ref": "U6",
+      "pin": "3"
+     }
+    ]
+   },
+   {
+    "name": "GB5_NCS",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "5"
+     },
+     {
+      "ref": "U6",
+      "pin": "4"
+     }
+    ]
+   },
+   {
+    "name": "GB5_NRESET",
+    "nodes": [
+     {
+      "ref": "J1",
+      "pin": "30"
+     },
+     {
+      "ref": "U6",
+      "pin": "5"
+     }
+    ]
+   },
+   {
+    "name": "GB_A0",
+    "nodes": [
+     {
+      "ref": "U4",
+      "pin": "18"
+     },
+     {
+      "ref": "U1",
+      "pin": "25"
+     }
+    ]
+   },
+   {
+    "name": "GB_A1",
+    "nodes": [
+     {
+      "ref": "U4",
+      "pin": "17"
+     },
+     {
+      "ref": "U1",
+      "pin": "26"
+     }
+    ]
+   },
+   {
+    "name": "GB_A2",
+    "nodes": [
+     {
+      "ref": "U4",
+      "pin": "16"
+     },
+     {
+      "ref": "U1",
+      "pin": "27"
+     }
+    ]
+   },
+   {
+    "name": "GB_A3",
+    "nodes": [
+     {
+      "ref": "U4",
+      "pin": "15"
+     },
+     {
+      "ref": "U1",
+      "pin": "28"
+     }
+    ]
+   },
+   {
+    "name": "GB_A4",
+    "nodes": [
+     {
+      "ref": "U4",
+      "pin": "14"
+     },
+     {
+      "ref": "U1",
+      "pin": "29"
+     }
+    ]
+   },
+   {
+    "name": "GB_A5",
+    "nodes": [
+     {
+      "ref": "U4",
+      "pin": "13"
+     },
+     {
+      "ref": "U1",
+      "pin": "30"
+     }
+    ]
+   },
+   {
+    "name": "GB_A6",
+    "nodes": [
+     {
+      "ref": "U4",
+      "pin": "12"
+     },
+     {
+      "ref": "U1",
+      "pin": "31"
+     }
+    ]
+   },
+   {
+    "name": "GB_A7",
+    "nodes": [
+     {
+      "ref": "U4",
+      "pin": "11"
+     },
+     {
+      "ref": "U1",
+      "pin": "32"
+     }
+    ]
+   },
+   {
+    "name": "GB_A8",
+    "nodes": [
+     {
+      "ref": "U5",
+      "pin": "18"
+     },
+     {
+      "ref": "U1",
+      "pin": "33"
+     }
+    ]
+   },
+   {
+    "name": "GB_A9",
+    "nodes": [
+     {
+      "ref": "U5",
+      "pin": "17"
+     },
+     {
+      "ref": "U1",
+      "pin": "34"
+     }
+    ]
+   },
+   {
+    "name": "GB_A10",
+    "nodes": [
+     {
+      "ref": "U5",
+      "pin": "16"
+     },
+     {
+      "ref": "U1",
+      "pin": "35"
+     }
+    ]
+   },
+   {
+    "name": "GB_A11",
+    "nodes": [
+     {
+      "ref": "U5",
+      "pin": "15"
+     },
+     {
+      "ref": "U1",
+      "pin": "36"
+     }
+    ]
+   },
+   {
+    "name": "GB_A12",
+    "nodes": [
+     {
+      "ref": "U5",
+      "pin": "14"
+     },
+     {
+      "ref": "U1",
+      "pin": "37"
+     }
+    ]
+   },
+   {
+    "name": "GB_A13",
+    "nodes": [
+     {
+      "ref": "U5",
+      "pin": "13"
+     },
+     {
+      "ref": "U1",
+      "pin": "38"
+     }
+    ]
+   },
+   {
+    "name": "GB_A14",
+    "nodes": [
+     {
+      "ref": "U5",
+      "pin": "12"
+     },
+     {
+      "ref": "U1",
+      "pin": "39"
+     }
+    ]
+   },
+   {
+    "name": "GB_A15",
+    "nodes": [
+     {
+      "ref": "U5",
+      "pin": "11"
+     },
+     {
+      "ref": "U1",
+      "pin": "40"
+     }
+    ]
+   },
+   {
+    "name": "GB_NWR",
+    "nodes": [
+     {
+      "ref": "U6",
+      "pin": "18"
+     },
+     {
+      "ref": "U1",
+      "pin": "41"
+     }
+    ]
+   },
+   {
+    "name": "GB_NRD",
+    "nodes": [
+     {
+      "ref": "U6",
+      "pin": "17"
+     },
+     {
+      "ref": "U1",
+      "pin": "42"
+     }
+    ]
+   },
+   {
+    "name": "GB_NCS",
+    "nodes": [
+     {
+      "ref": "U6",
+      "pin": "16"
+     },
+     {
+      "ref": "U1",
+      "pin": "16"
+     }
+    ]
+   },
+   {
+    "name": "GB_NRESET",
+    "nodes": [
+     {
+      "ref": "U6",
+      "pin": "15"
+     },
+     {
+      "ref": "U1",
+      "pin": "17"
+     }
+    ]
+   },
+   {
+    "name": "BUS_DIR",
+    "nodes": [
+     {
+      "ref": "U7",
+      "pin": "2"
+     },
+     {
+      "ref": "U1",
+      "pin": "19"
+     }
+    ]
+   },
+   {
+    "name": "CD0",
+    "nodes": [
+     {
+      "ref": "U7",
+      "pin": "3"
+     },
+     {
+      "ref": "U1",
+      "pin": "47"
+     },
+     {
+      "ref": "U2",
+      "pin": "29"
+     },
+     {
+      "ref": "U3",
+      "pin": "11"
+     }
+    ]
+   },
+   {
+    "name": "CD1",
+    "nodes": [
+     {
+      "ref": "U7",
+      "pin": "4"
+     },
+     {
+      "ref": "U1",
+      "pin": "48"
+     },
+     {
+      "ref": "U2",
+      "pin": "31"
+     },
+     {
+      "ref": "U3",
+      "pin": "12"
+     }
+    ]
+   },
+   {
+    "name": "CD2",
+    "nodes": [
+     {
+      "ref": "U7",
+      "pin": "5"
+     },
+     {
+      "ref": "U1",
+      "pin": "49"
+     },
+     {
+      "ref": "U2",
+      "pin": "33"
+     },
+     {
+      "ref": "U3",
+      "pin": "13"
+     }
+    ]
+   },
+   {
+    "name": "CD3",
+    "nodes": [
+     {
+      "ref": "U7",
+      "pin": "6"
+     },
+     {
+      "ref": "U1",
+      "pin": "50"
+     },
+     {
+      "ref": "U2",
+      "pin": "35"
+     },
+     {
+      "ref": "U3",
+      "pin": "15"
+     }
+    ]
+   },
+   {
+    "name": "CD4",
+    "nodes": [
+     {
+      "ref": "U7",
+      "pin": "7"
+     },
+     {
+      "ref": "U1",
+      "pin": "51"
+     },
+     {
+      "ref": "U2",
+      "pin": "38"
+     },
+     {
+      "ref": "U3",
+      "pin": "16"
+     }
+    ]
+   },
+   {
+    "name": "CD5",
+    "nodes": [
+     {
+      "ref": "U7",
+      "pin": "8"
+     },
+     {
+      "ref": "U1",
+      "pin": "52"
+     },
+     {
+      "ref": "U2",
+      "pin": "40"
+     },
+     {
+      "ref": "U3",
+      "pin": "17"
+     }
+    ]
+   },
+   {
+    "name": "CD6",
+    "nodes": [
+     {
+      "ref": "U7",
+      "pin": "9"
+     },
+     {
+      "ref": "U1",
+      "pin": "53"
+     },
+     {
+      "ref": "U2",
+      "pin": "42"
+     },
+     {
+      "ref": "U3",
+      "pin": "18"
+     }
+    ]
+   },
+   {
+    "name": "CD7",
+    "nodes": [
+     {
+      "ref": "U7",
+      "pin": "10"
+     },
+     {
+      "ref": "U1",
+      "pin": "54"
+     },
+     {
+      "ref": "U2",
+      "pin": "44"
+     },
+     {
+      "ref": "U3",
+      "pin": "19"
+     }
+    ]
+   },
+   {
+    "name": "CLK48",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "11"
+     },
+     {
+      "ref": "X1",
+      "pin": "3"
+     }
+    ]
+   },
+   {
+    "name": "UART_TO_FPGA",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "14"
+     },
+     {
+      "ref": "U10",
+      "pin": "19"
+     }
+    ]
+   },
+   {
+    "name": "UART_TO_USB",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "15"
+     },
+     {
+      "ref": "U10",
+      "pin": "22"
+     }
+    ]
+   },
+   {
+    "name": "MEM_NOE",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "55"
+     },
+     {
+      "ref": "U2",
+      "pin": "28"
+     },
+     {
+      "ref": "U3",
+      "pin": "22"
+     }
+    ]
+   },
+   {
+    "name": "MA0",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "59"
+     },
+     {
+      "ref": "U2",
+      "pin": "45"
+     },
+     {
+      "ref": "U3",
+      "pin": "10"
+     }
+    ]
+   },
+   {
+    "name": "MA1",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "60"
+     },
+     {
+      "ref": "U2",
+      "pin": "25"
+     },
+     {
+      "ref": "U3",
+      "pin": "9"
+     }
+    ]
+   },
+   {
+    "name": "MA2",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "61"
+     },
+     {
+      "ref": "U2",
+      "pin": "24"
+     },
+     {
+      "ref": "U3",
+      "pin": "8"
+     }
+    ]
+   },
+   {
+    "name": "MA3",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "62"
+     },
+     {
+      "ref": "U2",
+      "pin": "23"
+     },
+     {
+      "ref": "U3",
+      "pin": "7"
+     }
+    ]
+   },
+   {
+    "name": "MA4",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "63"
+     },
+     {
+      "ref": "U2",
+      "pin": "22"
+     },
+     {
+      "ref": "U3",
+      "pin": "6"
+     }
+    ]
+   },
+   {
+    "name": "MA5",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "68"
+     },
+     {
+      "ref": "U2",
+      "pin": "21"
+     },
+     {
+      "ref": "U3",
+      "pin": "5"
+     }
+    ]
+   },
+   {
+    "name": "MA6",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "69"
+     },
+     {
+      "ref": "U2",
+      "pin": "20"
+     },
+     {
+      "ref": "U3",
+      "pin": "4"
+     }
+    ]
+   },
+   {
+    "name": "MA7",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "70"
+     },
+     {
+      "ref": "U2",
+      "pin": "19"
+     },
+     {
+      "ref": "U3",
+      "pin": "3"
+     }
+    ]
+   },
+   {
+    "name": "MA8",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "71"
+     },
+     {
+      "ref": "U2",
+      "pin": "18"
+     },
+     {
+      "ref": "U3",
+      "pin": "25"
+     }
+    ]
+   },
+   {
+    "name": "MA9",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "72"
+     },
+     {
+      "ref": "U2",
+      "pin": "8"
+     },
+     {
+      "ref": "U3",
+      "pin": "24"
+     }
+    ]
+   },
+   {
+    "name": "MA10",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "73"
+     },
+     {
+      "ref": "U2",
+      "pin": "7"
+     },
+     {
+      "ref": "U3",
+      "pin": "21"
+     }
+    ]
+   },
+   {
+    "name": "MA11",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "74"
+     },
+     {
+      "ref": "U2",
+      "pin": "6"
+     },
+     {
+      "ref": "U3",
+      "pin": "23"
+     }
+    ]
+   },
+   {
+    "name": "MA12",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "75"
+     },
+     {
+      "ref": "U2",
+      "pin": "5"
+     },
+     {
+      "ref": "U3",
+      "pin": "2"
+     }
+    ]
+   },
+   {
+    "name": "MA13",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "76"
+     },
+     {
+      "ref": "U2",
+      "pin": "4"
+     },
+     {
+      "ref": "U3",
+      "pin": "26"
+     }
+    ]
+   },
+   {
+    "name": "MA14",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "77"
+     },
+     {
+      "ref": "U2",
+      "pin": "3"
+     },
+     {
+      "ref": "U3",
+      "pin": "1"
+     }
+    ]
+   },
+   {
+    "name": "MA15",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "79"
+     },
+     {
+      "ref": "U2",
+      "pin": "2"
+     }
+    ]
+   },
+   {
+    "name": "MA16",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "80"
+     },
+     {
+      "ref": "U2",
+      "pin": "1"
+     }
+    ]
+   },
+   {
+    "name": "MA17",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "81"
+     },
+     {
+      "ref": "U2",
+      "pin": "48"
+     }
+    ]
+   },
+   {
+    "name": "MA18",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "82"
+     },
+     {
+      "ref": "U2",
+      "pin": "17"
+     }
+    ]
+   },
+   {
+    "name": "MA19",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "83"
+     },
+     {
+      "ref": "U2",
+      "pin": "16"
+     }
+    ]
+   },
+   {
+    "name": "MA20",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "84"
+     },
+     {
+      "ref": "U2",
+      "pin": "9"
+     }
+    ]
+   },
+   {
+    "name": "MA21",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "85"
+     },
+     {
+      "ref": "U2",
+      "pin": "10"
+     }
+    ]
+   },
+   {
+    "name": "MA22",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "86"
+     },
+     {
+      "ref": "U2",
+      "pin": "13"
+     }
+    ]
+   },
+   {
+    "name": "JTAG_TMS",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "5"
+     },
+     {
+      "ref": "U10",
+      "pin": "26"
+     }
+    ]
+   },
+   {
+    "name": "JTAG_TDI",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "7"
+     },
+     {
+      "ref": "U10",
+      "pin": "25"
+     }
+    ]
+   },
+   {
+    "name": "JTAG_TDO",
+    "nodes": [
+     {
+      "ref": "U1",
+      "pin": "8"
+     },
+     {
+      "ref": "U10",
+      "pin": "24"
+     }
+    ]
+   },
+   {
+    "name": "USB_DP",
+    "nodes": [
+     {
+      "ref": "J2",
+      "pin": "A6"
+     },
+     {
+      "ref": "J2",
+      "pin": "B6"
+     },
+     {
+      "ref": "U11",
+      "pin": "1"
+     },
+     {
+      "ref": "U11",
+      "pin": "6"
+     },
+     {
+      "ref": "U10",
+      "pin": "28"
+     }
+    ]
+   },
+   {
+    "name": "USB_DN",
+    "nodes": [
+     {
+      "ref": "J2",
+      "pin": "A7"
+     },
+     {
+      "ref": "J2",
+      "pin": "B7"
+     },
+     {
+      "ref": "U11",
+      "pin": "3"
+     },
+     {
+      "ref": "U11",
+      "pin": "4"
+     },
+     {
+      "ref": "U10",
+      "pin": "27"
+     }
+    ]
+   }
+  ],
+  "noConnects": [
+   {
+    "ref": "U2",
+    "pin": "15"
+   },
+   {
+    "ref": "U2",
+    "pin": "30"
+   },
+   {
+    "ref": "U2",
+    "pin": "32"
+   },
+   {
+    "ref": "U2",
+    "pin": "34"
+   },
+   {
+    "ref": "U2",
+    "pin": "36"
+   },
+   {
+    "ref": "U2",
+    "pin": "39"
+   },
+   {
+    "ref": "U2",
+    "pin": "41"
+   },
+   {
+    "ref": "U2",
+    "pin": "43"
+   },
+   {
+    "ref": "U10",
+    "pin": "4"
+   },
+   {
+    "ref": "U10",
+    "pin": "5"
+   },
+   {
+    "ref": "U10",
+    "pin": "7"
+   },
+   {
+    "ref": "U10",
+    "pin": "8"
+   },
+   {
+    "ref": "U10",
+    "pin": "9"
+   },
+   {
+    "ref": "U10",
+    "pin": "10"
+   },
+   {
+    "ref": "U10",
+    "pin": "11"
+   },
+   {
+    "ref": "U10",
+    "pin": "12"
+   },
+   {
+    "ref": "U10",
+    "pin": "13"
+   },
+   {
+    "ref": "U10",
+    "pin": "14"
+   },
+   {
+    "ref": "U10",
+    "pin": "15"
+   },
+   {
+    "ref": "U10",
+    "pin": "16"
+   },
+   {
+    "ref": "U10",
+    "pin": "17"
+   },
+   {
+    "ref": "U10",
+    "pin": "18"
+   },
+   {
+    "ref": "U9",
+    "pin": "4"
+   },
+   {
+    "ref": "U6",
+    "pin": "11"
+   },
+   {
+    "ref": "U6",
+    "pin": "12"
+   },
+   {
+    "ref": "U6",
+    "pin": "13"
+   },
+   {
+    "ref": "U6",
+    "pin": "14"
+   },
+   {
+    "ref": "J2",
+    "pin": "A8"
+   },
+   {
+    "ref": "J2",
+    "pin": "B8"
+   }
+  ],
+  "design": {
+   "source": "gb-devcart r2",
+   "tool": "r2/hw/gen_r2.py"
+  }
+ },
+ "board": {
+  "outline": [
+   {
+    "x": 1.1,
+    "y": 61.0
+   },
+   {
+    "x": 50.3,
+    "y": 61.0
+   },
+   {
+    "x": 50.3,
+    "y": 52.4
+   },
+   {
+    "x": 51.4,
+    "y": 52.4
+   },
+   {
+    "x": 51.4,
+    "y": 2.6
+   },
+   {
+    "x": 47.4,
+    "y": 2.6
+   },
+   {
+    "x": 47.4,
+    "y": 0.0
+   },
+   {
+    "x": 0,
+    "y": 0.0
+   },
+   {
+    "x": 0,
+    "y": 52.4
+   },
+   {
+    "x": 1.1,
+    "y": 52.4
+   }
+  ],
+  "copperLayers": 4,
+  "rules": {
+   "clearanceMm": 0.1,
+   "trackWidthMm": 0.15,
+   "viaDiameterMm": 0.5,
+   "viaDrillMm": 0.3
+  },
+  "holes": [
+   {
+    "x": 25.7,
+    "y": 45.65,
+    "diameterMm": 7.2
+   },
+   {
+    "x": 25.7,
+    "y": 20.65,
+    "diameterMm": 2.3
+   }
+  ],
+  "placements": [
+   {
+    "ref": "J1",
+    "position": {
+     "x": 25.7,
+     "y": 61.0
+    }
+   },
+   {
+    "ref": "J2",
+    "position": {
+     "x": 25.7,
+     "y": 2.95
+    }
+   },
+   {
+    "ref": "U11",
+    "position": {
+     "x": 34.0,
+     "y": 4.5
+    }
+   },
+   {
+    "ref": "U10",
+    "position": {
+     "x": 40.5,
+     "y": 5.5
+    }
+   },
+   {
+    "ref": "Y1",
+    "position": {
+     "x": 46.0,
+     "y": 6.5
+    }
+   },
+   {
+    "ref": "C25",
+    "position": {
+     "x": 49.9,
+     "y": 6.0
+    }
+   },
+   {
+    "ref": "C26",
+    "position": {
+     "x": 46.5,
+     "y": 9.7
+    }
+   },
+   {
+    "ref": "C23",
+    "position": {
+     "x": 36.0,
+     "y": 9.7
+    }
+   },
+   {
+    "ref": "C27",
+    "position": {
+     "x": 39.5,
+     "y": 9.7
+    }
+   },
+   {
+    "ref": "R16",
+    "position": {
+     "x": 43.0,
+     "y": 9.7
+    }
+   },
+   {
+    "ref": "R17",
+    "position": {
+     "x": 18.5,
+     "y": 2.6
+    }
+   },
+   {
+    "ref": "R18",
+    "position": {
+     "x": 18.5,
+     "y": 4.6
+    }
+   },
+   {
+    "ref": "D2",
+    "position": {
+     "x": 3.2,
+     "y": 2.3
+    }
+   },
+   {
+    "ref": "D1",
+    "position": {
+     "x": 3.2,
+     "y": 5.0
+    }
+   },
+   {
+    "ref": "U8",
+    "position": {
+     "x": 9.0,
+     "y": 2.7
+    }
+   },
+   {
+    "ref": "U9",
+    "position": {
+     "x": 9.0,
+     "y": 6.6
+    }
+   },
+   {
+    "ref": "C15",
+    "position": {
+     "x": 14.0,
+     "y": 1.9
+    }
+   },
+   {
+    "ref": "C12",
+    "position": {
+     "x": 14.0,
+     "y": 3.8
+    }
+   },
+   {
+    "ref": "C11",
+    "position": {
+     "x": 14.0,
+     "y": 5.7
+    }
+   },
+   {
+    "ref": "C13",
+    "position": {
+     "x": 14.0,
+     "y": 7.6
+    }
+   },
+   {
+    "ref": "C10",
+    "position": {
+     "x": 3.2,
+     "y": 7.6
+    }
+   },
+   {
+    "ref": "C14",
+    "position": {
+     "x": 3.2,
+     "y": 9.6
+    }
+   },
+   {
+    "ref": "U1",
+    "position": {
+     "x": 11.5,
+     "y": 27.0
+    }
+   },
+   {
+    "ref": "C1",
+    "position": {
+     "x": 5.2,
+     "y": 20.6
+    }
+   },
+   {
+    "ref": "C5",
+    "position": {
+     "x": 5.2,
+     "y": 18.9
+    }
+   },
+   {
+    "ref": "C3",
+    "position": {
+     "x": 17.8,
+     "y": 20.6
+    }
+   },
+   {
+    "ref": "C6",
+    "position": {
+     "x": 17.8,
+     "y": 18.9
+    }
+   },
+   {
+    "ref": "C4",
+    "position": {
+     "x": 5.2,
+     "y": 33.4
+    }
+   },
+   {
+    "ref": "C7",
+    "position": {
+     "x": 5.2,
+     "y": 35.1
+    }
+   },
+   {
+    "ref": "C2",
+    "position": {
+     "x": 17.8,
+     "y": 33.4
+    }
+   },
+   {
+    "ref": "C8",
+    "position": {
+     "x": 17.8,
+     "y": 35.1
+    }
+   },
+   {
+    "ref": "C9",
+    "position": {
+     "x": 11.5,
+     "y": 18.4
+    }
+   },
+   {
+    "ref": "C24",
+    "position": {
+     "x": 11.5,
+     "y": 35.6
+    }
+   },
+   {
+    "ref": "X1",
+    "position": {
+     "x": 2.2,
+     "y": 23.6
+    }
+   },
+   {
+    "ref": "R3",
+    "position": {
+     "x": 2.2,
+     "y": 26.5
+    }
+   },
+   {
+    "ref": "R4",
+    "position": {
+     "x": 2.2,
+     "y": 28.3
+    }
+   },
+   {
+    "ref": "R8",
+    "position": {
+     "x": 2.2,
+     "y": 30.1
+    }
+   },
+   {
+    "ref": "R5",
+    "position": {
+     "x": 2.2,
+     "y": 31.9
+    }
+   },
+   {
+    "ref": "R6",
+    "position": {
+     "x": 2.2,
+     "y": 33.7
+    }
+   },
+   {
+    "ref": "R7",
+    "position": {
+     "x": 2.2,
+     "y": 35.5
+    }
+   },
+   {
+    "ref": "U2",
+    "position": {
+     "x": 39.0,
+     "y": 17.0
+    }
+   },
+   {
+    "ref": "C16",
+    "position": {
+     "x": 25.2,
+     "y": 15.5
+    }
+   },
+   {
+    "ref": "U3",
+    "position": {
+     "x": 39.0,
+     "y": 31.0
+    }
+   },
+   {
+    "ref": "C17",
+    "position": {
+     "x": 39.0,
+     "y": 38.6
+    }
+   },
+   {
+    "ref": "R10",
+    "position": {
+     "x": 25.2,
+     "y": 24.5
+    }
+   },
+   {
+    "ref": "R12",
+    "position": {
+     "x": 25.2,
+     "y": 26.3
+    }
+   },
+   {
+    "ref": "R14",
+    "position": {
+     "x": 25.2,
+     "y": 28.1
+    }
+   },
+   {
+    "ref": "R15",
+    "position": {
+     "x": 25.2,
+     "y": 29.9
+    }
+   },
+   {
+    "ref": "R9",
+    "position": {
+     "x": 21.3,
+     "y": 24.5
+    }
+   },
+   {
+    "ref": "R11",
+    "position": {
+     "x": 21.3,
+     "y": 26.3
+    }
+   },
+   {
+    "ref": "R13",
+    "position": {
+     "x": 21.3,
+     "y": 28.1
+    }
+   },
+   {
+    "ref": "R1",
+    "position": {
+     "x": 2.2,
+     "y": 37.3
+    }
+   },
+   {
+    "ref": "R2",
+    "position": {
+     "x": 2.2,
+     "y": 39.1
+    }
+   },
+   {
+    "ref": "U6",
+    "position": {
+     "x": 4.3,
+     "y": 47.2
+    }
+   },
+   {
+    "ref": "U4",
+    "position": {
+     "x": 13.2,
+     "y": 47.2
+    }
+   },
+   {
+    "ref": "U5",
+    "position": {
+     "x": 34.0,
+     "y": 47.2
+    }
+   },
+   {
+    "ref": "U7",
+    "position": {
+     "x": 43.5,
+     "y": 47.2
+    }
+   },
+   {
+    "ref": "C20",
+    "position": {
+     "x": 4.3,
+     "y": 42.0
+    }
+   },
+   {
+    "ref": "C18",
+    "position": {
+     "x": 13.2,
+     "y": 42.0
+    }
+   },
+   {
+    "ref": "C19",
+    "position": {
+     "x": 34.0,
+     "y": 42.0
+    }
+   },
+   {
+    "ref": "C21",
+    "position": {
+     "x": 41.5,
+     "y": 42.0
+    }
+   },
+   {
+    "ref": "C22",
+    "position": {
+     "x": 45.5,
+     "y": 42.0
+    }
+   },
+   {
+    "ref": "TP5",
+    "position": {
+     "x": 8.0,
+     "y": 39.9
+    }
+   },
+   {
+    "ref": "TP6",
+    "position": {
+     "x": 10.5,
+     "y": 39.9
+    }
+   },
+   {
+    "ref": "TP4",
+    "position": {
+     "x": 35.0,
+     "y": 39.9
+    }
+   },
+   {
+    "ref": "TP3",
+    "position": {
+     "x": 42.5,
+     "y": 39.9
+    }
+   },
+   {
+    "ref": "TP2",
+    "position": {
+     "x": 45.0,
+     "y": 39.9
+    }
+   },
+   {
+    "ref": "TP1",
+    "position": {
+     "x": 47.5,
+     "y": 39.9
+    }
+   }
+  ]
+ },
+ "libraries": [
+  {
+   "kind": "symbol",
+   "nickname": "gbdev2",
+   "uri": "/home/user/fabdesk-projects/gb-devcart-r2-2/lib/gbdev2.kicad_sym",
+   "description": "GB devcart r2 symbols"
+  },
+  {
+   "kind": "footprint",
+   "nickname": "gbdev2",
+   "uri": "/home/user/fabdesk-projects/gb-devcart-r2-2/lib/gbdev2.pretty",
+   "description": "GB devcart r2 footprints"
+  }
+ ]
+}

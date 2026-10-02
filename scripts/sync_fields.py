@@ -5,11 +5,12 @@ board.kicad_sch (footprints and placed symbols), so KiCad, JLC's tools and BOM e
     python3 scripts/sync_fields.py
 """
 import json
+import os
 import re
 import uuid
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(os.environ.get("BOARD_DIR", Path(__file__).resolve().parent.parent)).resolve()
 FIELDS = ("MPN", "Manufacturer", "LCSC")
 
 

@@ -149,7 +149,7 @@ def main(apply):
     req = {"mode": "apply" if apply else "preview", "expectedPcbRevision": rev,
            "geometry": {"vias": [dict(position={"x": round(x, 3), "y": round(y, 3)}, diameter=VIA_D, drill=VIA_DRILL,
                                       layers=["F.Cu", "B.Cu"], net=n) for x, y, n in vias],
-                        "tracks": tracks, "zones": zones}}
+                        "tracks": tracks, **({} if "--no-zones" in sys.argv else {"zones": zones})}}
     (A.SCRATCH / "power_vias.json").write_text(json.dumps(req, indent=1))
     print(f"{len(vias)} vias, {len(tracks)} stubs, {len(zones)} planes; skipped: {skipped or 'none'}")
     r = A.call("native_edit_transaction", req)

@@ -1,0 +1,13 @@
+(version 1)
+# r2.1 rules beyond the 0.15 mm board clearance. Copied into the fabdesk project by r2/hw/gen_r2.py.
+
+# The QFN-88 FPGA and QFN-28 USB bridge have pads 0.1 mm apart (0.4 mm pitch); JLCPCB's 4-layer
+# process allows 0.09 mm. Only pad-to-pad inside each package gets the tighter clearance.
+(rule "qfn_pad_pitch"
+  (constraint clearance (min 0.1))
+  (condition "A.Type == 'Pad' && B.Type == 'Pad' && ((A.memberOfFootprint('U1') && B.memberOfFootprint('U1')) || (A.memberOfFootprint('U10') && B.memberOfFootprint('U10')))"))
+
+# Freerouting necks down to 0.1 mm entering fine-pitch pads (JLCPCB 4-layer minimum: 0.09 mm).
+(rule "fine_pitch_neckdown"
+  (constraint track_width (min 0.1))
+  (condition "A.Type == 'Track'"))

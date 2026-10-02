@@ -28,6 +28,7 @@ REPO = HERE.parent.parent
 PROJ = Path(sys.argv[1] if len(sys.argv) > 1 else "/home/user/fabdesk-projects/gb-devcart-r2-2")
 LIB = PROJ / "lib"
 (LIB / "gbdev2.pretty").mkdir(parents=True, exist_ok=True)
+shutil.copy(HERE / "board.kicad_dru", PROJ / "board.kicad_dru")
 shutil.copy(REPO / "lib/gbdev.pretty/GB_Cart_Edge_32_DMG.kicad_mod", LIB / "gbdev2.pretty/GB_Cart_Edge_32_DMG.kicad_mod")
 
 PIN = json.load(open(REPO / "docs/r2-pinouts.json"))
@@ -435,7 +436,7 @@ doc = {
         # DMG cartridge outline (r2.1); placement in r2/hw/layout_dmg.py, rotations applied after
         # circuit_build with circuit_place (the netlist placement schema has no rotation)
         "outline": [{"x": x, "y": y} for x, y in LAYOUT.outline()], "copperLayers": 4,
-        "rules": {"clearanceMm": 0.1, "trackWidthMm": 0.15, "viaDiameterMm": 0.5, "viaDrillMm": 0.3},  # 0.1: the QFN-88 pads sit 0.1 apart (JLC 4-layer: 0.09)
+        "rules": {"clearanceMm": 0.15, "trackWidthMm": 0.15, "viaDiameterMm": 0.5, "viaDrillMm": 0.3},  # QFN pad pitch: board.kicad_dru
         "holes": [{"x": x, "y": y, "diameterMm": d} for x, y, d in LAYOUT.HOLES],
         "placements": [{"ref": r_, "position": {"x": x, "y": y}} for r_, (x, y, _) in LAYOUT.LAYOUT.items()],
     },

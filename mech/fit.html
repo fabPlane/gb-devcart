@@ -1,0 +1,559 @@
+<meta charset="utf-8">
+<title>GB Devcart Fit Check</title>
+<meta name="description" content="Will the GB DEVCART boards fit a Game Boy / ModRetro Chromatic cartridge shell?">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  --bg: #f3f1ec; --panel: #fbfaf7; --fg: #23211d; --muted: #6c675e; --line: #d9d4ca; --line-2: #c6c0b4;
+  --accent: #8c1d4a; --accent-soft: #f1dde5;
+  --pass: #2f6f2e; --pass-soft: #dcebd6; --fail: #b3261e; --fail-soft: #f6dcd8; --warn: #9a6100; --warn-soft: #f4e6c8;
+  --shell: #c3c0b9; --shell-edge: #8e8a82; --rib: #a9a59d; --cavity: #e6e3dc;
+  --pcb: #2c6b4b; --pcb-fill: rgba(44,107,75,.16); --gold: #b8901b; --stage: #e9e6e0;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #171614; --panel: #1f1e1b; --fg: #ece8e0; --muted: #a29c91; --line: #34312c; --line-2: #48443d;
+  --accent: #e5739f; --accent-soft: #3d2330;
+  --pass: #82c474; --pass-soft: #233320; --fail: #f2766b; --fail-soft: #3d201d; --warn: #e6b24c; --warn-soft: #3a2e17;
+  --shell: #5b5852; --shell-edge: #8a857c; --rib: #6f6b64; --cavity: #2a2825;
+  --pcb: #6cc196; --pcb-fill: rgba(108,193,150,.16); --gold: #e0b93e; --stage: #22211e; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #171614; --panel: #1f1e1b; --fg: #ece8e0; --muted: #a29c91; --line: #34312c; --line-2: #48443d;
+  --accent: #e5739f; --accent-soft: #3d2330;
+  --pass: #82c474; --pass-soft: #233320; --fail: #f2766b; --fail-soft: #3d201d; --warn: #e6b24c; --warn-soft: #3a2e17;
+  --shell: #5b5852; --shell-edge: #8a857c; --rib: #6f6b64; --cavity: #2a2825;
+  --pcb: #6cc196; --pcb-fill: rgba(108,193,150,.16); --gold: #e0b93e; --stage: #22211e; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 32px 16px 64px; display: grid; gap: 40px }
+h1, h2, h3 { text-wrap: balance; margin: 0; line-height: 1.2 }
+h1 { font-size: 30px; font-weight: 600; letter-spacing: -.01em }
+h2 { font-size: 19px; font-weight: 600 }
+h3 { font-size: 15px; font-weight: 600 }
+p { margin: 0; max-width: 68ch }
+.mono, code, td.num { font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace; font-size: .92em }
+.muted { color: var(--muted) }
+.eyebrow { font: 500 12px/1 "IBM Plex Mono", ui-monospace, monospace; letter-spacing: .12em; text-transform: uppercase; color: var(--accent) }
+header { display: grid; gap: 12px }
+section { display: grid; gap: 16px; min-width: 0 }
+.sec-head { display: grid; gap: 6px }
+
+.verdicts { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px }
+.vcard { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 10px; align-content: start; cursor: pointer; text-align: left; color: inherit; font: inherit }
+.vcard[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset }
+.vcard .top { display: flex; justify-content: space-between; align-items: center; gap: 8px }
+.vcard .name { font-weight: 600 }
+.vcard ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 13.5px; display: grid; gap: 2px }
+.chip { display: inline-flex; align-items: center; gap: 6px; font: 500 11.5px/1 "IBM Plex Mono", ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; padding: 5px 8px; border-radius: 999px; white-space: nowrap }
+.chip.pass { background: var(--pass-soft); color: var(--pass) }
+.chip.fail { background: var(--fail-soft); color: var(--fail) }
+.chip.warn { background: var(--warn-soft); color: var(--warn) }
+
+.tabs { display: flex; flex-wrap: wrap; gap: 6px }
+.tabs button, .seg button { font: 500 13px/1 "IBM Plex Sans", system-ui, sans-serif; color: var(--fg); background: var(--panel); border: 1px solid var(--line-2); padding: 8px 12px; border-radius: 8px; cursor: pointer }
+.tabs button[aria-pressed="true"], .seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg) }
+.seg { display: inline-flex; gap: 4px; flex-wrap: wrap }
+
+.views { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 16px; align-items: start }
+@media (max-width: 820px) { .views { grid-template-columns: minmax(0, 1fr) } }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 10px; min-width: 0 }
+.panel-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap }
+svg.top { width: 100%; height: auto; display: block }
+#stage { position: relative; width: 100%; aspect-ratio: 4 / 3.3; max-width: 100%; border-radius: 8px; overflow: hidden; background: var(--stage) }
+#stage canvas { display: block; width: 100% !important; height: 100% !important; touch-action: none }
+#stage .hint { position: absolute; left: 10px; bottom: 8px; font-size: 12px; color: var(--muted); pointer-events: none }
+#stage .loading { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: 13px }
+.controls { display: grid; gap: 10px }
+.ctl { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13px }
+.ctl label { color: var(--muted); min-width: 88px }
+.ctl input[type=range] { flex: 1; min-width: 120px; accent-color: var(--accent) }
+
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted) }
+.legend span { display: inline-flex; align-items: center; gap: 6px }
+.sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; border: 1px solid transparent }
+
+/* svg drawing */
+.s-shell { fill: var(--shell); stroke: var(--shell-edge); stroke-width: .25 }
+.s-cavity { fill: var(--cavity) }
+.s-rib { fill: var(--rib) }
+.s-zone { fill: none; stroke: var(--muted); stroke-width: .2; stroke-dasharray: .8 .6 }
+.s-label { fill: none; stroke: var(--shell-edge); stroke-width: .2; stroke-dasharray: 2 1 }
+.s-boss { fill: var(--shell-edge) }
+.s-mouth { fill: url(#hatch) }
+[hidden] { display: none !important }
+.s-board { fill: var(--pcb-fill); stroke: var(--pcb); stroke-width: .35 }
+.s-board.bad { stroke: var(--fail) }
+.s-hole { fill: var(--bg); stroke: var(--pcb); stroke-width: .25 }
+.s-hole.bad { stroke: var(--fail); stroke-width: .4 }
+.s-finger { fill: var(--gold) }
+.s-part { stroke-width: .25 }
+.s-part.ok { fill: var(--pcb-fill); stroke: var(--pcb) }
+.s-part.fail { fill: var(--fail-soft); stroke: var(--fail); stroke-width: .35 }
+.s-part.warn { fill: var(--warn-soft); stroke: var(--warn); stroke-width: .35 }
+.s-dim { stroke: var(--muted); stroke-width: .18; fill: none }
+.s-dimtxt { fill: var(--muted); font: 2.1px "IBM Plex Mono", ui-monospace, monospace }
+.s-ref { fill: var(--fg); font: 1.5px "IBM Plex Mono", ui-monospace, monospace; pointer-events: none }
+.s-hit { fill: var(--fail); font: 600 2.1px "IBM Plex Sans", system-ui, sans-serif; paint-order: stroke; stroke: var(--panel); stroke-width: .6px }
+
+/* stack-up */
+svg.stack { width: 100%; min-width: 640px; height: auto; display: block }
+.stack-wrap { overflow-x: auto }
+.k-wall { fill: var(--shell) }
+.k-room { fill: var(--cavity) }
+.k-pcb { fill: var(--pcb) }
+.k-pcb.bad { fill: var(--fail) }
+.k-part { fill: var(--pcb-fill); stroke: var(--pcb); stroke-width: .5 }
+.k-part.bad { fill: var(--fail-soft); stroke: var(--fail) }
+.k-part.warn { fill: var(--warn-soft); stroke: var(--warn) }
+.k-txt { fill: var(--muted); font: 11px "IBM Plex Mono", ui-monospace, monospace }
+.k-txt.strong { fill: var(--fg) }
+.k-line { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3 }
+
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--panel) }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px }
+#checks { min-width: 680px }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top }
+tr:last-child td { border-bottom: 0 }
+th { font: 500 11.5px/1.3 "IBM Plex Mono", ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); background: var(--bg) }
+td .m { display: block; margin-top: 4px; font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums }
+td.req { color: var(--muted); font-size: 12.5px; min-width: 200px }
+td.what { min-width: 180px }
+
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px }
+@media (max-width: 820px) { .two { grid-template-columns: minmax(0, 1fr) } }
+ol.fix { margin: 0; padding-left: 20px; display: grid; gap: 8px; max-width: 70ch }
+ol.fix li::marker { color: var(--accent); font-family: "IBM Plex Mono", ui-monospace, monospace }
+.note { border-left: 3px solid var(--accent); padding: 4px 0 4px 14px; color: var(--muted); font-size: 14px; max-width: 75ch }
+a { color: var(--accent) }
+footer { color: var(--muted); font-size: 13px; display: grid; gap: 6px }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">GB DEVCART · mechanical · DMG Game Pak</div>
+    <h1>Does it fit a Game Boy cartridge shell?</h1>
+    <p class="muted">Every board below is checked against a parametric DMG shell: 57 × 65 × 7.8 mm, with a 53.2 mm cavity and 3.3 mm of room on the label side. The original Game Boy, Game Boy Color, Analogue Pocket and ModRetro Chromatic all take that one cartridge outline. The shell is modelled from community CAD replicas and the board outline from gekkio's GB-CART256K-A. Nintendo has published no drawing, so test-fit one print first.</p>
+  </header>
+
+  <section>
+    <div class="verdicts" id="verdicts"></div>
+    <p class="note" id="headline"></p>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>Board in the shell</h2>
+      <p class="muted">This is the shell frame seen from the label side, with the connector end at the bottom. Click a board above to switch. Red marks a collision or a part outside the component zone.</p>
+    </div>
+    <div class="views">
+      <div class="panel">
+        <div class="panel-head"><h3>Top view</h3><span class="mono muted" id="topcap"></span></div>
+        <svg class="top" id="top" viewBox="-9 -7 77 82" role="img" aria-label="Top view of the board inside the cartridge shell"></svg>
+        <div class="legend">
+          <span><i class="sw" style="background:var(--shell)"></i>shell wall</span>
+          <span><i class="sw" style="background:var(--rib)"></i>ribs / bosses</span>
+          <span><i class="sw" style="border-color:var(--muted);border-style:dashed"></i>component zone</span>
+          <span><i class="sw" style="background:var(--pcb-fill);border-color:var(--pcb)"></i>board / part OK</span>
+          <span><i class="sw" style="background:var(--fail-soft);border-color:var(--fail)"></i>collision</span>
+          <span><i class="sw" style="background:var(--warn-soft);border-color:var(--warn)"></i>too tall</span>
+          <span><i class="sw" style="background:var(--gold)"></i>fingers</span>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h3>3D</h3><span class="mono muted">mech/out/shell_*.stl</span></div>
+        <div id="stage"><div class="loading" id="loading">Loading shell model…</div><div class="hint">drag to orbit · scroll or pinch to zoom</div></div>
+        <div class="controls">
+          <div class="ctl"><label>Shell</label>
+            <div class="seg" id="shellSeg">
+              <button data-v="std" aria-pressed="true">Standard</button>
+              <button data-v="usb" aria-pressed="false">USB-C top (r2)</button>
+            </div></div>
+          <div class="ctl"><label>Label half</label>
+            <div class="seg" id="frontSeg">
+              <button data-v="solid" aria-pressed="false">Solid</button>
+              <button data-v="ghost" aria-pressed="true">Ghost</button>
+              <button data-v="off" aria-pressed="false">Hidden</button>
+            </div></div>
+          <div class="ctl"><label for="explode">Explode</label><input id="explode" type="range" min="0" max="14" step="0.1" value="5"><span class="mono muted" id="explodeV">5 mm</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>Through the thickness</h2>
+      <p class="muted">A section across the cart, with the back face at 0. The shell's front ribs clamp the board's component face at 2.5 mm, so a thicker board pushes its back face into the back wall. Parts get 3.3 mm above that face.</p>
+    </div>
+    <div class="panel stack-wrap"><svg class="stack" id="stack" viewBox="0 0 760 210" role="img" aria-label="Thickness stack-up"></svg></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>Checks</h2><p class="muted">Results from <code>mech/fit_check.py</code>, which parses each <code>.kicad_pcb</code> (Edge.Cuts, NPTH holes, finger pads, courtyards and part heights). It exits non-zero on any fail.</p></div>
+    <div class="table-wrap"><table id="checks"></table></div>
+  </section>
+
+  <section class="two">
+    <div class="panel" style="gap:12px">
+      <h2>Getting r1.1 and r2.1 to fit</h2>
+      <ol class="fix">
+        <li>Start from the OEM outline in <code>mech/out/dmg_reference.kicad_pcb</code>. It is 51.4 × 61.0 with a 49.2 mm finger tongue and a 4.0 × 2.6 lock notch at the top right.</li>
+        <li>Cut holes for the shell: Ø7.2 at (25.7, 15.35) for the screw tube and Ø2.3 at (25.7, 40.35) for the post, both measured from the board's bottom-left corner.</li>
+        <li>Swap J1 for <code>gbdev:GB_Cart_Edge_32_DMG</code>. Its fingers start 1.5 mm above the edge, and GND/VCC sit 1.0 mm above it so they make contact first. Order ENIG or hard gold.</li>
+        <li>Order 0.8 or 1.0 mm FR-4. A 1.6 mm board pushes into the back wall.</li>
+        <li>Put every part on the label side, inside the dashed zone, no taller than 3.3 mm. Nothing goes in the bottom 11.4 mm, which sits inside the console's connector.</li>
+        <li>r2: put USB-C J2 on the top edge, its mouth flush with the board edge, and print <code>shell_front_usb</code>. At 3.26 mm the receptacle leaves 0.04 mm under a 3.3 mm wall, so the front half has a 0.8 mm pocket over it. The lock notch rules out the top-right corner.</li>
+        <li>r2 needs 4 layers at 1.0 mm. JLCPCB offers 4-layer boards at 0.8 or 1.0 mm.</li>
+      </ol>
+    </div>
+    <div class="panel" style="gap:12px">
+      <h2>Which consoles</h2>
+      <div class="table-wrap" style="border:0;background:none"><table>
+        <tr><th>Console</th><th>Fits?</th><th>Note</th></tr>
+        <tr><td>Game Boy (DMG), Pocket, Light</td><td><span class="chip pass">yes</span></td><td>The power-switch tab slides into the top-right notch, so <b>keep the notch</b> or the DMG won't switch on.</td></tr>
+        <tr><td>Game Boy Color</td><td><span class="chip pass">yes</span></td><td>Same outline. The notch is ignored.</td></tr>
+        <tr><td>ModRetro Chromatic</td><td><span class="chip pass">yes</span></td><td>ModRetro's own carts are standard DMG-size shells that also run on a DMG, a GBC and an Analogue Pocket. No slot-depth spec is published.</td></tr>
+        <tr><td>Analogue Pocket</td><td><span class="chip pass">yes</span></td><td>Native GB slot. Some flash carts have trouble on newer revisions; that is an electrical issue, not a mechanical one.</td></tr>
+        <tr><td>GBA / GBA SP</td><td><span class="chip warn">sticks out</span></td><td>Runs in GB mode at 5 V and protrudes from the slot. The board's 5 V input copes with that.</td></tr>
+      </table></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>Files</h2></div>
+    <div class="table-wrap"><table>
+      <tr><th>File</th><th>What</th></tr>
+      <tr><td class="mono">mech/shell.py</td><td>CadQuery source for the shell, split at z = 4.0. It writes <code>shell_back</code>, <code>shell_front_std</code> and <code>shell_front_usb</code> as STEP + STL. Print in PETG or ABS at 0.12–0.16 mm layers.</td></tr>
+      <tr><td class="mono">mech/dims.py</td><td>The single source for every dimension, with values traced to <code>docs/gb-cart-mechanical.md</code>.</td></tr>
+      <tr><td class="mono">mech/fit_check.py</td><td>Runs this fit check on any <code>.kicad_pcb</code> and writes <code>mech/out/fit.json</code>.</td></tr>
+      <tr><td class="mono">mech/std_board.py</td><td>Writes the reference outline and the <code>GB_Cart_Edge_32_DMG</code> footprint.</td></tr>
+      <tr><td class="mono">docs/gb-cart-mechanical.md</td><td>Research notes: sources (gekkio/gb-hardware, MouseBiteLabs, Printables shells, Wikipedia), conflicts between them, and gaps.</td></tr>
+    </table></div>
+  </section>
+
+  <footer>
+    <span>Repository: <a href="https://github.com/fabPlane/gb-devcart/tree/r2-fpga/mech">fabPlane/gb-devcart · mech/</a></span>
+    <span>PCB outline after gekkio/gb-hardware GB-CART256K-A (CC BY 4.0). Shell measured from the RetroGameRevival and FuniverseMN Printables models.</span>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+const NAMES = { reference: "DMG reference outline", r1: "r1 — parallel flash (main)", r2: "r2 — FPGA + USB-C" };
+const SHORT = { reference: "Reference", r1: "r1", r2: "r2" };
+const NS = "http://www.w3.org/2000/svg";
+let FIT, cur = "r2";
+
+function el(tag, attrs = {}, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+const fmt = (v, d = 1) => Number(v).toFixed(d);
+
+function zone() {
+  const S = FIT.shell;
+  return [S.width / 2 - S.cavity_width / 2 + S.side_rib_w, S.cross_rib_low_y,
+          S.width / 2 + S.cavity_width / 2 - S.side_rib_w, S.cross_rib_high_y];
+}
+function partStatus(p) {
+  const z = zone();
+  if (p.side !== "F") return "fail";
+  if (p.h > 0.1 && (p.box[0] < z[0] || p.box[2] > z[2] || p.box[1] < z[1] || p.box[3] > z[3])) return "fail";
+  if (p.h > FIT.component_max_h) return "warn";
+  return "ok";
+}
+function outlinePts(b) {
+  // fit.json lists Edge.Cuts as start/end pairs; chain them into one closed loop
+  const segs = [];
+  for (let i = 0; i + 1 < b.outline.length; i += 2) segs.push([b.outline[i], b.outline[i + 1]]);
+  const eq = (a, c) => Math.abs(a[0] - c[0]) < 0.02 && Math.abs(a[1] - c[1]) < 0.02;
+  const pts = [segs[0][0], segs[0][1]], used = new Set([0]);
+  while (used.size < segs.length) {
+    const end = pts.at(-1);
+    const k = segs.findIndex((sg, j) => !used.has(j) && (eq(sg[0], end) || eq(sg[1], end)));
+    if (k < 0) break;
+    used.add(k);
+    pts.push(eq(segs[k][0], end) ? segs[k][1] : segs[k][0]);
+  }
+  if (eq(pts[0], pts.at(-1))) pts.pop();
+  return pts.filter((q, i, a) => i === 0 || !eq(q, a[i - 1]));
+}
+function check(b, id) { return b.checks.find(c => c.id === id) }
+
+/* ---------- verdict cards ---------- */
+function renderVerdicts() {
+  const box = document.getElementById("verdicts");
+  box.innerHTML = "";
+  for (const b of FIT.boards) {
+    const fails = b.checks.filter(c => c.status === "fail"), warns = b.checks.filter(c => c.status === "warn");
+    const btn = document.createElement("button");
+    btn.className = "vcard"; btn.setAttribute("aria-pressed", b.name === cur);
+    btn.innerHTML = `<div class="top"><span class="name">${NAMES[b.name] || b.name}</span><span class="chip ${b.verdict}">${b.verdict === "pass" ? "fits" : "does not fit"}</span></div>
+      <div class="mono muted">${fmt(b.size[0])} × ${fmt(b.size[1])} mm · ${fmt(b.thickness)} mm · ${b.layers} layers · ${b.parts.length} parts</div>`;
+    const ul = document.createElement("ul");
+    const items = fails.length ? fails.map(c => `${c.label}: ${c.measured}`) : ["Every check passes. Use this as the starting outline."];
+    items.slice(0, 4).forEach(t => { const li = document.createElement("li"); li.textContent = t; ul.appendChild(li); });
+    if (fails.length > 4) { const li = document.createElement("li"); li.textContent = `+ ${fails.length - 4} more`; ul.appendChild(li); }
+    if (warns.length) { const li = document.createElement("li"); li.textContent = `${warns.length} warning${warns.length > 1 ? "s" : ""}`; ul.appendChild(li); }
+    btn.appendChild(ul);
+    btn.onclick = () => select(b.name);
+    box.appendChild(btn);
+  }
+  const bad = FIT.boards.filter(b => b.verdict !== "pass").map(b => SHORT[b.name]);
+  document.getElementById("headline").textContent = bad.length
+    ? `${bad.join(" and ")} will not go into a cartridge shell as drawn. ${bad.length > 1 ? "Both are" : "It is"} 56 mm wide against a 53.2 mm cavity, with no screw-tube hole and fingers too close to the edge. Don't send r1 to fab as it stands. The fix is the reference outline: same electronics, new board shape.`
+    : "Every board fits.";
+}
+
+/* ---------- top view ---------- */
+function renderTop() {
+  const S = FIT.shell, b = FIT.boards.find(x => x.name === cur), svg = document.getElementById("top");
+  svg.innerHTML = "";
+  const Y = y => S.height - y;
+  const defs = el("defs", {}, svg);
+  const pat = el("pattern", { id: "hatch", width: 1.2, height: 1.2, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" }, defs);
+  el("rect", { width: 1.2, height: 1.2, fill: "var(--cavity)" }, pat);
+  el("line", { x1: 0, y1: 0, x2: 0, y2: 1.2, stroke: "var(--rib)", "stroke-width": .35 }, pat);
+
+  // shell outline with lock notch
+  const r = S.corner_r, W = S.width, H = S.height, nx = W - S.notch_w, ny = H - S.notch_d;
+  el("path", { class: "s-shell", d: `M${r},${Y(0)} H${W - r} Q${W},${Y(0)} ${W},${Y(r)} V${Y(ny)} H${nx} V${Y(H)} H${r} Q0,${Y(H)} 0,${Y(H - r)} V${Y(r)} Q0,${Y(0)} ${r},${Y(0)} Z` }, svg);
+  const side = (W - S.cavity_width) / 2, topWall = 1.6;
+  el("rect", { class: "s-cavity", x: side, y: Y(H - topWall), width: S.cavity_width, height: H - topWall }, svg);
+  el("rect", { class: "s-mouth", x: side, y: Y(S.mouth_depth), width: S.cavity_width, height: S.mouth_depth }, svg);
+  for (const x of [side, W - side - S.side_rib_w])
+    el("rect", { class: "s-rib", x, y: Y(H - topWall), width: S.side_rib_w, height: H - topWall - S.mouth_depth }, svg);
+  for (const y of [S.cross_rib_low_y - 1, S.cross_rib_high_y])
+    el("rect", { class: "s-rib", x: side, y: Y(y + 1), width: S.cavity_width, height: 1, opacity: .75 }, svg);
+  const z = zone();
+  el("rect", { class: "s-zone", x: z[0], y: Y(z[3]), width: z[2] - z[0], height: z[3] - z[1] }, svg);
+  el("rect", { class: "s-label", x: W / 2 - S.label_w / 2, y: Y(S.label_bottom_y + S.label_h), width: S.label_w, height: S.label_h }, svg);
+
+  // board
+  const pts = outlinePts(b);
+  const wideFail = ["width", "height", "notch"].some(id => check(b, id)?.status === "fail");
+  el("path", { class: "s-board" + (wideFail ? " bad" : ""), d: "M" + pts.map(p => `${p[0]},${Y(p[1])}`).join(" L") + " Z" }, svg);
+  for (const p of b.parts) {
+    const st = partStatus(p), [x0, y0, x1, y1] = p.box;
+    if (p.h <= 0.1) continue;
+    el("rect", { class: "s-part " + st, x: x0, y: Y(y1), width: Math.max(x1 - x0, .2), height: Math.max(y1 - y0, .2) }, svg);
+    if ((x1 - x0) > 4 && (y1 - y0) > 3) { const t = el("text", { class: "s-ref", x: (x0 + x1) / 2, y: Y((y0 + y1) / 2) + .5, "text-anchor": "middle" }, svg); t.textContent = p.ref; }
+  }
+  for (const f of b.fingers) el("rect", { class: "s-finger", x: f[0] - f[2] / 2, y: Y(f[1] + f[3] / 2), width: f[2], height: f[3] }, svg);
+  const holeBad = check(b, "screw")?.status !== "pass";
+  for (const h of b.holes) el("circle", { class: "s-hole" + (holeBad ? " bad" : ""), cx: h[0], cy: Y(h[1]), r: h[2] / 2 }, svg);
+
+  // shell screw tube + post drawn over the board so collisions show
+  el("circle", { class: "s-boss", cx: W / 2, cy: Y(S.screw_y), r: S.screw_tube_od / 2, opacity: holeBad ? .9 : .35 }, svg);
+  el("circle", { class: "s-boss", cx: W / 2, cy: Y(S.post_y), r: S.post_d / 2, opacity: check(b, "post")?.status === "pass" ? .35 : .9 }, svg);
+  if (holeBad) { const t = el("text", { class: "s-hit", x: W / 2, y: Y(S.screw_y - S.screw_tube_od / 2 - 2.6), "text-anchor": "middle" }, svg); t.textContent = "screw tube hits board"; }
+  if (check(b, "width")?.status === "fail") {
+    const t = el("text", { class: "s-hit", x: W / 2, y: Y(H - 5), "text-anchor": "middle" }, svg);
+    t.textContent = `board ${fmt(b.size[0])} wide › cavity ${fmt(S.cavity_width)}`;
+  }
+
+  // dimensions
+  const dim = (x1, y1, x2, y2, txt, tx, ty, rot) => {
+    el("path", { class: "s-dim", d: `M${x1},${y1} L${x2},${y2}` }, svg);
+    for (const [x, y] of [[x1, y1], [x2, y2]]) el("path", { class: "s-dim", d: x1 === x2 ? `M${x - .8},${y} h1.6` : `M${x},${y - .8} v1.6` }, svg);
+    const t = el("text", { class: "s-dimtxt", x: tx, y: ty, "text-anchor": "middle", ...(rot ? { transform: `rotate(-90 ${tx} ${ty})` } : {}) }, svg); t.textContent = txt;
+  };
+  dim(0, Y(0) + 3, W, Y(0) + 3, `${fmt(W)} shell`, W / 2, Y(0) + 5.6);
+  dim(side, -3.4, W - side, -3.4, `${fmt(S.cavity_width)} cavity`, W / 2, -4.3);
+  dim(-3, Y(0), -3, Y(H), `${fmt(H)}`, -4.6, Y(H / 2), true);
+  dim(W + 3, Y(S.mouth_depth), W + 3, Y(0), "mouth", W + 5.6, Y(S.mouth_depth / 2), true);
+  document.getElementById("topcap").textContent = `${SHORT[b.name]} · offset ${fmt(b.offset[0], 2)}, ${fmt(b.offset[1], 2)} mm`;
+}
+
+/* ---------- stack-up ---------- */
+function renderStack() {
+  const S = FIT.shell, svg = document.getElementById("stack");
+  svg.innerHTML = "";
+  const X0 = 150, sc = 66, rowH = 34, rows = FIT.boards;
+  const X = z => X0 + z * sc;
+  // header scale
+  for (let z = 0; z <= 8; z++) {
+    el("line", { x1: X(z), y1: 16, x2: X(z), y2: 22, stroke: "var(--muted)", "stroke-width": 1 }, svg);
+    const t = el("text", { class: "k-txt", x: X(z), y: 12, "text-anchor": "middle" }, svg); t.textContent = z;
+  }
+  const tt = el("text", { class: "k-txt", x: X0 - 12, y: 12, "text-anchor": "end" }, svg); tt.textContent = "mm from back face";
+  rows.forEach((b, i) => {
+    const y = 34 + i * (rowH + 22), t = b.thickness, back = S.pcb_front_z - t;
+    el("rect", { class: "k-wall", x: X(0), y, width: S.back_wall * sc, height: rowH }, svg);
+    el("rect", { class: "k-room", x: X(S.back_wall), y, width: (S.front_inner_z - S.back_wall) * sc, height: rowH }, svg);
+    el("rect", { class: "k-wall", x: X(S.front_inner_z), y, width: (S.thickness - S.front_inner_z) * sc, height: rowH }, svg);
+    const pcbBad = back < S.back_wall;
+    el("rect", { class: "k-pcb" + (pcbBad ? " bad" : ""), x: X(back), y: y + 4, width: t * sc, height: rowH - 8 }, svg);
+    const tall = b.parts.reduce((m, p) => p.h > (m?.h ?? 0) ? p : m, null);
+    if (tall) {
+      const st = partStatus(tall) === "fail" && tall.h > FIT.component_max_h ? "bad" : tall.h > FIT.component_max_h ? "warn" : "";
+      el("rect", { class: "k-part " + st, x: X(S.pcb_front_z), y: y + 9, width: tall.h * sc, height: rowH - 18 }, svg);
+    }
+    const name = el("text", { class: "k-txt strong", x: X0 - 12, y: y + 15, "text-anchor": "end" }, svg); name.textContent = SHORT[b.name];
+    const sub = el("text", { class: "k-txt", x: X0 - 12, y: y + 29, "text-anchor": "end" }, svg);
+    sub.textContent = `${fmt(t)} mm board`;
+    const note = el("text", { class: "k-txt", x: X(0), y: y + rowH + 14 }, svg);
+    const gap = S.pcb_front_z - t - S.back_wall;
+    note.textContent = (pcbBad ? `✕ back face ${fmt(-gap, 2)} mm into the back wall` : `✓ ${fmt(gap, 2)} mm behind the board`) +
+      (tall ? `   ·   tallest ${tall.ref} ${fmt(tall.h, 2)} mm of ${fmt(FIT.component_max_h)}` + (tall.h > FIT.component_max_h ? " (OEM shell ~3.6)" : "") : "   ·   no parts");
+  });
+  for (const z of [S.pcb_front_z, S.front_inner_z]) el("line", { class: "k-line", x1: X(z), y1: 24, x2: X(z), y2: 34 + rows.length * (rowH + 22) + 2 }, svg);
+  const yb = 34 + rows.length * (rowH + 22) + 14;
+  svg.setAttribute("viewBox", `0 0 760 ${yb + 8}`);
+  [["board face 2.5", S.pcb_front_z], ["label inner wall 5.8", S.front_inner_z]].forEach(([s, z]) => {
+    const t = el("text", { class: "k-txt", x: X(z), y: yb, "text-anchor": "middle" }, svg); t.textContent = s;
+  });
+}
+
+/* ---------- checks table ---------- */
+function renderChecks() {
+  const tbl = document.getElementById("checks"), boards = FIT.boards;
+  const ids = [...new Set(boards.flatMap(b => b.checks.map(c => c.id)))];
+  let h = `<tr><th>Check</th>${boards.map(b => `<th>${SHORT[b.name]}</th>`).join("")}<th>Required</th></tr>`;
+  for (const id of ids) {
+    const any = boards.map(b => check(b, id)).find(Boolean);
+    h += `<tr><td class="what">${any.label}</td>`;
+    for (const b of boards) {
+      const c = check(b, id);
+      h += c ? `<td><span class="chip ${c.status}">${c.status}</span><span class="m">${c.measured}</span></td>` : `<td class="muted">n/a</td>`;
+    }
+    h += `<td class="req">${any.required}</td></tr>`;
+  }
+  tbl.innerHTML = h;
+}
+
+/* ---------- 3D ---------- */
+const V = { ready: false };
+function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim() }
+function init3D() {
+  const stage = document.getElementById("stage");
+  if (!window.THREE) { document.getElementById("loading").textContent = "3D viewer could not load three.js."; return; }
+  const S = FIT.shell;
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  stage.prepend(renderer.domElement);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(32, 1, 1, 2000);
+  camera.up.set(0, 0, 1);
+  camera.position.set(S.width / 2 + 70, -70, 95);
+  const controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.target.set(S.width / 2, S.height / 2, 3);
+  controls.enableDamping = true;
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x777066, 0.85));
+  const key = new THREE.DirectionalLight(0xffffff, 0.75); key.position.set(60, -40, 120); scene.add(key);
+  const fill = new THREE.DirectionalLight(0xffffff, 0.3); fill.position.set(-60, 90, 40); scene.add(fill);
+
+  const shellMat = () => new THREE.MeshStandardMaterial({ color: 0xb8b5ae, roughness: .75, metalness: 0, transparent: true });
+  const back = new THREE.Mesh(new THREE.BufferGeometry(), shellMat());
+  const front = { std: new THREE.Mesh(new THREE.BufferGeometry(), shellMat()), usb: new THREE.Mesh(new THREE.BufferGeometry(), shellMat()) };
+  scene.add(back, front.std, front.usb);
+  const boardGroup = new THREE.Group(); scene.add(boardGroup);
+  Object.assign(V, { renderer, scene, camera, controls, back, front, boardGroup, frontMode: "ghost", explode: 5 });
+
+  const files = { back: "out/shell_back.mesh.json", std: "out/shell_front_std.mesh.json", usb: "out/shell_front_usb.mesh.json" };
+  let left = 3;
+  for (const [k, url] of Object.entries(files)) {
+    fetch(url).then(r => { if (!r.ok) throw new Error(url); return r.json(); }).then(d => {
+      const g = new THREE.BufferGeometry();
+      g.setAttribute("position", new THREE.Float32BufferAttribute(d.positions, 3));
+      g.computeVertexNormals();
+      (k === "back" ? back : front[k]).geometry = g;
+      if (--left === 0) { document.getElementById("loading").hidden = true; }
+      applyView();
+    }).catch(() => { document.getElementById("loading").textContent = "Shell model files could not load."; });
+  }
+  const resize = () => {
+    const w = stage.clientWidth, h = stage.clientHeight;
+    renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+  };
+  new ResizeObserver(resize).observe(stage); resize();
+  const bg = () => renderer.setClearColor(new THREE.Color(css("--stage") || "#e9e6e0"));
+  bg(); matchMedia("(prefers-color-scheme: dark)").addEventListener("change", bg);
+  new MutationObserver(bg).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  (function loop() { controls.update(); renderer.render(scene, camera); requestAnimationFrame(loop); })();
+  V.ready = true;
+  buildBoard3D(); applyView();
+}
+
+function buildBoard3D() {
+  if (!V.ready) return;
+  const S = FIT.shell, b = FIT.boards.find(x => x.name === cur), g = V.boardGroup;
+  while (g.children.length) { const c = g.children.pop(); c.geometry?.dispose(); }
+  const pts = outlinePts(b);
+  const shape = new THREE.Shape(pts.map(p => new THREE.Vector2(p[0], p[1])));
+  for (const h of b.holes) { const hp = new THREE.Path(); hp.absarc(h[0], h[1], h[2] / 2, 0, Math.PI * 2, true); shape.holes.push(hp); }
+  const t = b.thickness;
+  const bad = b.verdict !== "pass";
+  const pcb = new THREE.Mesh(new THREE.ExtrudeGeometry(shape, { depth: t, bevelEnabled: false, curveSegments: 24 }),
+    new THREE.MeshStandardMaterial({ color: bad ? 0x2e6f52 : 0x1f6a46, roughness: .6, emissive: bad ? 0x400000 : 0x000000 }));
+  pcb.position.z = S.pcb_front_z - t; g.add(pcb);
+  const gold = new THREE.MeshStandardMaterial({ color: 0xd4a72c, metalness: .7, roughness: .35 });
+  for (const f of b.fingers) {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(f[2], f[3], .05), gold);
+    m.position.set(f[0], f[1], S.pcb_front_z + .025); g.add(m);
+  }
+  const mats = { ok: new THREE.MeshStandardMaterial({ color: 0x2a2a2c, roughness: .55 }),
+                 fail: new THREE.MeshStandardMaterial({ color: 0xd8382c, roughness: .5 }),
+                 warn: new THREE.MeshStandardMaterial({ color: 0xe0a020, roughness: .5 }) };
+  for (const p of b.parts) {
+    if (p.h <= 0.1) continue;
+    const [x0, y0, x1, y1] = p.box, w = Math.max(x1 - x0, .3), d = Math.max(y1 - y0, .3);
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w * .92, d * .92, p.h), mats[partStatus(p)]);
+    m.position.set((x0 + x1) / 2, (y0 + y1) / 2, S.pcb_front_z + p.h / 2); g.add(m);
+  }
+}
+
+function applyView() {
+  if (!V.ready) return;
+  const e = V.explode;
+  V.back.position.z = -e;
+  for (const k of ["std", "usb"]) {
+    const m = V.front[k];
+    m.visible = k === V.shell && V.frontMode !== "off";
+    m.position.z = e;
+    m.material.opacity = V.frontMode === "ghost" ? .28 : 1;
+    m.material.depthWrite = V.frontMode !== "ghost";
+  }
+  V.back.material.opacity = 1;
+}
+
+function seg(id, fn) {
+  const box = document.getElementById(id);
+  box.addEventListener("click", ev => {
+    const b = ev.target.closest("button"); if (!b) return;
+    box.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b));
+    fn(b.dataset.v);
+  });
+}
+function setShell(v) {
+  V.shell = v;
+  document.querySelectorAll("#shellSeg button").forEach(x => x.setAttribute("aria-pressed", x.dataset.v === v));
+  applyView();
+}
+
+function select(name) {
+  cur = name;
+  try { localStorage.setItem("fit-board", name) } catch (e) {}
+  renderVerdicts(); renderTop(); buildBoard3D();
+  setShell(name === "r2" ? "usb" : "std");
+}
+
+async function main() {
+  try { FIT = await (await fetch("out/fit.json")).json(); }
+  catch (e) { document.getElementById("headline").textContent = "Could not load out/fit.json."; return; }
+  try { const s = localStorage.getItem("fit-board"); if (s && FIT.boards.some(b => b.name === s)) cur = s; } catch (e) {}
+  if (!FIT.boards.some(b => b.name === cur)) cur = FIT.boards[0].name;
+  V.shell = cur === "r2" ? "usb" : "std";
+  renderVerdicts(); renderTop(); renderStack(); renderChecks();
+  init3D(); setShell(V.shell);
+  seg("shellSeg", v => { V.shell = v; applyView(); });
+  seg("frontSeg", v => { V.frontMode = v; applyView(); });
+  const ex = document.getElementById("explode");
+  ex.addEventListener("input", () => { V.explode = +ex.value; document.getElementById("explodeV").textContent = `${ex.value} mm`; applyView(); });
+}
+main();
+</script>

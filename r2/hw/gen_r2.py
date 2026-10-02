@@ -57,13 +57,22 @@ for name, n in fp["config_pins"].items():
 for name, n in FPGA_IO.items():
     FPGA_FUNC[n] = name
 assert len(FPGA_FUNC) == 88, len(FPGA_FUNC)
-fpga_pins = [(str(n), FPGA_FUNC[n], "power_in" if FPGA_FUNC[n].startswith(("VCC", "VSS")) else "bidirectional")
+fpga_pins = [(str(n), FPGA_FUNC[n], "power_in" if FPGA_FUNC[n].startswith(("VCC", "VSS")) else "passive")
              for n in range(1, 89)] + [("89", "EP", "power_in")]
+
+# ERC pin types: rails are driven by the edge connector (VCC, GND) and the LDO outputs (power_out);
+# IC supply pins are power_in; supply inputs fed through diodes / USB VBUS are passive (no driver to
+# check); signal pins are passive so straps to a rail are not flagged as output-vs-power conflicts.
+POWER_IN = ("VCC", "VDD", "VSS", "GND", "VCCA", "VCCB")
+def ptype(v):
+    w = v.split()[0]
+    if w == "VOUT":
+        return "power_out"
+    return "power_in" if w in POWER_IN else "passive"
 
 def table(key):
     t = PIN[key]["pins"]
-    return [(str(k), v, "power_in" if v.split()[0] in ("VCC", "VDD", "VSS", "GND", "VCCA", "VCCB", "VBUS", "VIN", "VOUT")
-             else "bidirectional") for k, v in t.items() if k.isdigit() or k[0] in "AB" and k[1:].isdigit()]
+    return [(str(k), v, ptype(v)) for k, v in t.items() if k.isdigit() or k[0] in "AB" and k[1:].isdigit()]
 
 SYMS = {
     "GB_Cart_Edge_32": ("J", "Game Boy cartridge edge, 32 fingers", None, None),
@@ -74,12 +83,12 @@ SYMS = {
     "SN74LVC8T245": sym("U", "8-bit dual-supply transceiver", table("U_DATA_XCVR")),
     "XC6206P332": sym("U", "3.3 V 200 mA LDO", table("U_LDO_3V3")),
     "ME6211C12": sym("U", "1.2 V 500 mA LDO", table("U_LDO_1V2")),
-    "CH347F": sym("U", "USB HS to UART + JTAG bridge", [(k if k != "0/EP" else "29", v, "bidirectional")
+    "CH347F": sym("U", "USB HS to UART + JTAG bridge", [(k if k != "0/EP" else "29", v, ptype(v))
                                                       for k, v in PIN["U_USB_BRIDGE"]["pins"].items()]),
     "USB_C_2.0": sym("J", "USB-C receptacle, USB 2.0", [(k, v, "passive") for k, v in PIN["J_USB"]["pins"].items()
                                                        if k != "SH"] + [("SH", "SHIELD", "passive")]),
     "USBLC6-2SC6": sym("U", "USB ESD protection", table("U_ESD")),
-    "Oscillator_4pin": sym("X", "48 MHz CMOS oscillator", [("1", "OE", "input"), ("2", "GND", "power_in"),
+    "Oscillator_4pin": sym("X", "48 MHz CMOS oscillator", [("1", "OE", "passive"), ("2", "GND", "power_in"),
                                                           ("3", "OUT", "output"), ("4", "VDD", "power_in")]),
     "Crystal_GND24": sym("Y", "Crystal, pads 2/4 GND", [("1", "1", "passive"), ("2", "GND", "passive"),
                                                        ("3", "3", "passive"), ("4", "GND", "passive")]),
@@ -90,16 +99,18 @@ SYMS = {
 }
 CONN_NAMES = ["VCC", "CLK", "~{WR}", "~{RD}", "~{CS}"] + [f"A{i}" for i in range(16)] + \
              [f"D{i}" for i in range(8)] + ["~{RESET}", "AUDIO_IN", "GND"]
-CONN = [(str(i + 1), n, "power_out" if n in ("VCC", "GND") else "bidirectional") for i, n in enumerate(CONN_NAMES)]
+CONN = [(str(i + 1), n, "power_out" if n in ("VCC", "GND") else "passive") for i, n in enumerate(CONN_NAMES)]
 SYMS["GB_Cart_Edge_32"] = ("J", SYMS["GB_Cart_Edge_32"][1], CONN[:16], CONN[16:])
 
+WIDTH = {}   # per-symbol pin x offset (set by the layout search below)
+YSHIFT = {}  # per-symbol vertical pin offset, 0 or 1.27 mm (sets the pin-row parity)
 FONT = "(effects (font (size 1.27 1.27)))"
 def sym_text(name, v):
     prefix, desc, left, right = v
     rows = max(len(left), len(right))
     tall = rows > 12
     two_sided = bool(right)
-    W = 19.05 if tall else (12.7 if two_sided else 5.08)
+    W = WIDTH.get(name, 19.05 if tall else (12.7 if two_sided else 5.08))
     hw = W - 2.54 if two_sided else 1.27
     y0 = 1.27 * (rows - 1)
     top = y0 + 2.54
@@ -112,18 +123,14 @@ def sym_text(name, v):
            f'    (symbol "{name}_0_1" (rectangle (start {-hw:.3f} {top:.3f}) (end {hw:.3f} {-top:.3f}) '
            f'(stroke (width 0.254) (type default)) (fill (type background))))',
            f'    (symbol "{name}_1_1"']
+    ys = YSHIFT.get(name, 0.0)
     for side, pins, x, rot in (("L", left, -W, 0), ("R", right, W, 180)):
         for i, (num, pn, t) in enumerate(pins):
-            out.append(f'      (pin {t} line (at {x:.3f} {y0 - 2.54 * i:.3f} {rot}) (length 2.54) '
+            out.append(f'      (pin {t} line (at {x:.3f} {y0 - 2.54 * i + ys:.3f} {rot}) (length 2.54) '
                        f'(name "{pn}" {FONT}) (number "{num}" {FONT}))')
     out.append("    )\n  )")
     return "\n".join(out)
 
-with open(LIB / "gbdev2.kicad_sym", "w") as f:
-    f.write('(kicad_symbol_lib (version 20241209) (generator "gbdev2") (generator_version "1.0")\n')
-    for k, v in SYMS.items():
-        f.write(sym_text(k, v) + "\n")
-    f.write(")\n")
 
 PINNO = {k: {} for k in SYMS}
 for k, (_p, _d, L, R) in SYMS.items():
@@ -344,6 +351,55 @@ conn("UART_TO_FPGA", ("U10", "TXD0")); conn("UART_TO_USB", ("U10", "RXD0"))
 for sig in ("TCK", "TMS", "TDI", "TDO"):
     conn(f"JTAG_{sig}", ("U10", sig))
 
+
+# ------------------------------------------------------------------------------- schematic collision check
+# Reproduces fab_pcb's generated-schematic geometry (vendor/fab_pcb/packages/compile/src/schematic.ts):
+# symbol i at (24 + (i%4)*28, 20 + (i//4)*24) x 1.27 mm; every connected pin gets a wire from its
+# endpoint 5.08 mm to the LEFT and a global label at the wire end. KiCad joins anything that touches
+# a wire (ends or middle) or a pin endpoint, so two nets merge if any of their points/segments touch.
+G = 1.27
+def sym_geom(part):
+    _p, _d, L, R = SYMS[part]
+    rows = max(len(L), len(R))
+    W = WIDTH.get(part, 19.05 if rows > 12 else (12.7 if R else 5.08))
+    y0 = 1.27 * (rows - 1) + YSHIFT.get(part, 0.0)
+    pts = {}
+    for i, (num, _n, _t) in enumerate(L):
+        pts[num] = (-W, y0 - 2.54 * i)
+    for i, (num, _n, _t) in enumerate(R):
+        pts[num] = (W, y0 - 2.54 * i)
+    return pts
+
+def collisions(order):
+    pin_net = {(nd["ref"], nd["pin"]): n for n, lst in nets.items() for nd in lst}
+    segs = []   # (y, x0, x1, net)  horizontal segments in 0.01 mm units
+    points = [] # (x, y, net)       pin endpoints (incl. unconnected ones: they still touch wires)
+    for idx, ref in enumerate(order):
+        sx, sy = (24 + (idx % 4) * 28) * G, (20 + (idx // 4) * 24) * G
+        for num, (px, py) in sym_geom(PARTOF[ref]).items():
+            x, y = round((sx + px) * 100), round((sy - py) * 100)
+            net = pin_net.get((ref, num))
+            points.append((x, y, net or f"NC:{ref}.{num}"))
+            if net:
+                segs.append((y, x - 508, x, net))
+    bad = set()
+    by_y = {}
+    for seg in segs:
+        by_y.setdefault(seg[0], []).append(seg)
+    for y, lst in by_y.items():
+        lst.sort(key=lambda t: t[1])
+        for i in range(len(lst)):
+            for j in range(i + 1, len(lst)):
+                if lst[j][1] > lst[i][2]:
+                    break
+                if lst[i][3] != lst[j][3]:
+                    bad.add(tuple(sorted((lst[i][3], lst[j][3]))))
+    for x, y, net in points:
+        for (sy_, x0, x1, n2) in by_y.get(y, []):
+            if x0 <= x <= x1 and n2 != net:
+                bad.add(tuple(sorted((net, n2))))
+    return bad
+
 # ------------------------------------------------------------------------------- checks + output
 seen = {}
 for net, lst in nets.items():
@@ -384,6 +440,42 @@ doc = {
         {"kind": "footprint", "nickname": "gbdev2", "uri": str(LIB / "gbdev2.pretty"), "description": "GB devcart r2 footprints"},
     ],
 }
+# Layout search: reorder components and tune per-symbol width / row parity until no two nets touch.
+import random
+rng = random.Random(2)
+order = [c_["ref"] for c_ in comps]
+WIDTHS = [7.62, 10.16, 12.7, 15.24, 17.78, 19.05, 20.32, 22.86, 25.4]
+best = len(collisions(order))
+for step in range(6000):
+    if best == 0:
+        break
+    saved = (list(order), dict(WIDTH), dict(YSHIFT))
+    move = rng.random()
+    if move < 0.5:
+        i, j = rng.randrange(len(order)), rng.randrange(len(order))
+        order[i], order[j] = order[j], order[i]
+    elif move < 0.8:
+        part = rng.choice(list(SYMS))
+        if SYMS[part][3]:  # two-sided symbols only
+            WIDTH[part] = rng.choice(WIDTHS)
+    else:
+        part = rng.choice(list(SYMS))
+        YSHIFT[part] = 1.27 - YSHIFT.get(part, 0.0)
+    n = len(collisions(order))
+    if n <= best:
+        best = n
+    else:
+        order, saved_w, saved_y = saved
+        WIDTH.clear(); WIDTH.update(saved_w); YSHIFT.clear(); YSHIFT.update(saved_y)
+bad = collisions(order)
+assert not bad, f"schematic layout search failed, collisions remain: {sorted(bad)}"
+comps.sort(key=lambda c_: order.index(c_["ref"]))
+print(f"schematic layout: 0 collisions after {step} search steps")
+with open(LIB / "gbdev2.kicad_sym", "w") as f:
+    f.write('(kicad_symbol_lib (version 20241209) (generator "gbdev2") (generator_version "1.0")\n')
+    for k, v in SYMS.items():
+        f.write(sym_text(k, v) + "\n")
+    f.write(")\n")
 assert set(PLACE) == {c_["ref"] for c_ in comps}, set(PLACE) ^ {c_["ref"] for c_ in comps}
 json.dump(doc, open(PROJ / "circuit.netlist.json", "w"), indent=1)
 print(f"ok {len(comps)} components, {len(nets)} nets, {len(noconn)} no-connects -> {PROJ}")

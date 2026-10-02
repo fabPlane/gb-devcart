@@ -4,6 +4,8 @@
 //
 //   c++ -O2 -std=c++17 -I../firmware/gbflash cart_sim.cpp -o cart_sim
 //   ./cart_sim [flash.bin] [fram.bin]   # images are loaded at start and saved on EOF
+//   GBCART_REV=2 ./cart_sim ...          # model the r2 FPGA cart (r2/rtl/gbcart_mapper.v + 8 MB
+//                                          AMD-command-set flash) instead of r1
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -81,12 +83,88 @@ uint8_t flash_read(uint32_t ca) {
 
 uint16_t fram_addr(uint16_t a) { return a & 0x1FFF; }  // F-RAM A13/A14 tied to GND
 
+// ---- r2: FPGA mapper (same register behaviour as r2/rtl/gbcart_mapper.v) + 8 MB x8 flash ----
+int rev = 1;
+namespace r2 {
+constexpr uint32_t FLASH_SIZE = 8u << 20;
+uint16_t rom_bank = 1;
+uint8_t ram_bank = 0, unlock_step = 0;
+bool ram_en = false, dev = false;
+const char UNLOCK[] = "GBDV";
+// AMD/JEDEC byte mode: command addresses are 0xAAA / 0x555 (A-1..A10).
+enum class St { Read, C1, C2, Prog, E3, E4, E5 };
+St st = St::Read;
+bool in_id = false;
+
+uint32_t chip_addr(uint16_t a) { return ((bit(a, 14) ? (uint32_t)rom_bank : 0u) << 14) | (a & 0x3FFF); }
+
+void flash_cmd(uint32_t ca, uint8_t d) {
+  uint16_t c = ca & 0xFFF;
+  if (d == 0xF0 && st != St::Prog) { st = St::Read; in_id = false; return; }
+  switch (st) {
+    case St::Read: st = (c == 0xAAA && d == 0xAA) ? St::C1 : St::Read; break;
+    case St::C1: st = (c == 0x555 && d == 0x55) ? St::C2 : St::Read; break;
+    case St::C2:
+      st = St::Read;
+      if (c != 0xAAA) break;
+      if (d == 0xA0) st = St::Prog;
+      else if (d == 0x80) st = St::E3;
+      else if (d == 0x90) in_id = true;
+      break;
+    case St::Prog: flash[ca] &= d; busy = 3; busy_data = d; st = St::Read; break;
+    case St::E3: st = (c == 0xAAA && d == 0xAA) ? St::E4 : St::Read; break;
+    case St::E4: st = (c == 0x555 && d == 0x55) ? St::E5 : St::Read; break;
+    case St::E5:
+      if (c == 0xAAA && d == 0x10) { std::fill(flash.begin(), flash.end(), 0xFF); busy = 20; busy_data = 0xFF; }
+      else if (d == 0x30) {  // 64 KB uniform sectors
+        uint32_t s0 = ca & ~0xFFFFu;
+        std::fill(flash.begin() + s0, flash.begin() + s0 + 0x10000, 0xFF); busy = 8; busy_data = 0xFF;
+      }
+      st = St::Read;
+      break;
+  }
+}
+
+uint8_t read(uint16_t a) {
+  if (!bit(a, 15)) {
+    uint32_t ca = chip_addr(a);
+    if (busy > 0) { busy--; toggle ^= 0x40; return (uint8_t)((~busy_data & 0x80) | toggle); }
+    if (in_id) return (ca & 0xFF) == 0 ? 0x01 : (ca & 0xFF) == 2 ? 0x7E : 0x00;  // Spansion-style ID
+    return flash[ca];
+  }
+  if (a >= 0xA000 && a < 0xC000 && ram_en) return fram[((uint32_t)ram_bank << 13) | (a & 0x1FFF)];
+  return 0xFF;
+}
+
+void write(uint16_t a, uint8_t d) {
+  if (!bit(a, 15)) {
+    switch (a >> 13) {
+      case 0: ram_en = (d & 0x0F) == 0x0A; if (d == 0xD0) dev = false; break;
+      case 1: if (!bit(a, 12)) rom_bank = (rom_bank & 0x100) | d; else rom_bank = (rom_bank & 0xFF) | ((d & 1) << 8); break;
+      case 2: if (!dev) ram_bank = d & 3; break;
+      case 3:
+        if (dev) break;
+        if (d == (uint8_t)UNLOCK[unlock_step]) {
+          if (++unlock_step == 4) { dev = true; unlock_step = 0; }
+        } else {
+          unlock_step = d == (uint8_t)UNLOCK[0] ? 1 : 0;
+        }
+        break;
+    }
+    if (dev && bit(a, 14)) flash_cmd(chip_addr(a), d);
+    return;
+  }
+  if (a >= 0xA000 && a < 0xC000 && ram_en) fram[((uint32_t)ram_bank << 13) | (a & 0x1FFF)] = d;
+}
+}  // namespace r2
+
 }  // namespace
 
 // ---- cart bus: decode exactly as the 74HC32/74HC00 network in the netlist ----
 static bool cs_n(uint16_t a) { return !(a >= 0xA000 && a < 0xFE00); }
 
 uint8_t bus_read(uint16_t a) {
+  if (rev == 2) return r2::read(a);
   bool rom_ce_n = bit(a, 15);
   bool fram_ce_n = cs_n(a) || bit(a, 14) || !bit(a, 13);
   if (!rom_ce_n) return flash_read(chip_addr(a));
@@ -95,6 +173,7 @@ uint8_t bus_read(uint16_t a) {
 }
 
 void bus_write(uint16_t a, uint8_t d) {
+  if (rev == 2) return r2::write(a, d);
   bool wr_a15 = bit(a, 15);  // /WR is low during the write
   bool latch_clk_low = !(wr_a15 || bit(a, 14) || bit(a, 12) || !bit(a, 13));
   bool flash_we_n = wr_a15 || !bit(a, 14);
@@ -123,6 +202,8 @@ static void save(const char* path, const std::vector<uint8_t>& mem) {
 
 int main(int argc, char** argv) {
   std::srand((unsigned)std::time(nullptr));
+  if (const char* r = std::getenv("GBCART_REV")) rev = std::atoi(r) == 2 ? 2 : 1;
+  if (rev == 2) flash.assign(r2::FLASH_SIZE, 0xFF);
   latch = (uint8_t)std::rand();
   for (auto& b : fram) b = (uint8_t)std::rand();
   if (argc > 1) load(argv[1], flash);

@@ -38,4 +38,28 @@ head -c 8192 /dev/urandom > "$work/save.sav"
 "${host[@]}" save-restore "$work/save.sav"
 "${host[@]}" save-backup "$work/save2.sav"
 cmp "$work/save.sav" "$work/save2.sav" && echo "save round-trips"
+echo
+echo "######## r2: FPGA mapper (MBC5 + dev mode) + 8 MB AMD flash ########"
+host2=(python3 "$here/host/gbflash.py" --rev 2 --sim "$work/cart_sim" --sim-flash "$work/flash2.bin" --sim-fram "$work/fram2.bin")
+head -c 8388608 /dev/urandom > "$work/flash2.bin"
+echo "== info"; "${host2[@]}" info
+echo "== flash $rom"; "${host2[@]}" flash "$rom"
+"${host2[@]}" dump "$work/dump2.bin" --size "$(stat -c%s "$rom")"
+cmp "$rom" "$work/dump2.bin" && echo "r2: dump matches ROM"
+echo "== 8 MB image, 512 banks"
+python3 - "$work/big2.gb" <<'PY'
+import sys, os
+img = bytearray(os.urandom(8 << 20))
+for bank in range(512):
+    img[bank * 0x4000 : bank * 0x4000 + 4] = bytes([0xB2, bank & 0xFF, bank >> 8, 0xB2])
+open(sys.argv[1], "wb").write(img)
+PY
+"${host2[@]}" flash "$work/big2.gb" 2>/dev/null | tail -1
+"${host2[@]}" dump "$work/big2-dump.bin" >/dev/null
+cmp "$work/big2.gb" "$work/big2-dump.bin" && echo "r2: 8 MB image round-trips through all 512 banks (9-bit MBC5 banking)"
+echo "== 32 KB F-RAM save (4 RAM banks)"
+head -c 32768 /dev/urandom > "$work/save2.sav"
+"${host2[@]}" save-restore "$work/save2.sav" | tail -1
+"${host2[@]}" save-backup "$work/save2b.sav" | tail -1
+cmp "$work/save2.sav" "$work/save2b.sav" && echo "r2: 32 KB save round-trips"
 echo "ALL OK"

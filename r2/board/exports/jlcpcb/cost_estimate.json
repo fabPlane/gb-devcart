@@ -1,0 +1,50 @@
+[
+ {
+  "n": 5,
+  "pcb": 24.6,
+  "parts": 185.9,
+  "econ_fees": 46.86,
+  "std_fees": 73.13,
+  "econ_total": 257.37,
+  "std_total": 283.63,
+  "short": [],
+  "ext": 11,
+  "unique": 21
+ },
+ {
+  "n": 10,
+  "pcb": 30.6,
+  "parts": 335.3,
+  "econ_fees": 50.25,
+  "std_fees": 76.86,
+  "econ_total": 416.14,
+  "std_total": 442.76,
+  "short": [],
+  "ext": 11,
+  "unique": 21
+ },
+ {
+  "n": 30,
+  "pcb": 53.2,
+  "parts": 890.15,
+  "econ_fees": 63.78,
+  "std_fees": 91.78,
+  "econ_total": 1007.13,
+  "std_total": 1035.13,
+  "short": [],
+  "ext": 11,
+  "unique": 21
+ },
+ {
+  "n": 100,
+  "pcb": 73.5,
+  "parts": 2663.2,
+  "econ_fees": 111.16,
+  "std_fees": 144.0,
+  "econ_total": 2847.86,
+  "std_total": 2880.7,
+  "short": [],
+  "ext": 11,
+  "unique": 21
+ }
+]

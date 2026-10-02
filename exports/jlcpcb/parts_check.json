@@ -1,0 +1,453 @@
+[
+ {
+  "lcsc": "C14663",
+  "refs": [
+   "C1",
+   "C2",
+   "C3",
+   "C4",
+   "C5",
+   "C6"
+  ],
+  "mpn": "CC0603KRX7R9BB104",
+  "found": true,
+  "jlc_mpn": "CC0603KRX7R9BB104",
+  "package": "0603",
+  "library": "base",
+  "stock": 54190290,
+  "need": 30,
+  "unit": 0.0123,
+  "least": 20,
+  "loss": 10,
+  "prices": [
+   {
+    "startNumber": 1,
+    "endNumber": 499,
+    "productPrice": 0.0123
+   },
+   {
+    "startNumber": 500,
+    "endNumber": 1499,
+    "productPrice": 0.0088
+   },
+   {
+    "startNumber": 1500,
+    "endNumber": 3999,
+    "productPrice": 0.0073
+   },
+   {
+    "startNumber": 4000,
+    "endNumber": 23999,
+    "productPrice": 0.0058
+   },
+   {
+    "startNumber": 24000,
+    "endNumber": 47999,
+    "productPrice": 0.0054
+   },
+   {
+    "startNumber": 48000,
+    "endNumber": -1,
+    "productPrice": 0.0051
+   }
+  ],
+  "per_board": 6
+ },
+ {
+  "lcsc": "C13585",
+  "refs": [
+   "C7"
+  ],
+  "mpn": "CL31A106KBHNNNE",
+  "found": true,
+  "jlc_mpn": "CL31A106KBHNNNE",
+  "package": "1206",
+  "library": "base",
+  "stock": 2393834,
+  "need": 5,
+  "unit": 0.2655,
+  "least": 5,
+  "loss": 4,
+  "prices": [
+   {
+    "startNumber": 1,
+    "endNumber": 99,
+    "productPrice": 0.2655
+   },
+   {
+    "startNumber": 100,
+    "endNumber": 299,
+    "productPrice": 0.2028
+   },
+   {
+    "startNumber": 300,
+    "endNumber": 1999,
+    "productPrice": 0.1722
+   },
+   {
+    "startNumber": 2000,
+    "endNumber": 3999,
+    "productPrice": 0.1449
+   },
+   {
+    "startNumber": 4000,
+    "endNumber": 9999,
+    "productPrice": 0.1374
+   },
+   {
+    "startNumber": 10000,
+    "endNumber": -1,
+    "productPrice": 0.1329
+   }
+  ],
+  "per_board": 1
+ },
+ {
+  "lcsc": "C25804",
+  "refs": [
+   "R1"
+  ],
+  "mpn": "0603WAF1002T5E",
+  "found": true,
+  "jlc_mpn": "0603WAF1002T5E",
+  "package": "0603",
+  "library": "base",
+  "stock": 23046124,
+  "need": 5,
+  "unit": 0.0018,
+  "least": 20,
+  "loss": 10,
+  "prices": [
+   {
+    "startNumber": 1,
+    "endNumber": 999,
+    "productPrice": 0.0018
+   },
+   {
+    "startNumber": 1000,
+    "endNumber": 4999,
+    "productPrice": 0.0015
+   },
+   {
+    "startNumber": 5000,
+    "endNumber": 9999,
+    "productPrice": 0.0014
+   },
+   {
+    "startNumber": 10000,
+    "endNumber": 49999,
+    "productPrice": 0.0013
+   },
+   {
+    "startNumber": 50000,
+    "endNumber": 50199,
+    "productPrice": 0.0012
+   },
+   {
+    "startNumber": 50200,
+    "endNumber": -1,
+    "productPrice": 0.0012
+   }
+  ],
+  "per_board": 1
+ },
+ {
+  "lcsc": "C4190",
+  "refs": [
+   "R2",
+   "R3",
+   "R4",
+   "R5",
+   "R6"
+  ],
+  "mpn": "0603WAF2201T5E",
+  "found": true,
+  "jlc_mpn": "0603WAF2201T5E",
+  "package": "0603",
+  "library": "base",
+  "stock": 7595099,
+  "need": 25,
+  "unit": 0.0018,
+  "least": 20,
+  "loss": 10,
+  "prices": [
+   {
+    "startNumber": 1,
+    "endNumber": 999,
+    "productPrice": 0.0018
+   },
+   {
+    "startNumber": 1000,
+    "endNumber": 4999,
+    "productPrice": 0.0014
+   },
+   {
+    "startNumber": 5000,
+    "endNumber": 9999,
+    "productPrice": 0.0012
+   },
+   {
+    "startNumber": 10000,
+    "endNumber": 49999,
+    "productPrice": 0.0011
+   },
+   {
+    "startNumber": 50000,
+    "endNumber": 50199,
+    "productPrice": 0.0009
+   },
+   {
+    "startNumber": 50200,
+    "endNumber": -1,
+    "productPrice": 0.0009
+   }
+  ],
+  "per_board": 5
+ },
+ {
+  "lcsc": "C632847",
+  "refs": [
+   "U1"
+  ],
+  "mpn": "SST39SF040-55-4I-NHE-T",
+  "found": true,
+  "jlc_mpn": "SST39SF040-55-4I-NHE-T",
+  "package": "PLCC-32(11.4x14)",
+  "library": "expand",
+  "stock": 17,
+  "need": 5,
+  "unit": 5.4574,
+  "least": 0,
+  "loss": 0,
+  "prices": [
+   {
+    "startNumber": 1,
+    "endNumber": 9,
+    "productPrice": 5.4574
+   },
+   {
+    "startNumber": 10,
+    "endNumber": 29,
+    "productPrice": 5.3289
+   },
+   {
+    "startNumber": 30,
+    "endNumber": 99,
+    "productPrice": 5.2444
+   },
+   {
+    "startNumber": 100,
+    "endNumber": 101,
+    "productPrice": 5.1582
+   },
+   {
+    "startNumber": 102,
+    "endNumber": 103,
+    "productPrice": 5.1582
+   },
+   {
+    "startNumber": 104,
+    "endNumber": -1,
+    "productPrice": 5.1582
+   }
+  ],
+  "per_board": 1
+ },
+ {
+  "lcsc": "C55945",
+  "refs": [
+   "U2"
+  ],
+  "mpn": "FM18W08-SGTR",
+  "found": true,
+  "jlc_mpn": "FM18W08-SGTR",
+  "package": "SOIC-28-300mil",
+  "library": "expand",
+  "stock": 45,
+  "need": 5,
+  "unit": 9.5768,
+  "least": 0,
+  "loss": 0,
+  "prices": [
+   {
+    "startNumber": 1,
+    "endNumber": 9,
+    "productPrice": 9.5768
+   },
+   {
+    "startNumber": 10,
+    "endNumber": 29,
+    "productPrice": 9.5768
+   },
+   {
+    "startNumber": 30,
+    "endNumber": 99,
+    "productPrice": 9.5768
+   },
+   {
+    "startNumber": 100,
+    "endNumber": 499,
+    "productPrice": 9.5768
+   },
+   {
+    "startNumber": 500,
+    "endNumber": 999,
+    "productPrice": 9.5768
+   },
+   {
+    "startNumber": 1000,
+    "endNumber": -1,
+    "productPrice": 9.5768
+   }
+  ],
+  "per_board": 1
+ },
+ {
+  "lcsc": "C10097",
+  "refs": [
+   "U3"
+  ],
+  "mpn": "SN74HC574DWR",
+  "found": true,
+  "jlc_mpn": "SN74HC574DWR",
+  "package": "SOIC-20-300mil",
+  "library": "expand",
+  "stock": 9077,
+  "need": 5,
+  "unit": 0.5251,
+  "least": 0,
+  "loss": 0,
+  "prices": [
+   {
+    "startNumber": 1,
+    "endNumber": 9,
+    "productPrice": 0.5251
+   },
+   {
+    "startNumber": 10,
+    "endNumber": 29,
+    "productPrice": 0.4374
+   },
+   {
+    "startNumber": 30,
+    "endNumber": 99,
+    "productPrice": 0.4
+   },
+   {
+    "startNumber": 100,
+    "endNumber": 499,
+    "productPrice": 0.3528
+   },
+   {
+    "startNumber": 500,
+    "endNumber": 999,
+    "productPrice": 0.3154
+   },
+   {
+    "startNumber": 1000,
+    "endNumber": -1,
+    "productPrice": 0.3024
+   }
+  ],
+  "per_board": 1
+ },
+ {
+  "lcsc": "C6838",
+  "refs": [
+   "U4",
+   "U5"
+  ],
+  "mpn": "SN74HC32DR",
+  "found": true,
+  "jlc_mpn": "SN74HC32DR",
+  "package": "SOIC-14",
+  "library": "expand",
+  "stock": 23625,
+  "need": 10,
+  "unit": 0.2499,
+  "least": 0,
+  "loss": 0,
+  "prices": [
+   {
+    "startNumber": 1,
+    "endNumber": 49,
+    "productPrice": 0.2499
+   },
+   {
+    "startNumber": 50,
+    "endNumber": 149,
+    "productPrice": 0.2109
+   },
+   {
+    "startNumber": 150,
+    "endNumber": 499,
+    "productPrice": 0.1942
+   },
+   {
+    "startNumber": 500,
+    "endNumber": 2499,
+    "productPrice": 0.1733
+   },
+   {
+    "startNumber": 2500,
+    "endNumber": 4999,
+    "productPrice": 0.1473
+   },
+   {
+    "startNumber": 5000,
+    "endNumber": -1,
+    "productPrice": 0.1418
+   }
+  ],
+  "per_board": 2
+ },
+ {
+  "lcsc": "C10090",
+  "refs": [
+   "U6"
+  ],
+  "mpn": "SN74HC00DR",
+  "found": true,
+  "jlc_mpn": "SN74HC00DR",
+  "package": "SOIC-14",
+  "library": "expand",
+  "stock": 90183,
+  "need": 5,
+  "unit": 0.1244,
+  "least": 0,
+  "loss": 0,
+  "prices": [
+   {
+    "startNumber": 1,
+    "endNumber": 49,
+    "productPrice": 0.1244
+   },
+   {
+    "startNumber": 50,
+    "endNumber": 149,
+    "productPrice": 0.0989
+   },
+   {
+    "startNumber": 150,
+    "endNumber": 499,
+    "productPrice": 0.0862
+   },
+   {
+    "startNumber": 500,
+    "endNumber": 2499,
+    "productPrice": 0.0768
+   },
+   {
+    "startNumber": 2500,
+    "endNumber": 4999,
+    "productPrice": 0.0615
+   },
+   {
+    "startNumber": 5000,
+    "endNumber": -1,
+    "productPrice": 0.0576
+   }
+  ],
+  "per_board": 1
+ }
+]

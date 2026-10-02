@@ -1,0 +1,55 @@
+[
+ {
+  "n": 5,
+  "pcb": 18.6,
+  "parts": 83.9,
+  "econ_fees": 27.46,
+  "std_fees": 49.94,
+  "econ_total": 129.96,
+  "std_total": 152.44,
+  "short": [],
+  "ext": 5,
+  "unique": 9
+ },
+ {
+  "n": 10,
+  "pcb": 21.6,
+  "parts": 164.39,
+  "econ_fees": 29.86,
+  "std_fees": 52.34,
+  "econ_total": 215.85,
+  "std_total": 238.33,
+  "short": [],
+  "ext": 5,
+  "unique": 9
+ },
+ {
+  "n": 30,
+  "pcb": 30.0,
+  "parts": 484.75,
+  "econ_fees": 39.46,
+  "std_fees": 61.94,
+  "econ_total": 554.21,
+  "std_total": 576.69,
+  "short": [
+   "C632847 (U1): need 30, stock 17"
+  ],
+  "ext": 5,
+  "unique": 9
+ },
+ {
+  "n": 100,
+  "pcb": 65.5,
+  "parts": 1585.09,
+  "econ_fees": 73.06,
+  "std_fees": 95.54,
+  "econ_total": 1723.65,
+  "std_total": 1746.13,
+  "short": [
+   "C632847 (U1): need 100, stock 17",
+   "C55945 (U2): need 100, stock 45"
+  ],
+  "ext": 5,
+  "unique": 9
+ }
+]

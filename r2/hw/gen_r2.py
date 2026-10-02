@@ -436,7 +436,7 @@ doc = {
         # DMG cartridge outline (r2.1); placement in r2/hw/layout_dmg.py, rotations applied after
         # circuit_build with circuit_place (the netlist placement schema has no rotation)
         "outline": [{"x": x, "y": y} for x, y in LAYOUT.outline()], "copperLayers": 4,
-        "rules": {"clearanceMm": 0.15, "trackWidthMm": 0.15, "viaDiameterMm": 0.5, "viaDrillMm": 0.3},  # QFN pad pitch: board.kicad_dru
+        "rules": {"clearanceMm": 0.1, "trackWidthMm": 0.15, "viaDiameterMm": 0.5, "viaDrillMm": 0.3},  # 0.1: QFN-88 pad pitch; JLC 4-layer allows 0.09
         "holes": [{"x": x, "y": y, "diameterMm": d} for x, y, d in LAYOUT.HOLES],
         "placements": [{"ref": r_, "position": {"x": x, "y": y}} for r_, (x, y, _) in LAYOUT.LAYOUT.items()],
     },

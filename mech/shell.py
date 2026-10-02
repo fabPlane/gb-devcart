@@ -6,8 +6,9 @@
 Two halves split at z = SPLIT_Z. Dimensions come from mech/dims.py (sourced in
 docs/gb-cart-mechanical.md). Variants:
   shell_std  : plain DMG-style shell (r1.1-style boards)
-  shell_usb  : r2 shell with a USB-C opening in the top wall, the top cross rib removed over the
-               connector and the front wall thinned above it for clearance
+  shell_usb  : r2 shell (shell_back_usb + shell_front_usb) with a USB-C opening through the top wall
+               of both halves, the top cross rib removed over the connector and the front wall thinned
+               above it for clearance
 Printing: PETG or ABS, 0.12-0.16 mm layers, back half face-down, front half label-face-down.
 The shell is a community-measured replica, not a Nintendo drawing; test-fit before a batch.
 """
@@ -42,7 +43,7 @@ def cavity(z0, z1, y0=None):
                                   centered=(False, False, False)).translate((SIDE_WALL, y0, z0))
 
 
-def back_half():
+def back_half(usb_x=None):
     half = outer().intersect(cq.Workplane("XY").box(100, 100, SPLIT_Z, centered=(True, True, False)).translate((CX, 30, 0)))
     half = half.cut(cavity(S["back_wall"], 20, y0=-1))                       # open at the connector end
     t = PCB_STD["thickness"]
@@ -62,7 +63,16 @@ def back_half():
     half = half.cut(cq.Workplane("XY").circle(S["shank_d"] / 2).extrude(10).translate((CX, S["screw_y"], 0)))
     # locating post through the PCB's small hole
     post = cq.Workplane("XY").circle(S["post_d"] / 2).extrude(S["post_top_z"]).translate((CX, S["post_y"], 0))
-    return half.union(post)
+    half = half.union(post)
+    if usb_x is not None:   # the receptacle sits on the PCB face (z 2.5), below the split: open the top wall here too
+        half = half.cut(usb_opening(usb_x))
+    return half
+
+
+def usb_opening(usb_x):
+    """USB-C mouth through the top wall, from the PCB face up to the connector's mouth height."""
+    return cq.Workplane("XY").box(USB_C["mouth_w"], 6, USB_C["mouth_h"], centered=(True, False, False)) \
+        .translate((usb_x, S["height"] - 4, S["pcb_front_z"]))
 
 
 def front_half(usb_x=None):
@@ -92,9 +102,7 @@ def front_half(usb_x=None):
                     .translate((CX, S["label_bottom_y"], S["thickness"] - S["label_depth"])))
     if usb_x is not None:
         top = S["height"]
-        # opening in the top wall, from the PCB face up to the connector mouth height
-        half = half.cut(cq.Workplane("XY").box(USB_C["mouth_w"], 6, USB_C["mouth_h"], centered=(True, False, False))
-                        .translate((usb_x, top - 4, S["pcb_front_z"])))
+        half = half.cut(usb_opening(usb_x))
         # thinner front wall over the connector body for clearance (3.26 tall part vs 3.3 room)
         half = half.cut(cq.Workplane("XY").box(USB_C["body_w"] + 1.0, USB_C["body_len"] + 1.0, USB_C["pocket_extra"] + 1,
                                                centered=(True, False, False))
@@ -123,12 +131,13 @@ def export(shape, name):
 
 
 if __name__ == "__main__":
-    usb_x = float(os.environ.get("USB_X", PCB_X_IN_SHELL + PCB_STD["width"] / 2 - 6.0))
-    back = back_half()
-    export(back, "shell_back")
+    # r2.1 puts J2 on the board centreline (r2/hw/layout_dmg.py)
+    usb_x = float(os.environ.get("USB_X", PCB_X_IN_SHELL + PCB_STD["width"] / 2))
+    export(back_half(), "shell_back")
+    export(back_half(usb_x), "shell_back_usb")
     export(front_half(), "shell_front_std")
     export(front_half(usb_x), "shell_front_usb")
     export(pcb_std(), "pcb_std_outline")
-    for n in ("shell_back", "shell_front_std", "shell_front_usb", "pcb_std_outline"):
+    for n in ("shell_back", "shell_back_usb", "shell_front_std", "shell_front_usb", "pcb_std_outline"):
         bb = cq.importers.importStep(str(OUT / f"{n}.step")).val().BoundingBox()
         print(f"{n:18s} {bb.xlen:6.2f} x {bb.ylen:6.2f} x {bb.zlen:5.2f}  z {bb.zmin:.2f}..{bb.zmax:.2f}")

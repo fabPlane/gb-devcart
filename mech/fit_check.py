@@ -178,7 +178,10 @@ def check(name, path):
         items.append(dict(ref=fp["ref"], box=box, h=hgt, side=fp["side"], pkg=fp["name"].split(":")[-1]))
         if fp["side"] == "B":
             back.append(fp["ref"])
-        if hgt > 0.1 and (box[0] < zone[0] or box[2] > zone[2] or box[1] < zone[1] or box[3] > zone[3]):
+        # a USB-C receptacle may cross the top cross rib: the r2 shell cuts the rib and wall over it
+        # (checked separately by "usb")
+        top = S["height"] if "USB_C" in fp["name"] else zone[3]
+        if hgt > 0.1 and (box[0] < zone[0] or box[2] > zone[2] or box[1] < zone[1] or box[3] > top):
             outside.append(fp["ref"])
         worst_h = max(worst_h, hgt)
     tallest = max(items, key=lambda i: i["h"]) if items else None

@@ -203,7 +203,7 @@ footer { color: var(--muted); font-size: 13px; display: grid; gap: 6px }
         <li>Swap J1 for <code>gbdev:GB_Cart_Edge_32_DMG</code>. Its fingers start 1.5 mm above the edge, and GND/VCC sit 1.0 mm above it so they make contact first. Order ENIG or hard gold.</li>
         <li>Order 0.8 or 1.0 mm FR-4. A 1.6 mm board pushes into the back wall.</li>
         <li>Put every part on the label side, inside the dashed zone, no taller than 3.3 mm. Nothing goes in the bottom 11.4 mm, which sits inside the console's connector.</li>
-        <li>r2: put USB-C J2 on the top edge, its mouth flush with the board edge, and print <code>shell_front_usb</code>. At 3.26 mm the receptacle leaves 0.04 mm under a 3.3 mm wall, so the front half has a 0.8 mm pocket over it. The lock notch rules out the top-right corner.</li>
+        <li>r2: put USB-C J2 on the top edge, centred, with its mouth 1.2 mm past the board edge, and print <code>shell_back_usb</code> + <code>shell_front_usb</code>. Both halves are open over the connector. At 3.26 mm the receptacle leaves 0.04 mm under a 3.3 mm wall, so the front half has a 0.8 mm pocket over it. The lock notch rules out the top-right corner.</li>
         <li>r2 needs 4 layers at 1.0 mm. JLCPCB offers 4-layer boards at 0.8 or 1.0 mm.</li>
       </ol>
     </div>
@@ -224,7 +224,7 @@ footer { color: var(--muted); font-size: 13px; display: grid; gap: 6px }
     <div class="sec-head"><h2>Files</h2></div>
     <div class="table-wrap"><table>
       <tr><th>File</th><th>What</th></tr>
-      <tr><td class="mono">mech/shell.py</td><td>CadQuery source for the shell, split at z = 4.0. It writes <code>shell_back</code>, <code>shell_front_std</code> and <code>shell_front_usb</code> as STEP + STL. Print in PETG or ABS at 0.12–0.16 mm layers.</td></tr>
+      <tr><td class="mono">mech/shell.py</td><td>CadQuery source for the shell, split at z = 4.0. It writes <code>shell_back</code> + <code>shell_front_std</code> (standard) and <code>shell_back_usb</code> + <code>shell_front_usb</code> (r2, USB-C opening) as STEP + STL. Print in PETG or ABS at 0.12–0.16 mm layers.</td></tr>
       <tr><td class="mono">mech/dims.py</td><td>The single source for every dimension, with values traced to <code>docs/gb-cart-mechanical.md</code>.</td></tr>
       <tr><td class="mono">mech/fit_check.py</td><td>Runs this fit check on any <code>.kicad_pcb</code> and writes <code>mech/out/fit.json</code>.</td></tr>
       <tr><td class="mono">mech/std_board.py</td><td>Writes the reference outline and the <code>GB_Cart_Edge_32_DMG</code> footprint.</td></tr>
@@ -262,7 +262,8 @@ function zone() {
 function partStatus(p) {
   const z = zone();
   if (p.side !== "F") return "fail";
-  if (p.h > 0.1 && (p.box[0] < z[0] || p.box[2] > z[2] || p.box[1] < z[1] || p.box[3] > z[3])) return "fail";
+  const top = p.pkg.includes("USB_C") ? FIT.shell.height : z[3];   // the USB shell cuts the top rib over J2
+  if (p.h > 0.1 && (p.box[0] < z[0] || p.box[2] > z[2] || p.box[1] < z[1] || p.box[3] > top)) return "fail";
   if (p.h > FIT.component_max_h) return "warn";
   return "ok";
 }
@@ -448,20 +449,22 @@ function init3D() {
   const fill = new THREE.DirectionalLight(0xffffff, 0.3); fill.position.set(-60, 90, 40); scene.add(fill);
 
   const shellMat = () => new THREE.MeshStandardMaterial({ color: 0xb8b5ae, roughness: .75, metalness: 0, transparent: true });
-  const back = new THREE.Mesh(new THREE.BufferGeometry(), shellMat());
+  const back = { std: new THREE.Mesh(new THREE.BufferGeometry(), shellMat()), usb: new THREE.Mesh(new THREE.BufferGeometry(), shellMat()) };
   const front = { std: new THREE.Mesh(new THREE.BufferGeometry(), shellMat()), usb: new THREE.Mesh(new THREE.BufferGeometry(), shellMat()) };
-  scene.add(back, front.std, front.usb);
+  scene.add(back.std, back.usb, front.std, front.usb);
   const boardGroup = new THREE.Group(); scene.add(boardGroup);
   Object.assign(V, { renderer, scene, camera, controls, back, front, boardGroup, frontMode: "ghost", explode: 5 });
 
-  const files = { back: "out/shell_back.mesh.json", std: "out/shell_front_std.mesh.json", usb: "out/shell_front_usb.mesh.json" };
-  let left = 3;
+  const files = { back_std: "out/shell_back.mesh.json", back_usb: "out/shell_back_usb.mesh.json",
+                  front_std: "out/shell_front_std.mesh.json", front_usb: "out/shell_front_usb.mesh.json" };
+  let left = 4;
   for (const [k, url] of Object.entries(files)) {
     fetch(url).then(r => { if (!r.ok) throw new Error(url); return r.json(); }).then(d => {
       const g = new THREE.BufferGeometry();
       g.setAttribute("position", new THREE.Float32BufferAttribute(d.positions, 3));
       g.computeVertexNormals();
-      (k === "back" ? back : front[k]).geometry = g;
+      const [half, v] = k.split("_");
+      (half === "back" ? back : front)[v].geometry = g;
       if (--left === 0) { document.getElementById("loading").hidden = true; }
       applyView();
     }).catch(() => { document.getElementById("loading").textContent = "Shell model files could not load."; });
@@ -510,15 +513,16 @@ function buildBoard3D() {
 function applyView() {
   if (!V.ready) return;
   const e = V.explode;
-  V.back.position.z = -e;
   for (const k of ["std", "usb"]) {
+    V.back[k].visible = k === V.shell;
+    V.back[k].position.z = -e;
+    V.back[k].material.opacity = 1;
     const m = V.front[k];
     m.visible = k === V.shell && V.frontMode !== "off";
     m.position.z = e;
     m.material.opacity = V.frontMode === "ghost" ? .28 : 1;
     m.material.depthWrite = V.frontMode !== "ghost";
   }
-  V.back.material.opacity = 1;
 }
 
 function seg(id, fn) {

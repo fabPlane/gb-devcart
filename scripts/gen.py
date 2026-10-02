@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Generate lib/gbdev.kicad_sym, lib/gbdev.pretty/GB_Cart_Edge_32.kicad_mod and circuit.netlist.json."""
-import json, os, math
+import json, os, math, sys
 
 PROJ = "/home/user/fabdesk-projects/gb-devcart"
 LIB = f"{PROJ}/lib"
@@ -125,7 +125,7 @@ with open(f"{LIB}/gbdev.pretty/GB_Cart_Edge_32.kicad_mod", "w") as f:
 
 # ---------------------------------------------------------------- netlist
 FP = {
-    "J1": "gbdev:GB_Cart_Edge_32",
+    "J1": "gbdev:GB_Cart_Edge_32_DMG",   # mech/std_board.py: fingers 1.5 mm above the edge
     "U1": "Package_LCC:PLCC-32_11.4x14.0mm_P1.27mm",
     "U2": "Package_SO:SOIC-28W_7.5x17.9mm_P1.27mm",
     "U3": "Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm",
@@ -223,14 +223,28 @@ for ref, part in PARTOF.items():
         if k not in seen and not any(c["ref"] == ref and c["pin"] == num for c in noconn):
             print("UNCONNECTED", ref, num)
 
-PLACE = {
-    "J1": (28, 49.5), "U1": (14, 14), "U2": (48.5, 15), "U3": (32.5, 11),
-    "U4": (24, 29), "U5": (33, 29), "U6": (13, 31),
-    "C1": (18.5, 3.2), "C2": (53, 3.4), "C3": (36.8, 2.4), "C4": (24, 22.5), "C5": (33, 22.5), "C6": (18.5, 27.4),
-    "C7": (6, 38.5), "R1": (46, 33),
-    "R2": (40.2, 4.8), "R3": (40.2, 7.8), "R4": (40.2, 10.8), "R5": (40.2, 13.8), "R6": (40.2, 16.8),
-    "TP1": (40, 39.5), "TP2": (43, 39.5), "TP3": (46, 39.5), "TP4": (49, 39.5), "TP5": (52, 39.5), "TP6": (52, 35.5),
+# r1.1: DMG cartridge outline (mech/dims.py PCB_STD). ref -> (x, y, rotation°), KiCad frame (y down),
+# fingers along the bottom edge. Every part sits inside the shell's component zone.
+import shutil
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "r2", "hw"))
+import layout_dmg as DMG  # noqa: E402
+shutil.copy(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "lib", "gbdev.pretty", "GB_Cart_Edge_32_DMG.kicad_mod"),
+            f"{LIB}/gbdev.pretty/GB_Cart_Edge_32_DMG.kicad_mod")
+LAYOUT = {
+    "J1": (DMG.W / 2, DMG.H, 0),
+    "U1": (9.0, 10.5, 0), "U3": (27.0, 9.5, 0), "U2": (43.5, 12.0, 0),
+    "U6": (8.0, 30.0, 0), "U4": (18.0, 30.0, 0), "U5": (35.0, 30.0, 0),
+    "C1": (9.0, 19.8, 0), "C3": (27.0, 17.6, 0), "C2": (43.5, 22.6, 0),
+    "C6": (8.0, 36.0, 0), "C4": (18.0, 36.0, 0), "C5": (35.0, 36.0, 0),
+    "C7": (45.0, 30.0, 0), "R1": (45.0, 33.5, 0),
+    "R2": (35.0, 4.0, 0), "R3": (35.0, 6.0, 0), "R4": (35.0, 8.0, 0), "R5": (35.0, 10.0, 0), "R6": (35.0, 12.0, 0),
+    "TP1": (34.0, 39.8, 0), "TP2": (37.0, 39.8, 0), "TP3": (40.0, 39.8, 0), "TP4": (43.0, 39.8, 0),
+    "TP5": (46.0, 39.8, 0), "TP6": (49.0, 39.8, 0),
 }
+CRTYD = dict(DMG.CRTYD, U1=(-6.55, 6.55, -7.82, 7.82), U2=(-5.93, 5.93, -9.2, 9.2), U3=(-5.93, 5.93, -6.65, 6.65),
+             U4=(-3.7, 3.7, -4.58, 4.58), U5=(-3.7, 3.7, -4.58, 4.58), U6=(-3.7, 3.7, -4.58, 4.58), C7=(-2.3, 2.3, -1.15, 1.15))
+assert not DMG.problems(LAYOUT, CRTYD), DMG.problems(LAYOUT, CRTYD)
+PLACE = {r: (x, y) for r, (x, y, _) in LAYOUT.items()}
 doc = {
     "netlist": {
         "components": comps,
@@ -239,9 +253,9 @@ doc = {
         "design": {"source": "gb-devcart", "tool": "gen.py"},
     },
     "board": {
-        "widthMm": 56, "heightMm": 49.5, "copperLayers": 2,
+        "outline": [{"x": x, "y": y} for x, y in DMG.outline()], "copperLayers": 2,
         "rules": {"clearanceMm": 0.15, "trackWidthMm": 0.2, "viaDiameterMm": 0.5, "viaDrillMm": 0.3},
-        "holes": [{"x": 28, "y": 39, "diameterMm": 3.5}],
+        "holes": [{"x": x, "y": y, "diameterMm": d} for x, y, d in DMG.HOLES],
         "placements": [{"ref": r, "position": {"x": x, "y": y}} for r, (x, y) in PLACE.items()],
     },
     "libraries": [

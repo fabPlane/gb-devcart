@@ -20,13 +20,15 @@ import os
 import shutil
 import sys
 from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import layout_dmg as LAYOUT  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parent.parent
 PROJ = Path(sys.argv[1] if len(sys.argv) > 1 else "/home/user/fabdesk-projects/gb-devcart-r2-2")
 LIB = PROJ / "lib"
 (LIB / "gbdev2.pretty").mkdir(parents=True, exist_ok=True)
-shutil.copy(REPO / "lib/gbdev.pretty/GB_Cart_Edge_32.kicad_mod", LIB / "gbdev2.pretty/GB_Cart_Edge_32.kicad_mod")
+shutil.copy(REPO / "lib/gbdev.pretty/GB_Cart_Edge_32_DMG.kicad_mod", LIB / "gbdev2.pretty/GB_Cart_Edge_32_DMG.kicad_mod")
 
 PIN = json.load(open(REPO / "docs/r2-pinouts.json"))
 FPGA_IO = json.load(open(HERE / "fpga_pins.json"))
@@ -156,7 +158,7 @@ FP = {
     "R": "Resistor_SMD:R_0603_1608Metric",
     "C": "Capacitor_SMD:C_0603_1608Metric",
     "TestPoint": "TestPoint:TestPoint_Pad_D1.5mm",
-    "GB_Cart_Edge_32": "gbdev2:GB_Cart_Edge_32",
+    "GB_Cart_Edge_32": "gbdev2:GB_Cart_Edge_32_DMG",
 }
 MPN = {  # part -> (MPN, Manufacturer, LCSC)
     "GW1N-LV4QN88": ("GW1N-LV4QN88C6/I5", "Gowin", "C31900351"),
@@ -430,10 +432,12 @@ doc = {
     "netlist": {"components": comps, "nets": [{"name": n, "nodes": v} for n, v in nets.items()],
                 "noConnects": noconn, "design": {"source": "gb-devcart r2", "tool": "r2/hw/gen_r2.py"}},
     "board": {
-        "widthMm": 56, "heightMm": 50, "copperLayers": 4,
-        "rules": {"clearanceMm": 0.15, "trackWidthMm": 0.15, "viaDiameterMm": 0.5, "viaDrillMm": 0.3},
-        "holes": [{"x": 28, "y": 39, "diameterMm": 3.5}],
-        "placements": [{"ref": r_, "position": {"x": x, "y": y}} for r_, (x, y) in PLACE.items()],
+        # DMG cartridge outline (r2.1); placement in r2/hw/layout_dmg.py, rotations applied after
+        # circuit_build with circuit_place (the netlist placement schema has no rotation)
+        "outline": [{"x": x, "y": y} for x, y in LAYOUT.outline()], "copperLayers": 4,
+        "rules": {"clearanceMm": 0.1, "trackWidthMm": 0.15, "viaDiameterMm": 0.5, "viaDrillMm": 0.3},  # 0.1: the QFN-88 pads sit 0.1 apart (JLC 4-layer: 0.09)
+        "holes": [{"x": x, "y": y, "diameterMm": d} for x, y, d in LAYOUT.HOLES],
+        "placements": [{"ref": r_, "position": {"x": x, "y": y}} for r_, (x, y, _) in LAYOUT.LAYOUT.items()],
     },
     "libraries": [
         {"kind": "symbol", "nickname": "gbdev2", "uri": str(LIB / "gbdev2.kicad_sym"), "description": "GB devcart r2 symbols"},
@@ -476,6 +480,7 @@ with open(LIB / "gbdev2.kicad_sym", "w") as f:
     for k, v in SYMS.items():
         f.write(sym_text(k, v) + "\n")
     f.write(")\n")
-assert set(PLACE) == {c_["ref"] for c_ in comps}, set(PLACE) ^ {c_["ref"] for c_ in comps}
+assert set(LAYOUT.LAYOUT) == {c_["ref"] for c_ in comps}, set(LAYOUT.LAYOUT) ^ {c_["ref"] for c_ in comps}
+assert not LAYOUT.problems(), LAYOUT.problems()
 json.dump(doc, open(PROJ / "circuit.netlist.json", "w"), indent=1)
 print(f"ok {len(comps)} components, {len(nets)} nets, {len(noconn)} no-connects -> {PROJ}")

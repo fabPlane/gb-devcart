@@ -1,12 +1,17 @@
-# GB DEVCART r1 — open hardware
+# GB DEVCART r1.1 — open hardware
 
 A simple, original Game Boy (DMG) / ModRetro Chromatic homebrew development cartridge.
 512 KB of rewritable NOR flash, 8 KB of battery-free F-RAM, and an MBC5-subset mapper built
-from discrete 74HC logic. 2-layer, 56 x 49.5 mm, 32 edge fingers at 1.5 mm pitch, 5 V bus.
+from discrete 74HC logic. 2-layer, 1.0 mm, 32 edge fingers at 1.5 mm pitch, 5 V bus. The board uses the
+standard Game Boy cartridge outline (51.4 × 61 mm, finger tongue, lock notch, shell screw and post holes), so it
+fits a DMG / GBC / Pocket / ModRetro Chromatic cartridge shell; see [`mech/`](mech/) and the fit check.
 
 ![GB DEVCART r1, 3D render](renders/3d-iso.png)
 
-> **Status:** fully routed (2 layers, Freerouting through fabdesk), DRC/ERC clean, in-stock JLCPCB parts
+> **r1 (56 × 49.5 mm) did not fit a cartridge shell; do not order it.** r1.1 is the same circuit on the
+> DMG outline.
+>
+> **Status:** fully routed (2 layers, Freerouting through fabdesk), DRC clean, in-stock JLCPCB parts
 > with LCSC numbers, JLC gerbers/BOM/CPL in `exports/jlcpcb/`. **Not yet built or tested on hardware.**
 
 Designed with [fabPlane](https://fabplane.com) (fabdesk) driving Claude Code. Inspired by the ModRetro
@@ -92,9 +97,13 @@ read-back. Keep bank 0 (vectors, header, flasher stub) write-protected by softwa
 
 - `/RESET` has a 10 kΩ pull-up (R1). `AUDIO_IN` is unconnected except for test pad TP6.
 - Test pads: TP1 VCC, TP2 GND, TP3 CLK, TP4 /WR, TP5 /RD, TP6 AUDIO_IN.
-- Edge fingers are on the component side, 0.5 mm back from the board edge; order the board with ENIG.
+- Edge fingers (`gbdev:GB_Cart_Edge_32_DMG`) are on the component side and start 1.5 mm above the board edge (VCC/GND 1.0 mm, so they make contact first); order the board with ENIG or hard gold.
 - Pin 1 (VCC) is at the left, looking at the component side. Order: VCC, CLK, /WR, /RD, /CS, A0–A15, D0–D7, /RESET, AUDIO_IN, GND.
-- 3.5 mm boss hole at (28, 39) mm from the top-left; all parts are kept above y = 41.5 mm.
+- Shell holes: Ø7.2 at (25.7, 45.65) for the screw tube and Ø2.3 at (25.7, 20.65) for the locating post (mm from the
+  top-left, KiCad frame), each with a copper keep-out. Parts stay inside the shell's component zone (x 0.55–50.85,
+  y 0.9–51.2); nothing on the back.
+- The PLCC-32 flash is 3.56 mm tall. An OEM shell has about 3.6 mm of room on the label side (gekkio's GB-CART boards
+  use the same package); the printed shell in `mech/` has 3.3 mm, so set `front_inner_z` to 6.1 in `mech/dims.py` before printing one for r1.1.
 - Latch outputs are tri-stated and pulled down for bank 0, so the bank-0 address-to-data path depends on a ~2.2 kΩ RC settle (about 40–80 ns). Check the timing on a real console.
 - The `/CS` decode assumes `/CS` is asserted for A15 = 1; verify on the target hardware.
 - Bus is 5 V logic (HC family). Confirm that your target's cartridge port tolerates 5 V.
@@ -148,7 +157,7 @@ JLC order files (regenerate with `KICAD_CLI=… python3 scripts/jlc_export.py`):
 
 | File | Upload as |
 | --- | --- |
-| `exports/jlcpcb/gerbers.zip` | Gerber files (2 layers, 56 × 49.5 mm) |
+| `exports/jlcpcb/gerbers.zip` | Gerber files (2 layers, 51.4 × 61 mm DMG outline, 1.0 mm) |
 | `exports/jlcpcb/bom.csv` | Assembly BOM: 9 lines, every line with an LCSC part number |
 | `exports/jlcpcb/cpl.csv` | Assembly pick-and-place (19 parts, top side) |
 
@@ -159,7 +168,7 @@ sometimes need a ±90° correction.
 | --- | --- |
 | ![top](renders/top.png) | ![bottom](renders/bottom.png) |
 
-Snapshot from 2026-10-01 (USD, before shipping):
+Snapshot from 2026-10-01 for the r1 board (USD, before shipping; r1.1 is a similar size, so expect similar prices):
 
 | Qty | Bare PCB, ENIG | PCB + Economic assembly |
 | --- | --- | --- |
@@ -172,8 +181,8 @@ Before ordering:
 - **Stock.** The design now uses the in-stock drop-ins: SST39SF040-55-4I-NHE-T (C632847, the same flash
   in a faster, industrial grade) and FM18W08-SGTR (C55945, the same F-RAM on tape and reel). Stock was
   17 and 45 on 2026-10-01, so re-check it before ordering. The F-RAM is about 60% of the assembled cost.
-- **Gold-finger size rule.** JLC's bevelled gold-finger option needs boards of at least 50 mm on both sides.
-  This board is 49.5 mm tall, so widen it to 50 mm (r1.1) or order a panel. Plain ENIG needs no change.
+- **Gold-finger size rule.** JLC's bevelled gold-finger option needs boards of at least 50 mm on both sides;
+  r1.1 is 51.4 × 61 mm, so it qualifies. Plain ENIG needs no change.
 
 ## Project files
 
@@ -184,22 +193,19 @@ Before ordering:
 
 ## Project status
 
-- **Netlist:** 26 components, 46 nets. Custom `gbdev` symbols and edge footprint; placement inside the 56 x 49.5 mm
-  outline, with all parts above y = 41.5 mm and the 3.5 mm boss hole at (28, 39).
+- **Netlist:** 26 components, 46 nets. Custom `gbdev` symbols and edge footprint; r1.1 placement on the DMG outline
+  (`scripts/gen.py`, checked by `r2/hw/layout_dmg.py`), all parts inside the shell's component zone.
 - **Routing:** done with Freerouting 2.4.1 (Java 25) through fabdesk's `route_run`. All 134 connections are routed
   in one run.
-  - **Rules:** 0.2 mm tracks, 0.15 mm clearance, 0.5/0.3 mm vias, all within JLCPCB's standard 2-layer process.
-  - **Keepouts:** a copper keepout around the boss hole and rules for the finger zone.
-  - **Power:** VCC/GND widened to 0.25–0.4 mm where neighbouring tracks allow. A GND pour on B.Cu would be a
-    good r1.1 change.
-- **DRC:** 0 errors, 0 warnings, 0 unconnected, 0 schematic-parity conflicts. **ERC:** 0 errors.
+  - **Rules:** 0.2 mm tracks (Freerouting necks down to 0.15 mm at some pads; the board minimum is 0.15 mm),
+    0.15 mm clearance, 0.5/0.3 mm vias, all within JLCPCB's standard 2-layer process.
+  - **Keepouts:** copper keep-outs 0.5 mm around both shell holes.
+- **DRC (r1.1):** 0 errors, 0 unconnected; 19 silkscreen warnings (overlapping reference text).
+- **Fit check:** `python3 mech/fit_check.py r1=board.kicad_pcb` passes every check; one warning for the PLCC-32 height.
 - **What didn't work:** fabdesk's built-in `capacity` router (fab_router) could not route this dense
   2-layer bus. Its best result was 63 of 134 connections, and long runs block the bridge process until
   fabdesk times out. To get to the result above, parts were moved (U2, U3, C2, C3, C6, R2–R6), the rules
   were tightened as listed, and Freerouting was enabled.
-- **Board thickness:** still the KiCad default (1.6 mm). Choose 1.0 mm in the fab order so the board fits
-  a DMG shell.
-- **Hand edits:** the silkscreen text and the J1 reference position were added to `board.kicad_pcb` by hand.
-  A `circuit_build` with `fresh: true` will discard them, along with the routing.
+- **Board thickness:** 1.0 mm in the file. Choose 1.0 mm in the fab order too.
 - **Not yet verified on hardware:** bus timing (bank-0 pull-down settling), the `/CS` decode assumption,
   and the JLC rotation offsets.
